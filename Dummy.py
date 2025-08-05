@@ -49,4 +49,7 @@
 #   await page.getByRole('textbox', { name: 'Player Search' }).fill('6001');
 #   await page.getByRole('textbox', { name: 'Player Search' }).press('Enter');
 #   await page.getByRole('button').filter({ hasText: /^$/ }).nth(1).click();
-# });
+# })
+# await page.locator('#seat__1 div').filter({ hasText: 'P 100' }).locator('div').nth(4).click();
+#   await page.locator('#seat__1 div').filter({ hasText: 'P 100' }).locator('div').nth(4).click();
+  
