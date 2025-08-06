@@ -1,23 +1,27 @@
 class InventoryTab:
     def __init__(self, page):
         self.page = page
+        self.inventory_tab_selector = self.page.get_by_role('tab', name='Inventory')
+        self.scan_button_selector = self.page.get_by_role('button', name='Scan')
+        self.adjust_button_selector = self.page.get_by_role('button', name='Adjust')
+        self.select_reason_selector = self.page.get_by_role("combobox")
+        self.reason_others_selector = self.page.locator("text=Others").first
+        self.confirm_button_selector = self.page.get_by_role('button', name='Confirm')
 
     def inventory_tab(self):
-        return self.page.get_by_role('tab', name='Inventory')
+        return self.inventory_tab_selector
 
     def scan_button(self):
-        return self.page.get_by_role('button', name='Scan')
-    
+        return self.scan_button_selector
+
     def adjust_button(self):
-        return self.page.get_by_role('button', name='Adjust')
+        return self.adjust_button_selector
 
     def select_reason_option(self):
-        # Clicks the mat-select that contains "Select reason"
-        return self.page.get_by_role("combobox")
+        return self.select_reason_selector
 
     def reason_others_option(self):
-        # Selects the "Others" option from the overlay panel (wait for it to be visible)
-        return self.page.locator("text=Others").first
+        return self.reason_others_selector
 
     def confirm_button(self):
-        return self.page.get_by_role('button', name='Confirm')
+        return self.confirm_button_selector

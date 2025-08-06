@@ -1,6 +1,9 @@
+from pages.ViewTableTab import ViewTableTab
+
 class UIUtils:
     def __init__(self, page):
         self.page = page
+        self.view_table_tab = ViewTableTab(self.page)
 
     def click(self, locator):
         """Clicks the given locator."""
@@ -71,3 +74,37 @@ class UIUtils:
             if header:  # skip empty header columns
                 result[header] = cell.strip()
         return result
+    
+    def is_quick_buy_in_present(self):
+        """
+        Checks if the 'QUICK BUY IN' option is present on the screen.
+        Prints a message if present.
+        Returns True if present, False otherwise.
+        """
+        try:
+            if self.view_table_tab.quick_buy_in().is_visible():
+                print("QUICK BUY IN Option is present on screen")
+                return True
+            else:
+                print("QUICK BUY IN Option is NOT present on screen")
+                return False
+        except Exception:
+                    print("QUICK BUY IN Option is NOT present on screen")
+                    return False
+            # Check if QUICK BUY IN is present
+            
+    def is_buy_in_button_present(self):
+        """
+        Checks if the Buy-In confirm button is present on the screen.
+        Prints a message if present.
+        Returns True if present, False otherwise.
+        """
+        try:
+            if self.view_table_tab.buy_in_confirm_button().is_visible():
+                print("Buy-In Confirm Button is present on screen")
+                return True
+            else:
+                print("Buy-In Confirm Button is NOT present on screen")
+                return False
+        except Exception:
+                    print("Buy-In Confirm Button is NOT present on screen")    

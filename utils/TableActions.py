@@ -4,6 +4,7 @@ from conftest import get_tableIP, setup
 from pages.PlayerTab import PlayerTab
 from pages.InventoryTab import InventoryTab
 from pages.ViewTableTab import ViewTableTab
+from utils.UIUtils import UIUtils
 
 class TableActions:
     def get_api_url(self):
@@ -33,6 +34,7 @@ class TableActions:
         self.table_open()
 
     def expire_and_adjust(self):
+        self.chip_move_from_antenna(antenna_name="TT", chip_id="e00540011226b05d", acquired="true")
         self.player_tab.table_dashboard_button().click()
         self.player_tab.table_controls_menu_item().click()
         self.player_tab.expire_chips_button().click()
@@ -69,8 +71,10 @@ class TableActions:
                 self.inventory_tab.reason_others_option().click()
                 self.page.wait_for_timeout(1000)
                 self.inventory_tab.confirm_button().click()
+                self.navigate_to_tab('View Table', wait_time=2000)
             else:
                 print("'Adjust' button is not clickable.")
+                self.navigate_to_tab('View Table', wait_time=2000)
                 return
         except Exception as e:
             print(f"Error interacting with Adjust button: {e}")
@@ -159,36 +163,62 @@ class TableActions:
         resp_place = requests.post(api_url, headers=headers, json=data_place, verify=False)
         print(f"Place chip response: {resp_place.status_code} {resp_place.text}")
 
-    def buy_in(self, player_id: str, seat_number: int, chip_id: str):
+    def buy_in(self, player_id: str, seat_number: int, chip_id: str, buyin_type: str):
         """
         Moves chip to DEALER, then automates the Buy-In process for a given player, seat, and chip.
+        Supports Rated, Known, and Anonymous buy-ins.
         Calls move_chip to place the chip on the seat's antenna after buy-in.
         :param player_id: The player ID as string (e.g., "6001")
         :param seat_number: The seat number as integer (e.g., 1)
         :param chip_id: The chip's unique ID as string
+        :param buyin_type: "rated", "known", or "anonymous"
         """
         try:
             # Step 1: Move chip from TT to DEALER
             self.move_chip("TT", "DEALER", chip_id)
             self.page.wait_for_timeout(1000)
-
+            self.ui_utils = UIUtils(self.page)
+            self.ui_utils.is_quick_buy_in_present()
+            self.ui_utils.is_buy_in_button_present()
             # Step 2: Buy-In UI process
-            self.view_table_tab.seat_section(seat_number).click()
-            self.page.wait_for_timeout(1000)
-            self.view_table_tab.player_search_box().fill(player_id)
-            self.page.wait_for_timeout(1000)
-            self.view_table_tab.player_search_box().press('Enter')
-            self.page.wait_for_timeout(1000)
-            self.view_table_tab.buy_in_confirm_button().click()
-            self.page.wait_for_timeout(1000)
-            print(f"Buy-In process completed for seat {seat_number} and player {player_id}.")
+            if buyin_type.lower() == "rated":
+                # Rated buy-in (existing logic)
+                self.view_table_tab.seat_section(seat_number).click()
+                self.page.wait_for_timeout(1000)
+                self.view_table_tab.player_search_box().fill(player_id)
+                self.page.wait_for_timeout(1000)
+                self.view_table_tab.player_search_box().press('Enter')
+                self.page.wait_for_timeout(1000)
+                self.view_table_tab.buy_in_confirm_button().click()
+                self.page.wait_for_timeout(1000)
+                print(f"Rated Buy-In process completed for seat {seat_number} and player {player_id}.")
+ 
+            elif buyin_type.lower() == "known":
+                # Known buy-in (example: select from known list, or similar logic)
+                self.view_table_tab.player_search_box().fill(player_id)
+                self.page.wait_for_timeout(1000)
+                self.view_table_tab.player_search_box().press('Enter')
+                self.page.wait_for_timeout(1000)
+                self.view_table_tab.buy_in_confirm_button().click()
+                self.page.wait_for_timeout(1000)
+                print(f"Known Buy-In process completed for seat {seat_number} and player {player_id}.")
+ 
+            elif buyin_type.lower() == "anon":
+                # Anon buy-in (example: click anony button, skip player_id)
+                self.view_table_tab.buy_in_confirm_button().click()
+                self.page.wait_for_timeout(1000)
+                print(f"Anon Buy-In process completed for seat {seat_number}.")
 
+            else:
+                print(f"Unknown buyin_type '{buyin_type}' specified.")
+                return
+ 
             # Step 3: Move chip from DEALER to the seat's antenna (assuming antenna name is based on seat number)
             self.remove_chip_from_antenna("DEALER", chip_id)
             self.page.wait_for_timeout(1000)
         except Exception as e:
             print(f"Error during Buy-In: {e}")
-
+            
     def chip_move_from_antenna(self, antenna_name: str, chip_id: str, acquired: str = "false"):
         """
         Moves (sets acquired true/false) the chip on the specified antenna using the chipMove API.

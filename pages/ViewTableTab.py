@@ -1,25 +1,25 @@
 class ViewTableTab:
-    
     def __init__(self, page):
         self.page = page
-        
-    TAKE_PLAYER = "TAKEPLAYER"
-    VIEW_TABLE = "View Table"
-    PLAYER_SEARCH = "Player Search"
-    BUY_IN_CONFIRM_BUTTON = "button.wd-dd-button.button-confirm.tick"
+        self.view_table_tab_selector = self.page.get_by_role('tab', name="View Table")
+        self.player_search_box_selector = self.page.get_by_role('textbox', name="Player Search")
+        self.buy_in_confirm_button_selector = self.page.locator("button.wd-dd-button.button-confirm.tick")
+        self.dot_locator = self.page.locator("div.dots")
+        self.count_locator = self.page.locator("div.count")
+        self.quick_buy_in_selector = self.page.get_by_text('QUICK BUY IN')
 
     def view_table_tab(self):
-        return self.page.get_by_role('tab', name=self.VIEW_TABLE)
+        return self.view_table_tab_selector
 
     def seat_section(self, seat_number):
         return self.page.locator('section').filter(has_text=str(seat_number)).locator('div').first
-    
+
     def player_search_box(self):
-        return self.page.get_by_role('textbox', name=self.PLAYER_SEARCH)
+        return self.player_search_box_selector
 
     def buy_in_confirm_button(self):
-        return self.page.locator(self.BUY_IN_CONFIRM_BUTTON)
-    
+        return self.buy_in_confirm_button_selector
+
     def is_dot_present(self):
         """
         Returns True if get_dot_count() is greater than 0, else False.
@@ -30,24 +30,26 @@ class ViewTableTab:
         """
         Returns the number of visible divs with class 'dots' on the screen.
         """
-        dot_locators = self.page.locator("div.dots")
-        return dot_locators.count()
-    
+        return self.dot_locator.count()
+
     def get_dot_count(self):
         """
         Returns the number of dots:
         - If 'div.count' is present, returns its integer value.
         - Otherwise, returns the count of 'div.dots' elements.
         """
-        count_locator = self.page.locator("div.count")
-        if count_locator.count() > 0:
-            # 'div.count' is present, get its integer value
-            count_text = count_locator.inner_text().strip()
+        if self.count_locator.count() > 0:
+            count_text = self.count_locator.inner_text().strip()
             try:
                 return int(count_text)
             except ValueError:
                 return 0
         else:
-            # Fallback: count 'div.dots' elements
-            dot_locators = self.page.locator("div.dots")
-            return dot_locators.count()
+            return self.dot_locator.count()
+
+    def quick_buy_in(self):
+            """
+            Returns the locator for the 'QUICK BUY IN' button/text.
+            """
+            return self.quick_buy_in_selector
+        

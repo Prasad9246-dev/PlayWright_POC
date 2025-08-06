@@ -17,21 +17,26 @@ def setup():
         yield page
         browser.close()
 
+
 def get_config():
     return read_excel_config("data/config_data.xlsx")
 
 config = get_config()
+
 
 def get_tableIP():
     table_ip = config.get("tableip")
     print(table_ip)
     return table_ip
 
+
 def get_username():
     return config.get("username")
 
+
 def get_password():
     return config.get("password")
+
 
 def get_env():
     return config.get("env")
