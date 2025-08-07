@@ -2,10 +2,11 @@ from tests.BaseTest import BaseTest
 import allure
 
 class Test0608(BaseTest):
-    def __init__(self, setup):
+    def setup_method(self, setup):
         super().__init__(setup)
 
     def test_case(self):
+        # self.setup.pause()
         # Only your test logic here, setup is already done
         self.table_actions.buy_in(player_id="6009", seat_number=1, chip_id="e00540011226b05d", buyin_type="known")
         # ...other steps...

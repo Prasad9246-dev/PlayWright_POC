@@ -18,81 +18,27 @@ class TableActions:
         self.view_table_tab = ViewTableTab(page)    
 
     def table_close(self):
+        # If "Table is closed" is already present, skip closing
+        if self.page.get_by_text("Table is closed").is_visible():
+            print("Table is already closed. Skipping close operation.")
+            return
         self.player_tab.dropdown_button().click()
         self.player_tab.menu_item_close().click()
         self.player_tab.confirm_button().click()
         self.page.wait_for_timeout(4000)
 
     def table_open(self):
-        self.player_tab.dropdown_button().click()
-        self.player_tab.menu_item_open().click()
-        self.player_tab.confirm_button().click()
-        self.page.wait_for_timeout(4000)
+        if self.page.get_by_text("Table is closed").is_visible():
+            self.player_tab.dropdown_button().click()
+            self.player_tab.menu_item_open().click()
+            self.player_tab.confirm_button().click()
+            self.page.wait_for_timeout(4000)
+        else:
+            print("Table is already open. Skipping open operation.")
 
     def table_close_and_open(self):
         self.table_close()
         self.table_open()
-
-    def expire_and_adjust(self):
-        self.chip_move_from_antenna(antenna_name="TT", chip_id="e00540011226b05d", acquired="true")
-        self.player_tab.table_dashboard_button().click()
-        self.player_tab.table_controls_menu_item().click()
-        self.player_tab.expire_chips_button().click()
-        self.player_tab.confirm_button().click()
-        self.player_tab.close_button().click()
-        self.inventory_tab.inventory_tab().click()
-        self.inventory_tab.scan_button().click()
-        self.page.wait_for_timeout(2000)
-        api_url = self.get_api_url()
-        # Step 1: Wait for isScanning to be False
-        for attempt in range(20):
-            resp = requests.get(api_url, verify=False)
-            data = resp.json()
-            is_scanning = data.get("chipTrayStatus", {}).get("isScanning")
-            print(f"Attempt {attempt+1}: isScanning={is_scanning}")
-            if not is_scanning:
-                break
-            time.sleep(2)
-        else:
-            print("Timeout waiting for isScanning to become False (first check).")
-            return
-
-        # Step 2: Click Adjust if enabled
-        try:
-            adjust_button = self.inventory_tab.adjust_button()
-            adjust_button.wait_for(state="visible", timeout=10000)
-            if adjust_button.is_enabled():
-                adjust_button.click()
-                print("'Adjust' button is clickable.")
-                self.page.wait_for_timeout(2000)
-                self.inventory_tab.select_reason_option().click()
-                self.page.wait_for_timeout(500)  # Give time for overlay to appear
-                self.inventory_tab.reason_others_option().wait_for(state="visible", timeout=3000)
-                self.inventory_tab.reason_others_option().click()
-                self.page.wait_for_timeout(1000)
-                self.inventory_tab.confirm_button().click()
-                self.navigate_to_tab('View Table', wait_time=2000)
-            else:
-                print("'Adjust' button is not clickable.")
-                self.navigate_to_tab('View Table', wait_time=2000)
-                return
-        except Exception as e:
-            print(f"Error interacting with Adjust button: {e}")
-            return
-
-        # Step 3: Wait for isScanning to be False again
-        for attempt in range(20):
-            resp = requests.get(api_url, verify=False)
-            data = resp.json()
-            is_scanning = data.get("chipTrayStatus", {}).get("isScanning")
-            print(f"Attempt {attempt+1} (after Adjust): isScanning={is_scanning}")
-            if not is_scanning:
-                break
-            time.sleep(2)
-        else:
-            print("Timeout waiting for isScanning to become False (after Adjust).")
-            return
-
 
     def navigate_to_tab(self, tab_name, wait_time=5000):
         """
@@ -111,8 +57,8 @@ class TableActions:
             self.page.wait_for_timeout(wait_time)
         except Exception as e:
             print(f"Error clicking '{tab_name}' tab: {e}")
-            
-            
+            self.page.screenshot(path=f"screenshots/error_clicking_{tab_name}.png")
+
     def remove_chip_from_antenna(self, antenna_name: str, chip_id: str):
         """
         Removes (falses) the chip from the specified antenna using the chipMove API.
@@ -132,7 +78,6 @@ class TableActions:
             print(f"Remove chip from '{antenna_name}' response: {resp_remove.status_code} {resp_remove.text}")
         except Exception as e:
             print(f"Error removing chip from antenna '{antenna_name}': {e}")
-
     
     def move_chip(self, from_antenna, to_antenna, chip_id="e00540011226b05d"):
         """
@@ -174,6 +119,7 @@ class TableActions:
         :param buyin_type: "rated", "known", or "anonymous"
         """
         try:
+            self.navigate_to_tab('View Table', wait_time=2000)
             # Step 1: Move chip from TT to DEALER
             self.move_chip("TT", "DEALER", chip_id)
             self.page.wait_for_timeout(1000)

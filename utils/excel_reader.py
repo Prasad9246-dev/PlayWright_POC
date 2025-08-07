@@ -1,4 +1,5 @@
 import openpyxl
+import pandas as pd
 
 def read_excel_config(path):
     """
@@ -20,6 +21,13 @@ def read_excel_config(path):
         print(f"Error reading Excel file: {e}")
     return config
 
-if __name__ == "__main__":
-    config = read_excel_config("data/config_data.xlsx")  # Update path if needed
-    print(str(config))  # Optional: See output in terminal
+
+
+def read_chip_ids_df(path):
+    """
+    Reads the 'ChipIds' sheet and returns a DataFrame with 'chipsID' and 'Denom'.
+    """
+    df = pd.read_excel(path, sheet_name="ChipIds")
+    return df[["All-chips", "Denom"]].rename(columns={"All-chips": "chipsID"})
+
+print(read_chip_ids_df("data/AutomationChips.xlsx"))
