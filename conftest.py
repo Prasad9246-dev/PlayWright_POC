@@ -15,7 +15,7 @@ def setup():
         context = browser.new_context(ignore_https_errors=True,viewport={"width": 1366, "height": 650})
         page = context.new_page()
         yield page
-        tear_down(browser)
+        tear_down_browser(browser)
 
 
 def get_config():
@@ -50,10 +50,10 @@ def get_url():
     print(url_template)
     return url_template
 
-@pytest.fixture
-def tear_down():
-    def _tear_down(browser):
-        if not browser.is_closed():
-            browser.close()
-        print("Browser closed. Teardown complete.")
-    return _tear_down
+def tear_down_browser(browser):
+    """Closes the browser and prints a message."""
+    try:
+        browser.close()
+        print(" Browser closed. Teardown complete.")
+    except Exception as e:
+        print(f"Error closing browser: {e}")

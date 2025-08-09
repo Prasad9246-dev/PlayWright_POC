@@ -21,8 +21,7 @@ class UIUtils:
         """Returns the text content of the locator."""
         try:
             # Wait for the element to be visible before getting text
-            self.page.locator(locator).wait_for(state="visible", timeout=5000)
-            return self.page.locator(locator).first.inner_text()
+            return locator.inner_text()
         except Exception as e:
             print(f"Error in get_text: {e}")
             return None
@@ -42,8 +41,7 @@ class UIUtils:
     def wait_for_enabled(self, locator, timeout=5000):
         """Waits for the locator to be enabled."""
         self.page.locator(locator).wait_for(state="enabled", timeout=timeout)
-        
-        
+            
     def is_game_id_incremented_by_one(previousGameID, CurrentGameID):
         """
         Returns True if CurrentGameID is exactly 1 greater than previousGameID, else False.
@@ -55,7 +53,6 @@ class UIUtils:
         except ValueError:
             print("Game IDs are not valid integers.")
             return False
-        
         
     def get_first_row_as_dict(self):
         """

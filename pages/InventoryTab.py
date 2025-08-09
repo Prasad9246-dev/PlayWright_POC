@@ -1,7 +1,7 @@
 class InventoryTab:
     def __init__(self, page):
         self.page = page
-        self.inventory_tab_selector = self.page.get_by_role('tab', name='Inventory')
+        self.inventory_tab_selector = self.page.get_by_role('tab', name="Inventory")
         self.scan_button_selector = self.page.get_by_role('button', name='Scan')
         self.adjust_button_selector = self.page.get_by_role('button', name='Adjust')
         self.select_reason_selector = self.page.get_by_role("combobox")

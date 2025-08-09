@@ -13,12 +13,12 @@ class LoginPage(BasePage):
         self.page.goto(url)
 
     def login(self, username, password):
-        try:
-            # Wait up to 2 seconds for the username field to be visible
-            self.username_selector.wait_for(state="visible", timeout=2000)
+        # Check if the login page is visible before attempting login
+        self.page.wait_for_timeout(4000) 
+        if self.username_selector.is_visible():
             self.username_selector.fill(username)
             self.password_selector.fill(password)
             self.login_button_selector.click()
-        except TimeoutError:
-            # Username field not visible, skip login
-            print("Username field not visible, skipping login.")
+            print("Login attempted.")
+        else:
+            print("Login page not visible, skipping login.")

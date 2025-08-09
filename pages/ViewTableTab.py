@@ -7,12 +7,15 @@ class ViewTableTab:
         self.dot_locator = self.page.locator("div.dots")
         self.count_locator = self.page.locator("div.count")
         self.quick_buy_in_selector = self.page.get_by_text('QUICK BUY IN')
+    #     self.seat_section_selector = self.page.locator("app-buyin-transaction").get_by_role("main").locator("div").filter(
+    #     has_text=str(seat_number)
+    # )
 
     def view_table_tab(self):
         return self.view_table_tab_selector
 
     def seat_section(self, seat_number):
-        return self.page.locator('section').filter(has_text=str(seat_number)).locator('div').first
+        return self.page.locator(f'div.seat__seat-wrapper:has(button.seat.pos__{seat_number})').click()
 
     def player_search_box(self):
         return self.player_search_box_selector
