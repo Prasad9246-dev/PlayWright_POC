@@ -94,74 +94,6 @@ class TableActions:
         } for chip_id in chip_id_list]
         resp_place = requests.post(api_url, headers=headers, json=data_place, verify=False)
         print(f"Place chip(s) response: {resp_place.status_code} {resp_place.text}")
-
-    def buy_in_type(self, table_ip, player_id: str, seat_number: int, denom: str, buyin_type: str, chips_df):
-        """
-        Automates the Buy-In process for a given player, seat, and denom.
-        Finds the chip IDs for the given denom from chips_df using get_chip_ids_for_denom or get_n_chips_for_denom.
-        Returns the chip IDs used for the buy-in.
-        :param table_ip: Table IP address
-        :param player_id: The player ID as string (e.g., "6001")
-        :param seat_number: The seat number as integer (e.g., 1)
-        :param denom: The denomination value as string (e.g., "100" or "100-5")
-        :param buyin_type: "rated", "known", or "anonymous"
-        :param chips_df: DataFrame containing chip IDs and Denoms
-        :return: List of chip IDs used for buy-in
-        """
-        try:
-            # Determine which function to use based on denom format
-            if '-' in denom:
-                chip_ids = self.get_n_chips_for_denom(chips_df, denom)
-            else:
-                chip_ids = self.get_chip_ids_for_denom(chips_df, denom)
-
-            if not chip_ids:
-                print(f"No chips found for denom {denom}")
-                return []
-
-            chip_ids_str = ",".join(chip_ids)
-
-            self.navigate_to_tab(self.view_table_tab.view_table_tab(), wait_time=2000)
-            # Step 1: Move chips from TT to DEALER
-            self.move_chips_between_antennas(table_ip, "TT", "DEALER", chip_ids_str)
-            self.page.wait_for_timeout(1000)
-            self.ui_utils.is_quick_buy_in_present()
-            self.ui_utils.is_buy_in_button_present()
-            # Step 2: Buy-In UI process
-            if buyin_type.lower() == "rated":
-                print(seat_number)
-                self.view_table_tab.seat_section(seat_number)
-                self.page.wait_for_timeout(1000)
-                self.view_table_tab.player_search_box().fill(player_id)
-                self.page.wait_for_timeout(1000)
-                self.view_table_tab.player_search_box().press('Enter')
-                self.page.wait_for_timeout(1000)
-                self.view_table_tab.buy_in_confirm_button().click()
-                self.page.wait_for_timeout(1000)
-                print(f"Rated Buy-In process completed for seat {seat_number} and player {player_id}.")
-            elif buyin_type.lower() == "known":
-                self.view_table_tab.player_search_box().fill(player_id)
-                self.page.wait_for_timeout(1000)
-                self.view_table_tab.player_search_box().press('Enter')
-                self.page.wait_for_timeout(1000)
-                self.view_table_tab.buy_in_confirm_button().click()
-                self.page.wait_for_timeout(1000)
-                print(f"Known Buy-In process completed for player {player_id}.")
-            elif buyin_type.lower() == "anon":
-                self.view_table_tab.buy_in_confirm_button().click()
-                self.page.wait_for_timeout(1000)
-                print(f"Anon Buy-In process completed for player {player_id}.")
-            else:
-                print(f"Unknown buyin_type '{buyin_type}' specified.")
-                return []
-
-            # Step 3: Move chips from DEALER to the seat's antenna
-            self.chip_move_antenna(table_ip, "DEALER", chip_ids_str, "false")
-            self.page.wait_for_timeout(1000)
-            return chip_ids
-        except Exception as e:
-            print(f"Error during Buy-In: {e}")
-            return []
             
     def chip_move_antenna(self,table_ip, antenna_name: str, chip_ids, acquired: str):
         """
@@ -190,30 +122,6 @@ class TableActions:
             print(f"Chip move on '{antenna_name}' (acquired={acquired}) response: {resp.status_code} {resp.text}")
         except Exception as e:
             print(f"Error moving chip(s) on antenna '{antenna_name}': {e}")
-
-    def draw_cards(self, table_ip: str, *cards):
-        """
-        Draws one or more cards on the table using the drawcard API (GET method).
-        After all cards are drawn, hits the shoebutton API.
-        :param table_ip: The table IP address as a string.
-        :param cards: Variable number of card strings (e.g., "4s", "5h", "6d").
-        """
-        api_url = f"https://{table_ip}:790/api/table/v1/drawcard"
-        headers = {'Content-Type': 'application/json'}
-        for card in cards:
-            try:
-                url_with_param = f"{api_url}?card={card}"
-                resp = requests.get(url_with_param, headers=headers, verify=False)
-                print(f"Draw card '{card}' response: {resp.status_code} {resp.text}")
-            except Exception as e:
-                print(f"Error drawing card '{card}': {e}")
-        # After all cards are drawn, hit the shoebutton API
-        try:
-            shoe_url = f"https://{table_ip}:790/api/table/v1/shoebutton"
-            resp_shoe = requests.get(shoe_url, headers=headers, verify=False)
-            print(f"Shoe button API response: {resp_shoe.status_code} {resp_shoe.text}")
-        except Exception as e:
-            print(f"Error calling shoe button API: {e}")
 
     def get_chip_ids_for_denom(self,chips_df, denom):
         """

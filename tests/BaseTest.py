@@ -3,10 +3,12 @@ from GameSkeleton.Wager import Wager
 from pages.login_page import LoginPage
 from utils.Expire_And_Adjust_Variance import ExpireAndAdjustVariance
 from utils.TableActions import TableActions
-from utils.excel_reader import get_buyin_data, get_cards_data, get_wager_data
+from utils.excel_reader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data
 from conftest import get_url, get_username, get_password, get_tableIP
 from utils.excel_reader import read_chip_ids_df
 from GameSkeleton.BuyIN import BuyIN
+from GameSkeleton.TakeBets import TakeBets
+from GameSkeleton.Payouts import Payout
 
 class BaseTest:
     def __init__(self, setup,test_case_id):
@@ -22,9 +24,13 @@ class BaseTest:
         self.buyin_data = get_buyin_data("data/testData.xlsx", test_case_id)
         self.wager_data = get_wager_data("data/testData.xlsx", test_case_id)
         self.card_data = get_cards_data("data/testData.xlsx", test_case_id)
+        self.take_bets_data = get_takeBets_data("data/testData.xlsx", test_case_id)
+        self.payout_data = get_payout_data("data/testData.xlsx", test_case_id)
         self.buyin_processor = BuyIN(setup)
         self.wager_processor = Wager(setup)
         self.card_processor = GameoutComes()
+        self.take_bets_processor = TakeBets(setup)
+        self.payout_processor = Payout(setup)
         self._run_base_setup()  # Automatically run setup on instantiation
 
     def _run_base_setup(self):

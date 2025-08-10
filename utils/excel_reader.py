@@ -112,4 +112,38 @@ def get_cards_data(excel_path, test_case_id):
             cards.append(str(row[col]).strip())
     return cards
 
-print(get_cards_data("data/testData.xlsx", "TEST-0608"))
+def get_takeBets_data(excel_path, test_case_id):
+    """
+    Reads the TakeBets column for the given test_case_id and returns a list of bets, split by ';'.
+    Example return: ['B3', 'B5']
+    """
+    df = pd.read_excel(excel_path)
+    row = df[df['testCase_ID'] == test_case_id].iloc[0]
+    takebets_raw = row.get("TakeBets", "")
+    if pd.notna(takebets_raw):
+        bets = [bet.strip() for bet in str(takebets_raw).split(';') if bet.strip()]
+        return bets
+    return []
+
+def get_payout_data(excel_path, test_case_id):
+    """
+    Reads all payout columns (payAmt1;Antenna, payAmt2, ...) for the given test_case_id
+    and returns a list of dicts: [{'antenna': ..., 'denom': ...}, ...]
+    Handles any number of payout columns.
+    Example return: [{'antenna': 'P1', 'denom': '100'}, {'antenna': 'P2', 'denom': '100'}, ...]
+    """
+    df = pd.read_excel(excel_path)
+    row = df[df['testCase_ID'] == test_case_id].iloc[0]
+    payout_list = []
+    for col in df.columns:
+        if col.lower().startswith("payamt"):
+            val = row[col]
+            if pd.notna(val):
+                parts = [p.strip() for p in str(val).split(';')]
+                antenna = parts[0] if len(parts) > 0 else None
+                denom = parts[1] if len(parts) > 1 else None
+                payout_list.append({
+                    "antenna": antenna,
+                    "denom": denom
+                })
+    return payout_list
