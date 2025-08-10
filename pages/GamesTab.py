@@ -2,17 +2,13 @@ class GamesTab:
     
     def __init__(self, page):
         self.page = page
+        self.GAMES_TAB = self.page.get_by_role('tab', name="Games")
     
-    GAMES_TAB = "Games"
     GAME_ID_CELL = "table[role='table'] tbody tr:first-child td:nth-child(2)"
     TABLE_LOCATOR = "table[role='table']"
     TABLE_HEADER_LOCATOR = "thead tr th"
     TABLE_BODY_LOCATOR = "tbody tr:first-child td"
 
-    def games_tab(self):
-        return self.page.get_by_role('tab', name=self.GAMES_TAB)
-    
-    
     def get_first_row_first_column_text(self):
         """
         Returns the text content of the first row, first column cell in the table.
@@ -26,8 +22,7 @@ class GamesTab:
         except Exception as e:
             print(f"Error in get_first_row_first_column_text: {e}")
             return None
-        
-        
+               
     def get_first_row_as_dict(self):
         """
         Returns the first row of the table as a dictionary mapping column names to cell values.
