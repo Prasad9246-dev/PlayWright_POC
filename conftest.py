@@ -12,7 +12,7 @@ def setup():
         )
         # Set viewport=None to use the full window size
     
-        context = browser.new_context(ignore_https_errors=True,viewport={"width": 1366, "height": 650})
+        context = browser.new_context(ignore_https_errors=True,viewport={"width": 1366, "height": 600})
         page = context.new_page()
         yield page
         browser.close()
