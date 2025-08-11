@@ -41,6 +41,15 @@ def get_password():
 def get_env():
     return config.get("env")
 
+def get_ppApplication_Url():
+    url_template = config.get("ppapplicationurl")  # use lowercase key
+    env = config.get("env")
+    print(f"url_template: {url_template}, env: {env}")
+    if url_template and env:
+        return url_template.replace("env", env)
+    print(url_template)
+    return url_template
+
 def get_url():
     url_template = config.get("url")
     table_ip = config.get("tableip")
@@ -57,3 +66,7 @@ def tear_down_browser(browser):
         print(" Browser closed. Teardown complete.")
     except Exception as e:
         print(f"Error closing browser: {e}")
+        
+if __name__ == "__main__":
+    url = get_ppApplication_Url()
+    print(f"PP Application URL: {url}")
