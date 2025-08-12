@@ -11,7 +11,6 @@ def setup():
             args=["--start-maximized"]
         )
         # Set viewport=None to use the full window size
-    
         context = browser.new_context(ignore_https_errors=True,viewport={"width": 1366, "height": 650})
         page = context.new_page()
         yield page
@@ -68,5 +67,4 @@ def tear_down_browser(browser):
         print(f"Error closing browser: {e}")
         
 if __name__ == "__main__":
-    url = get_ppApplication_Url()
-    print(f"PP Application URL: {url}")
+    pass

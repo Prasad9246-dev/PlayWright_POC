@@ -77,7 +77,7 @@ def get_wager_data(excel_path, test_case_id):
     """
     Reads all wager columns for the given test_case_id and returns a dict:
     { 'W1': {...}, 'W2': {...}, ... }
-    Handles any number of wager columns, including the first column.
+    Handles any number of wager columns, including tagged bets.
     """
     df = pd.read_excel(excel_path)
     row = df[df['testCase_ID'] == test_case_id].iloc[0]
@@ -95,9 +95,14 @@ def get_wager_data(excel_path, test_case_id):
                 "denom": denom,
                 "antenna": antenna
             }
+            # Support tagged bets (4th part)
+            if len(parts) > 3:
+                wager_data["tagged_antenna"] = parts[3]
             wager_dict[f"W{idx}"] = wager_data
             idx += 1
     return wager_dict
+
+print(get_wager_data("data/testData.xlsx", "TEST-0608"))
 
 def get_cards_data(excel_path, test_case_id):
     """
