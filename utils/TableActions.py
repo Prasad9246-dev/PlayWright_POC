@@ -1,6 +1,5 @@
 import requests
-import time
-from conftest import get_tableIP, setup
+from utils.config_read import ConfigUtils
 from pages.PlayerTab import PlayerTab
 from pages.InventoryTab import InventoryTab
 from pages.ViewTableTab import ViewTableTab
@@ -8,7 +7,8 @@ from utils.UIUtils import UIUtils
 
 class TableActions:
     def get_api_url(self):
-        table_ip = get_tableIP()
+        config_utils = ConfigUtils()
+        table_ip = config_utils.get_tableIP()
         return f"https://{table_ip}:790/api/table/v1/tableInfo"
 
     def __init__(self, page):
@@ -20,6 +20,7 @@ class TableActions:
 
     def table_close(self):
         # If "Table is closed" is already present, skip closing
+        self.page.wait_for_timeout(3000)
         if self.page.get_by_text("Table is closed").is_visible():
             print("Table is already closed. Skipping close operation.")
             return
@@ -31,6 +32,7 @@ class TableActions:
         print("Table closed successfully.")
 
     def table_open(self):
+        self.page.wait_for_timeout(3000)
         if self.page.get_by_text("Table is closed").is_visible():
             print("Opening table...")
             self.player_tab.dropdown_button().click()
@@ -42,6 +44,7 @@ class TableActions:
             print("Table is already open. Skipping open operation.")
 
     def table_close_and_open(self):
+        self.navigate_to_tab(self.player_tab.Players_TAB)
         self.table_close()
         self.table_open()
 

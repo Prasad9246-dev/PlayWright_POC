@@ -5,13 +5,9 @@ class UIUtils:
         self.page = page
         self.view_table_tab = ViewTableTab(self.page)
 
-    def click(self, locator):
-        """Clicks the given locator."""
-        self.page.locator(locator).click()
-        
-    def click_tab(self, selector):
-        """Clicks the tab specified by the selector string."""
-        self.page.locator(selector).click()
+    def click_to_element(self, element_selector):
+        """Clicks the given element."""
+        element_selector.click()
 
     def type_into(self, locator, text):
         """Types the given text into the locator."""
@@ -26,7 +22,6 @@ class UIUtils:
             print(f"Error in get_text: {e}")
             return None
         
-
     def is_visible(self, locator):
         """Checks if the locator is visible on the page."""
         try:

@@ -1,6 +1,6 @@
 import requests
 import time
-from conftest import get_tableIP
+from utils.config_read import ConfigUtils
 from pages.PlayerTab import PlayerTab
 from pages.InventoryTab import InventoryTab
 from pages.ViewTableTab import ViewTableTab
@@ -10,7 +10,8 @@ from utils.excel_reader import read_chip_ids_df
 class ExpireAndAdjustVariance:
     def __init__(self, page):
         self.page = page
-        self.table_ip = get_tableIP()
+        config_utils = ConfigUtils()
+        self.table_ip = config_utils.get_tableIP()
         self.player_tab = PlayerTab(page)
         self.inventory_tab = InventoryTab(page)
         self.view_table_tab = ViewTableTab(page)

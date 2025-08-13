@@ -1,6 +1,7 @@
 class PlayerTab:
     def __init__(self, page):
         self.page = page
+        self.Players_TAB = self.page.get_by_role('tab', name="Players")
 
     def dropdown_button(self):
         return self.page.get_by_role('button', name='arrow_drop_down', exact=True)

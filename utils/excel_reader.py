@@ -102,8 +102,6 @@ def get_wager_data(excel_path, test_case_id):
             idx += 1
     return wager_dict
 
-print(get_wager_data("data/testData.xlsx", "TEST-0608"))
-
 def get_cards_data(excel_path, test_case_id):
     """
     Reads card columns (card1, card2, ...) for the given test_case_id and returns a list of card values.

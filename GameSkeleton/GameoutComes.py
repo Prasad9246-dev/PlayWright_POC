@@ -29,7 +29,7 @@ class GameoutComes:
         self.draw_cards(cards, table_ip)
         self.press_shoe_button(table_ip)
         
-    def deal_cards_and_activate_shoe(self, table_ip: str, *cards):
+    def deal_cards_and_activate_shoe(self, table_ip, *cards):
         """
         Deals one or more cards on the table using the drawcard API (GET method).
         After all cards are dealt, activates the shoe button API.
