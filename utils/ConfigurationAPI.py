@@ -1,4 +1,7 @@
 import requests
+import psycopg2
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class ConfigurationAPI:
     def __init__(self):
@@ -126,3 +129,92 @@ class ConfigurationAPI:
         response = requests.put(url, json=payload, headers=headers, verify=False)
         print(f"Update Template Response: {response.status_code}")
         return response
+
+    def get_connection(self, tableIP):
+        conn_str = (
+            f"dbname=wdts_db "
+            f"user=wdts_admin "
+            f"password=35Password! "
+            f"host={tableIP} "
+            f"port=5432 "
+            f"sslmode=disable"
+        )
+        try:
+            conn = psycopg2.connect(conn_str)
+            return conn
+        except Exception as e:
+            print(f"Database connection error: {e}")
+            return None
+
+    def get_game_template_id(self, tableIP, template_name):
+        query = "SELECT template_id FROM t_template_configuration WHERE name = %s and template_type = 'GAME' limit 1;"
+        conn = self.get_connection(tableIP)
+        if conn is None:
+            print("Could not establish database connection.")
+            return None
+        try:
+            cur = conn.cursor()
+            cur.execute(query, (template_name,))
+            result = cur.fetchone()
+            cur.close()
+            conn.close()
+            if result:
+                return result[0]
+            else:
+                print("No template found.")
+                return None
+        except Exception as e:
+            print(f"Database error: {e}")
+            return None
+
+    def run_query(self, tableIP, query):
+        """
+        Executes a SQL query on the given tableIP and returns the first row of the result.
+        - tableIP: Database IP address
+        - query: SQL query string (no parameters)
+        Returns: First row of the result or None
+        """
+        conn = self.get_connection(tableIP)
+        if conn is None:
+            print("Could not establish database connection.")
+            return None
+        try:
+            cur = conn.cursor()
+            cur.execute(query)
+            result = cur.fetchone()
+            cur.close()
+            conn.close()
+            return result
+        except Exception as e:
+            print(f"Database error: {e}")
+            return None
+
+    def get_current_template(self, tableIP, base_url, template_type):
+        """
+        Gets the current template details for the given tableIP and template_type.
+        - tableIP: Database IP address
+        - base_url: API base URL (e.g., "https://wdts-gateway-cs01.wdts.local:792")
+        - template_type: e.g., "TABLE_LIMITS" or "GAME"
+        Returns: Template details as JSON or None
+        """
+        base_url = base_url.rstrip('/').replace('/login', '')
+        access_token = self.get_access_token(base_url)
+        template_id = self.get_current_template_id(base_url, tableIP, template_type)
+        if not template_id:
+            print("No templateId found for given tableIP and template_type.")
+            return None
+        url = f"{base_url}/api/configuration/v1/template?templateId={template_id}&templateType={template_type}"
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json"
+        }
+        response = requests.get(url, headers=headers, verify=False)
+        try:
+            data = response.json()
+            return data.get("name")
+        except Exception as e:
+            print(f"Error extracting template details: {e}")
+            return None
+
+if __name__ == "__main__":
+    pass

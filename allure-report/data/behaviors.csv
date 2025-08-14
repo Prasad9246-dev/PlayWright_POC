@@ -1,4 +1,4 @@
 "BROKEN","EPIC","FAILED","FEATURE","PASSED","SKIPPED","STORY","UNKNOWN"
-"0","","0","Buy-In Feature","1","0","TEST-28845: Rated Buy-In","0"
+"0","","0","Player antenna logic on commission table","1","0","Insurance on Banker antenna disables Player antenna","0"
 "0","","0","Buy-In Feature","1","0","TEST-0608: Rated Buy-In","0"
-"0","","0","Buy-In Feature","1","0","TEST-14007: Rated Buy-In","0"
+"0","","0","Take messaging visibility on the screen","1","0","Verify 'TAKE PLAYER' element appears after buy-in and wager","0"

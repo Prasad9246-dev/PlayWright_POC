@@ -5,7 +5,7 @@ import allure
 @allure.feature("Take messaging visibility on the screen")
 @allure.story("Verify 'TAKE PLAYER' element appears after buy-in and wager")
 @allure.title("'TAKE PLAYER' element should be visible after buy-in and wager")
-def test_run_TEST_28845(setup,request):
+def test_28845(setup,request):
     base_test = BaseTest(setup,"TEST-28845")
     request.node.base_test = base_test
     table_ip = base_test.tableIP

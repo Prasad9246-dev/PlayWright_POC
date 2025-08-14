@@ -5,6 +5,7 @@ class OverrideTab:
         self.override_tab_selector = self.page.get_by_role('tab', name="Override")
         self.void_hand_button = self.page.get_by_role("button", name="Void Hand")
         self.table_actions = TableActions(page)
+        
     def click_void_hand(self):
         """
         Clicks the 'Void Hand' button if it is enabled.

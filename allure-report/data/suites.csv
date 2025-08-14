@@ -1,4 +1,4 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","89772","TEST-28845 Rated Buy-In Test","tests","Wed Aug 13 22:41:23 IST 2025","passed","Wed Aug 13 22:42:52 IST 2025","","TEST-28845","",""
-"","113398","TEST-0608 Rated Buy-In Test","tests","Wed Aug 13 22:42:55 IST 2025","passed","Wed Aug 13 22:44:48 IST 2025","","TEST-0608","",""
-"","120375","TEST-14007 Rated Buy-In Test","tests","Wed Aug 13 22:44:51 IST 2025","passed","Wed Aug 13 22:46:51 IST 2025","","TEST-14007","",""
+"","77862","Player antenna should remain off when Banker antenna has insurance on commission table","tests","Thu Aug 14 12:59:03 IST 2025","passed","Thu Aug 14 13:00:21 IST 2025","","TEST-14007","",""
+"","80592","TEST-0608 Rated Buy-In Test","tests","Thu Aug 14 12:57:40 IST 2025","passed","Thu Aug 14 12:59:01 IST 2025","","TEST-0608","",""
+"","68857","'TAKE PLAYER' element should be visible after buy-in and wager","tests","Thu Aug 14 12:56:29 IST 2025","passed","Thu Aug 14 12:57:38 IST 2025","","TEST-28845","",""

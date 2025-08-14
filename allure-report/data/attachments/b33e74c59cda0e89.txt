@@ -1,0 +1,1 @@
+TAKE PLAYER element is visible on the screen

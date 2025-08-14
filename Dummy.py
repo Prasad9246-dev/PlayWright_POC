@@ -1,3 +1,3 @@
-from conftest import get_ppApplication_Url
+from utils.ConfigurationAPI import ConfigurationAPI
 
-print(get_ppApplication_Url())
+print(ConfigurationAPI().get_table_info("172.31.3.83"))
