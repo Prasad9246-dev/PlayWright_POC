@@ -20,7 +20,7 @@ def setup():
 def pytest_runtest_makereport(item, call):
     # Only act after the test call phase
     if call.when == "call":
-        base_test = getattr(item, "base_test", None)
+        tbd = getattr(item, "tbd", None)
         # Get test case ID (function name or nodeid)
         raw_id = item.name if hasattr(item, "name") else item.nodeid.split("::")[-1]
         test_case_id = raw_id.replace("test_", "TEST-")
@@ -29,9 +29,9 @@ def pytest_runtest_makereport(item, call):
         if call.excinfo is not None:
             status = "Fail"
             remarks = str(call.excinfo.value)
-            if base_test:
+            if tbd:
                 try:
-                    base_test.void_game()
+                    tbd.void_game()
                 except Exception as e:
                     print(f"Failed to void hand in hook: {e}")
         else:

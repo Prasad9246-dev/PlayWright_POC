@@ -1,4 +1,4 @@
-from pages.Configuration_Page import ConfigurationPage
+from pages.ConfigurationPage import ConfigurationPage
 from utils.UIUtils import UIUtils
 
 class ConfigurationActions:

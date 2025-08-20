@@ -8,4 +8,5 @@ class ConfigurationPage(BasePage):
         self.search_box = self.page.get_by_role('button', name='Search')
         self.search_location = self.page.get_by_role('textbox', name='Search location')
         self.table_path_locator = self.page.locator('td span.pointer-cursor')
-        self.configuration = self.page.locator('button:has-text("Configuration")')
+        self.apps_configuration = self.page.get_by_text("Configuration")
+        self.casino_manager = self.page.locator('button:has-text("Casino Manager")')

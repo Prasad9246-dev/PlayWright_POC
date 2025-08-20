@@ -7,7 +7,6 @@ class ConfigurationLoginPage(BasePage):
         self.username_selector = self.page.get_by_role('textbox', name='Username')
         self.password_selector = self.page.get_by_role('textbox', name='Password')
         self.submit_button_selector = self.page.get_by_role('button', name='Submit')
-        self.configuration = self.page.locator('button:has-text("Configuration")')
 
     def configuration_login(self, username, password):
         self.username_selector.fill(username)
@@ -17,3 +16,4 @@ class ConfigurationLoginPage(BasePage):
         
     def navigate_to_configuration(self, button_text):
         self.page.locator(f'button:has-text("{button_text}")').click()
+        

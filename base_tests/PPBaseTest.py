@@ -16,7 +16,7 @@ from GameSkeleton.Payouts import Payout
 from utils.ConfigurationAPI import ConfigurationAPI
 from utils.ScreenshotUtil import ScreenshotUtil
 
-class TBDBaseTest:
+class PPBaseTest:
     def __init__(self, setup, test_case_id):
         self.setup = setup
         self.config = self._load_config()
@@ -28,11 +28,11 @@ class TBDBaseTest:
     def _load_config(self):
         config_utils = ConfigUtils()
         return {
-            "url": config_utils.get_url(),
+            "tbd_url": config_utils.get_url(),
+            "pp_application_url": config_utils.get_ppApplication_Url(),
             "username": config_utils.get_username(),
             "password": config_utils.get_password(),
             "tableIP": config_utils.get_tableIP(),
-            "base_url": config_utils.get_ppApplication_Url(),
         }
 
     def _init_data(self):
@@ -61,16 +61,6 @@ class TBDBaseTest:
         self.Configuration_API = ConfigurationAPI()
 
     def _run_base_setup(self):
-        self.login_page.navigate(self.config["url"])
+        self.login_page.navigate(self.config["pp_application_url"])
         self.login_page.login(self.config["username"], self.config["password"])
-        self.setup.wait_for_timeout(2000)
-        # self.table_actions.table_close_and_open()
-        # self.expire_and_adjust_variance.expire_and_adjust()
-        # self.setup.wait_for_timeout(3000)
-
-    def void_game(self):
-        try:
-            self.Override_Tab.click_void_hand()
-            print("Void Hand button clicked.")
-        except Exception as e:
-            print(f"Failed to void hand: {e}")
+        self.setup.wait_for_timeout(3000)

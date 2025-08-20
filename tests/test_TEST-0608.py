@@ -1,54 +1,53 @@
-from tests.BaseTest import BaseTest
+from base_tests.TBDBaseTest import TBDBaseTest
 import allure
-from utils.excel_reader import get_buyin_data
-from GameSkeleton.BuyIN import BuyIN
 
 @allure.feature("Buy-In Feature")
 @allure.story("TEST-0608: Rated Buy-In")
 @allure.title("TEST-0608 Rated Buy-In Test")
-def test_0608(setup):
-    base_test = BaseTest(setup,"TEST-0608")
-    table_ip = base_test.tableIP
-    chips_df = base_test.chips_df
-    base_test.table_actions.navigate_to_tab(base_test.games_tab.GAMES_TAB)
-    
-    previousGameID = base_test.games_tab.get_first_row_first_column_text()
-    # Get buy-in data from Excel for this test case
-    buyin_data = base_test.buyin_data
-    result = base_test.buyin_processor.process_buyins(table_ip, buyin_data, chips_df)
+def test_0608(setup,request):
+    # Initialize base test and get required data
+    tbd = TBDBaseTest(setup, "TEST-0608")
+    request.node.tbd = tbd
+    table_ip = tbd.config["tableIP"]
+    chips_df = tbd.chips_df
+
+    # Navigate to Games tab and get previous Game ID
+    tbd.table_actions.navigate_to_tab(tbd.games_tab.GAMES_TAB)
+    previous_game_id = tbd.games_tab.get_first_row_first_column_text()
+
+    # Process buy-ins
+    buyin_result = tbd.buyin_processor.process_buyins(table_ip, tbd.buyin_data, chips_df)
     print("Buy-In Results:")
-    for entry in result:
-        print(f"Player: {entry['player']}, Denom: {entry['denom']}, Chips ID: {entry['chips_ID']}") 
-    
-    # Process wagers after buy-in
-    wager_data = base_test.wager_data
-    wager_data_result = base_test.wager_processor.process_wagers(table_ip, result, wager_data)
+    for entry in buyin_result:
+        print(f"Player: {entry['player']}, Denom: {entry['denom']}, Chips ID: {entry['chips_ID']}")
+
+    # Process wagers
+    wager_result = tbd.wager_processor.process_wagers(table_ip, buyin_result, tbd.wager_data)
     print("Wager Results:")
-    for entry in wager_data_result:
+    for entry in wager_result:
         print(f"Player: {entry['player']}, Denom: {entry['denom']}, Antenna: {entry['antenna']}, Chips ID: {entry['chips_ID']}")
 
     # Draw cards and press shoe button
-    base_test.card_processor.draw_cards_and_shoe_press(base_test.card_data, table_ip)
-    
-    # Take bets using the wager results
-    takebets_list = base_test.take_bets_data
-    base_test.take_bets_processor.take(table_ip, wager_data_result, takebets_list)
-    
-    # Process payouts
-    payout_data = base_test.payout_data
-    base_test.payout_processor.process_payouts(table_ip, payout_data, base_test.chips_df)
-    
+    tbd.card_processor.draw_cards_and_shoe_press(tbd.card_data, table_ip)
+
+    # Take bets
+    tbd.take_bets_processor.take(table_ip, wager_result, tbd.take_bets_data)
+
     # Verify game ID increment logic
-    base_test.table_actions.navigate_to_tab(base_test.games_tab.GAMES_TAB)
-    CurrentGameID = base_test.games_tab.get_first_row_first_column_text()
-    
-    if previousGameID == CurrentGameID:
-        print("Game record is not present on Games tab.")
-        base_test.screenshot_util.attach_screenshot(name="Game record is not present on Games tab.")
-        base_test.screenshot_util.attach_text("Game record is not present on Games tab.", name="Verification Message")
-        assert previousGameID == CurrentGameID, "Rated Buyin completed, but game record is NOT displayed on Games tab."
+    tbd.table_actions.navigate_to_tab(tbd.games_tab.GAMES_TAB)
+    current_game_id = tbd.games_tab.get_first_row_first_column_text()
+
+    # Assertion and reporting
+    print(f"Previous Game ID: {previous_game_id}, Current Game ID: {current_game_id}")
+    if previous_game_id == current_game_id:
+        msg = "Game record is not present on Games tab."
+        print(msg)
+        tbd.screenshot_util.attach_screenshot(name=msg)
+        tbd.screenshot_util.attach_text(msg, name="Verification Message")
+        assert False, "Rated Buyin completed, but game record is NOT displayed on Games tab."
     else:
-        print("Game record is present on Games tab.")
-        base_test.screenshot_util.attach_screenshot(name="Game record is present on Games tab.")
-        base_test.screenshot_util.attach_text("Game record is present on Games tab.", name="Verification Message")
-        assert previousGameID != CurrentGameID, "Rated Buyin completed and game record IS displayed on Games tab."
+        msg = "Game record is present on Games tab."
+        print(msg)
+        tbd.screenshot_util.attach_screenshot(name=msg)
+        tbd.screenshot_util.attach_text(msg, name="Verification Message")
+        assert True, "Rated Buyin completed and game record IS displayed on Games tab."
