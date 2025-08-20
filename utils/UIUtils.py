@@ -9,9 +9,19 @@ class UIUtils:
         """Clicks the given element."""
         element_selector.click()
 
-    def type_into(self, locator, text):
-        """Types the given text into the locator."""
-        self.page.locator(locator).fill(text)
+    def fill_element(self, locator, text):
+        """Types the given text into the locator or selector."""
+        if isinstance(locator, str):
+            self.page.locator(locator).fill(text)
+        else:
+            locator.fill(text)
+        
+    def press_enter(self, locator):
+        """Presses Enter on the given locator or selector."""
+        if isinstance(locator, str):
+            self.page.locator(locator).press("Enter")
+        else:
+            locator.press("Enter")
 
     def get_text(self, locator):
         """Returns the text content of the locator."""

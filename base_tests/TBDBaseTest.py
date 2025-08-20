@@ -16,8 +16,8 @@ from GameSkeleton.Payouts import Payout
 from utils.ConfigurationAPI import ConfigurationAPI
 from utils.ScreenshotUtil import ScreenshotUtil
 
-class BaseTest:
-    def __init__(self, setup,test_case_id):
+class TBDBaseTest:
+    def __init__(self, setup, test_case_id):
         self.setup = setup
         self.config_utils = ConfigUtils()
         self.url = self.config_utils.get_url()
@@ -48,13 +48,13 @@ class BaseTest:
         self._run_base_setup()  # Automatically run setup on instantiation
 
     def _run_base_setup(self):
-        # self.login_page.navigate(self.url)
-        # self.login_page.login(self.username, self.password)
-        # self.setup.wait_for_timeout(2000)
-        # self.table_actions.table_close_and_open()
-        # self.expire_and_adjust_variance.expire_and_adjust()
+        self.login_page.navigate(self.url)
+        self.login_page.login(self.username, self.password)
+        self.setup.wait_for_timeout(2000)
+        self.table_actions.table_close_and_open()
+        self.expire_and_adjust_variance.expire_and_adjust()
         self.setup.wait_for_timeout(3000)  # Wait for the setup to complete before proceeding
-        
+
     def void_game(self):
         try:
             self.Override_Tab.click_void_hand()

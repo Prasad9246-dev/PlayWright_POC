@@ -217,4 +217,7 @@ class ConfigurationAPI:
             return None
 
 if __name__ == "__main__":
-    pass
+    api = ConfigurationAPI()
+    base_url = "https://wdts-gateway-cs01.wdts.local:792"  # Replace with your actual URL if needed
+    token = api.get_access_token(base_url)
+    print(f"Access token: {token}")
