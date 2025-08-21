@@ -35,7 +35,12 @@ def get_buyin_data(excel_path, test_case_id):
     Handles missing seat/player_id for known/anon types.
     """
     df = pd.read_excel(excel_path)
-    row = df[df['testCase_ID'] == test_case_id].iloc[0]
+    filtered = df[df['testCase_ID'] == test_case_id]
+    if filtered.empty:
+        print(f"[ERROR] No data found for testCase_ID: {test_case_id} in {excel_path}")
+        print(f"[DEBUG] Available testCase_IDs: {df['testCase_ID'].unique()}")
+        raise ValueError(f"No data found for testCase_ID: {test_case_id}")
+    row = filtered.iloc[0]
     buyin_dict = {}
     idx = 1
     for col in df.columns:
@@ -80,7 +85,12 @@ def get_wager_data(excel_path, test_case_id):
     Handles any number of wager columns, including the first column.
     """
     df = pd.read_excel(excel_path)
-    row = df[df['testCase_ID'] == test_case_id].iloc[0]
+    filtered = df[df['testCase_ID'] == test_case_id]
+    if filtered.empty:
+        print(f"[ERROR] No data found for testCase_ID: {test_case_id} in {excel_path}")
+        print(f"[DEBUG] Available testCase_IDs: {df['testCase_ID'].unique()}")
+        raise ValueError(f"No data found for testCase_ID: {test_case_id}")
+    row = filtered.iloc[0]
     wager_dict = {}
     idx = 1
     for col in df.columns:
@@ -105,7 +115,12 @@ def get_cards_data(excel_path, test_case_id):
     Example return: ['2s', '4d', '3s', '4d']
     """
     df = pd.read_excel(excel_path)
-    row = df[df['testCase_ID'] == test_case_id].iloc[0]
+    filtered = df[df['testCase_ID'] == test_case_id]
+    if filtered.empty:
+        print(f"[ERROR] No data found for testCase_ID: {test_case_id} in {excel_path}")
+        print(f"[DEBUG] Available testCase_IDs: {df['testCase_ID'].unique()}")
+        raise ValueError(f"No data found for testCase_ID: {test_case_id}")
+    row = filtered.iloc[0]
     cards = []
     for col in df.columns:
         if col.lower().startswith("card") and pd.notna(row[col]):
@@ -118,7 +133,12 @@ def get_takeBets_data(excel_path, test_case_id):
     Example return: ['B3', 'B5']
     """
     df = pd.read_excel(excel_path)
-    row = df[df['testCase_ID'] == test_case_id].iloc[0]
+    filtered = df[df['testCase_ID'] == test_case_id]
+    if filtered.empty:
+        print(f"[ERROR] No data found for testCase_ID: {test_case_id} in {excel_path}")
+        print(f"[DEBUG] Available testCase_IDs: {df['testCase_ID'].unique()}")
+        raise ValueError(f"No data found for testCase_ID: {test_case_id}")
+    row = filtered.iloc[0]
     takebets_raw = row.get("TakeBets", "")
     if pd.notna(takebets_raw):
         bets = [bet.strip() for bet in str(takebets_raw).split(';') if bet.strip()]
@@ -133,7 +153,12 @@ def get_payout_data(excel_path, test_case_id):
     Example return: [{'antenna': 'P1', 'denom': '100'}, {'antenna': 'P2', 'denom': '100'}, ...]
     """
     df = pd.read_excel(excel_path)
-    row = df[df['testCase_ID'] == test_case_id].iloc[0]
+    filtered = df[df['testCase_ID'] == test_case_id]
+    if filtered.empty:
+        print(f"[ERROR] No data found for testCase_ID: {test_case_id} in {excel_path}")
+        print(f"[DEBUG] Available testCase_IDs: {df['testCase_ID'].unique()}")
+        raise ValueError(f"No data found for testCase_ID: {test_case_id}")
+    row = filtered.iloc[0]
     payout_list = []
     for col in df.columns:
         if col.lower().startswith("payamt"):

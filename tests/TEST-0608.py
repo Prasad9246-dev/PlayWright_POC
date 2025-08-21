@@ -1,11 +1,7 @@
 from tests.BaseTest import BaseTest
-import allure
 from utils.excel_reader import get_buyin_data
 from GameSkeleton.BuyIN import BuyIN
 
-@allure.feature("Buy-In Feature")
-@allure.story("TEST-0608: Rated Buy-In")
-@allure.title("TEST-0608 Rated Buy-In Test")
 def test_run_TEST_0608(setup):
     base_test = BaseTest(setup,"TEST-0608")
     table_ip = base_test.tableIP
@@ -44,9 +40,7 @@ def test_run_TEST_0608(setup):
     
     if previousGameID == CurrentGameID:
         print("Game record is not present on Games tab.")
-        allure.attach("Game record is NOT present on Games tab.", name="Games Tab Verification", attachment_type=allure.attachment_type.TEXT)
         assert previousGameID == CurrentGameID, "Game record should not be present on Games tab."
     else:
         print("Game record is present on Games tab.")
-        allure.attach("Game record is present on Games tab.", name="Games Tab Verification", attachment_type=allure.attachment_type.TEXT)
         assert previousGameID != CurrentGameID, "Game record should be present on Games tab."

@@ -1,11 +1,15 @@
 from GameSkeleton.GameoutComes import GameoutComes
 from GameSkeleton.Wager import Wager
+from pages.InventoryTab import InventoryTab
+from pages.ViewTableTab import ViewTableTab
 from pages.login_page import LoginPage
+from pages.PlayerTab import PlayerTab
 from pages.GamesTab import GamesTab
+from utils.ConfigurationAPI import ConfigurationAPI
 from utils.Expire_And_Adjust_Variance import ExpireAndAdjustVariance
 from utils.TableActions import TableActions
-from utils.excel_reader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data
-from conftest import get_url, get_username, get_password, get_tableIP
+from utils.excel_reader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data   
+from conftest import get_ppApplication_Url, get_url, get_username, get_password, get_tableIP, get_ppApplication_Url
 from utils.excel_reader import read_chip_ids_df
 from GameSkeleton.BuyIN import BuyIN
 from GameSkeleton.TakeBets import TakeBets
@@ -18,10 +22,14 @@ class BaseTest:
         self.username = get_username()
         self.password = get_password()
         self.tableIP = get_tableIP()
+        self.base_url = get_ppApplication_Url()
         self.chips_df = read_chip_ids_df("data/AutomationChips.xlsx")
         self.login_page = LoginPage(setup)
+        self.Player_Tab = PlayerTab(setup)
         self.table_actions = TableActions(setup)
+        self.View_Table_Tab = ViewTableTab(setup)
         self.games_tab = GamesTab(setup)
+        self.inventory_tab = InventoryTab(setup)
         self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup)
         self.buyin_data = get_buyin_data("data/testData.xlsx", test_case_id)
         self.wager_data = get_wager_data("data/testData.xlsx", test_case_id)
@@ -33,6 +41,7 @@ class BaseTest:
         self.card_processor = GameoutComes()
         self.take_bets_processor = TakeBets(setup)
         self.payout_processor = Payout(setup)
+        self.Configuration_API = ConfigurationAPI()
         self._run_base_setup()  # Automatically run setup on instantiation
 
     def _run_base_setup(self):

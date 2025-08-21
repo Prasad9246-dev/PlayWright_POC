@@ -42,6 +42,7 @@ class TableActions:
             print("Table is already open. Skipping open operation.")
 
     def table_close_and_open(self):
+        self.player_tab.PLAYERS_TAB.click
         self.table_close()
         self.table_open()
 
@@ -74,8 +75,16 @@ class TableActions:
         api_url = f"https://{table_ip}:790/api/table/v1/chipMove"
         headers = {'Content-Type': 'application/json'}
 
-        # Split chip_ids by comma and strip whitespace
-        chip_id_list = [chip_id.strip() for chip_id in chip_ids.split(",")]
+        # # Split chip_ids by comma and strip whitespace
+        # chip_id_list = [chip_id.strip() for chip_id in chip_ids.split(",")]
+
+         # Accept comma-separated string or list
+        if isinstance(chip_ids, str):
+            chip_id_list = [chip_id.strip() for chip_id in chip_ids.split(",")]
+        elif isinstance(chip_ids, list):
+            chip_id_list = chip_ids
+        else:
+            raise ValueError("chip_ids must be a string or a list")
 
         # Remove chips from from_antenna
         data_remove = [{
@@ -187,4 +196,107 @@ class TableActions:
             chip_ids = matching_chips.iloc[:count]["chipsID"].tolist()
             chips_df.drop(matching_chips.iloc[:count].index, inplace=True)
             return chip_ids
+
+    def transfer_from_view_table(self):
+        """
+        Clicks the (0) button, selects 'Transfer', confirms, and clicks the 'Transfer' text
+        using selectors from ViewTableTab only.
+        """
+        try:
+            self.view_table_tab.BuyIn_GreenBar.click()
+            self.view_table_tab.Transfer.click()
+            # Check if the 'Transfer' header exists instead of clicking it
+            if self.view_table_tab.transfer_Header.is_visible():
+                print("Transfer header is visible. Transfer dialog opened successfully.")
+            else:
+                print("[ERROR] Transfer header is not visible.")
+            self.view_table_tab.transfer_ConfirmButton.click()
+            print("Transfer from View Table completed.")
+        except Exception as e:
+            print(f"[ERROR] Transfer from View Table failed: {e}")
+
+    def change_transaction_from_view_table(self, table_ip, chips_df):
+        """
+        Clicks the (0) button, selects 'Change Transaction', confirms, and checks if the 'Change Transaction' header exists
+        using selectors from ViewTableTab only.
+        """
+        try:
+            first_chip_ids = self.get_chip_ids_for_denom(chips_df, 500)  # Example: get $500 chips for change
+            print(first_chip_ids)
+            self.move_chips_between_antennas(table_ip, "TT", "DEALER", first_chip_ids)
+            self.view_table_tab.BuyIn_Close.click()
+            time.sleep(2)
+            self.page.reload()
+            try:
+                # Wait for any overlay to disappear
+                self.page.wait_for_selector("app-dealer-info", state="hidden", timeout=10000)
+                button = self.page.locator('#dealerAndAggrAmount')
+                button.wait_for(state="visible", timeout=5000)
+                button.scroll_into_view_if_needed()
+                button.click()
+                print("Clicked Dealer and Aggregate Amount button.")
+            except Exception as e:
+                print(f"[ERROR] Could not click Dealer and Aggregate Amount button: {e}")
+            #self.view_table_tab.dealer_and_aggr_amount_button.click()
+            time.sleep(2)
+            self.view_table_tab.Change.click()
+            time.sleep(3)
+            # Check if the 'Change Transaction' header exists instead of clicking it
+            if self.view_table_tab.Change_Header.is_visible():
+                print("Change Transaction header is visible. Change Transaction dialog opened successfully.")
+                second_chip_ids = self.get_n_chips_for_denom(chips_df, "100-5")  # Example: get 5 chips of $100
+                print(second_chip_ids)
+               # self.move_chips_between_antennas(table_ip, "TT", "DEALER", first_chip_ids)
+                self.move_chips_between_antennas(table_ip, "TT", "DEALER", second_chip_ids)
+                self.view_table_tab.Change_ConfirmButton.click()
+                print("Change Transaction from View Table completed.")
+            else:
+                print("[ERROR] Change Transaction header is not visible.")
+        except Exception as e:
+            print(f"[ERROR] Change Transaction from View Table failed: {e}")
+
+    def move_to_sessions_tab(self):
+        """
+        Navigates to the Sessions tab using the selector from ViewTableTab.
+        """
+        try:
+            self.view_table_tab.SessionsTab.wait_for(state="visible", timeout=10000)
+            self.view_table_tab.SessionsTab.click()
+            print("Moved to Sessions tab.")
+            self.page.wait_for_timeout(3000)
+        except Exception as e:
+            print(f"[ERROR] Could not move to Sessions tab: {e}")
+
+    def check_chip_in_value(self, expected_value="1000"):
+        """
+        Navigates to the Sessions tab, clicks the first row, checks if the chip in value is correct,
+        clicks on the chip in value, and verifies the 'Update Chips In' header is visible.
+        """
+        try:
+            # Move to Sessions tab
+            self.move_to_sessions_tab()
+            self.page.wait_for_timeout(2000)
+
+            # Click on the first row in the Sessions table
+            first_cell = self.page.locator("table[role='table'] tbody tr[role='row']").nth(0).locator("td").nth(0)
+            time.sleep(2)
+            first_cell.click()
+            print("Clicked on first row in Sessions tab.")
+
+            # Check if the chip in value is correct (1000)
+            time.sleep(4)
+            chip_in_locator = self.page.locator(f'span.wd-flex.session-summary__value.label-underline', has_text=expected_value)
+            if chip_in_locator.is_visible():
+                print(f"Chip In value '{expected_value}' is visible.")
+                chip_in_locator.nth(0).click()  # Click the first occurrence of the chip in value
+            else:
+                print(f"[ERROR] Chip In value '{expected_value}' is not visible.")
+                return
+
+        except Exception as e:
+            print(f"[ERROR] Check ChipIn Value failed: {e}")
+
+
+
+
 

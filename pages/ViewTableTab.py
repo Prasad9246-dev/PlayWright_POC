@@ -7,9 +7,20 @@ class ViewTableTab:
         self.dot_locator = self.page.locator("div.dots")
         self.count_locator = self.page.locator("div.count")
         self.quick_buy_in_selector = self.page.get_by_text('QUICK BUY IN')
-    #     self.seat_section_selector = self.page.locator("app-buyin-transaction").get_by_role("main").locator("div").filter(
-    #     has_text=str(seat_number)
-    # )
+        # self.BuyIn_GreenBar = self.page.locator("#dealerAndAggrAmount")
+        self.Transfer = self.page.get_by_role("menuitem", name="Transfer")
+        self.Change = self.page.get_by_role("menuitem", name="Change")
+        self.transfer_ConfirmButton = self.page.locator("button.wd-dd-button.button-confirm.confirm")
+        self.transfer_Header = self.page.get_by_text("Transfer")
+        self.Change_Header = self.page.get_by_text("Change", exact=True)
+        self.dealer_and_aggr_amount_button = self.page.locator("#dealerAndAggrAmount")
+        self.BuyIn_Close = self.page.get_by_role("button", name="close")
+        self.Change_ConfirmButton = self.page.locator("button.wd-dd-button.button-confirm.confirm")
+        self.SessionsTab = self.page.get_by_role("tab", name="Sessions")
+        self.seat_1_Player = self.page.locator("#seat__1").get_by_text("1", exact=True)
+        self.Player = self.page.get_by_role("img", name="Cash chips")
+        self.update_player_search = self.page.get_by_role('textbox')
+        self.reveal_button = self.page.get_by_text('REVEAL')
 
     def view_table_tab(self):
         return self.view_table_tab_selector
@@ -55,4 +66,42 @@ class ViewTableTab:
             Returns the locator for the 'QUICK BUY IN' button/text.
             """
             return self.quick_buy_in_selector
-        
+
+    def click_verify_if_visible(self):
+        """
+        Clicks the 'Verify' button if it is visible and prints 'success'.
+        """
+        verify_button = self.page.get_by_role("button", name="Verify")
+        if verify_button.is_visible():
+            print("Verify button is available on Screen successfully.")
+            verify_button.click()
+
+    def click_update_if_visible(self):
+        """
+        Clicks the 'Update' button if it is visible and prints a success message.
+        """
+        update_button = self.page.get_by_role("button", name="Update")
+        if update_button.is_visible():
+            print("Update button is available on Screen successfully.")
+            update_button.click()
+
+    def update_player_and_verify(self, player_id: str = "6001"):
+        """
+        Updates a player by searching for the player ID, clicking the 'Update' button if visible,
+        and then clicking the 'Verify' button if it exists and is visible.
+
+        Args:
+            player_id (str): The player ID to search for. Defaults to "6001".
+        """
+        # Fill the player search box and press Enter
+        self.update_player_search.fill(player_id)
+        self.update_player_search.press("Enter")
+        self.page.wait_for_timeout(1000)  # Wait for search results to load
+
+        # Click the Verify button if visible
+        verify_button = self.page.get_by_role("button", name="Verify")
+        if verify_button.is_visible():
+            print("Verify button is available on Screen successfully.")
+            verify_button.click()
+        else:
+            print("Verify button is not available on Screen.")
