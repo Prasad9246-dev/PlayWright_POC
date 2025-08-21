@@ -7,7 +7,10 @@ class UIUtils:
 
     def click_to_element(self, element_selector):
         """Clicks the given element."""
-        element_selector.click()
+        if isinstance(element_selector, str):
+            self.page.locator(element_selector).click()
+        else:
+            element_selector.click()
 
     def fill_element(self, locator, text):
         """Types the given text into the locator or selector."""

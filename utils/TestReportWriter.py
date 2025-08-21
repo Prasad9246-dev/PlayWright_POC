@@ -9,7 +9,8 @@ class TestReportWriter:
         self.build_version = build_version
         self.feature_name = feature_name
         self.date_str = datetime.now().strftime("%Y-%m-%d")
-        self.folder_path = rf"C:\Users\{self.username}\Walker Digital Table Systems\WDTS INDIA - automation\Playwright\TestCaseReport"
+        # self.folder_path = rf"C:\Users\{self.username}\Walker Digital Table Systems\WDTS INDIA - automation\Playwright\TestCaseReport"
+        self.folder_path = "reports/"
         os.makedirs(self.folder_path, exist_ok=True)
         self.file_name = f"{self.build_version}_{self.date_str}.xlsx"
         self.file_path = os.path.join(self.folder_path, self.file_name)
@@ -44,17 +45,4 @@ class TestReportWriter:
                 result["time"]
             ])
         wb.save(self.file_path)
-        print(f"Test report written to: {self.file_path}")
-        
-        
-report_writer = TestReportWriter("PP_2_6_4_B1_P4", "OwnershipPlayerBankerAntenna")
-# After each test case:
-report_writer.add_result(
-    test_set_name="OwnershipPlayerBankerAntenna",
-    test_case_id="TEST-14007",
-    status="Pass",  # or "Fail"
-    remarks="",     # error message if fail
-    time_str=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-)
-# After all tests:
-report_writer.write_report()
+        print(f"Test report written to: {self.file_path}")      

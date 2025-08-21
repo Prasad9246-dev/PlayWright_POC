@@ -216,8 +216,42 @@ class ConfigurationAPI:
             print(f"Error extracting template details: {e}")
             return None
 
+    def update_system_tab(self, tableIP, base_url, property_code, property_value):
+        """
+        Updates a SYSTEM template property for the given tableIP.
+        Args:
+            tableIP (str): Table IP address
+            base_url (str): API base URL
+            property_code (str): Property code to update
+            property_value (str): Value to set for the property
+        Returns:
+            Response object from requests.put
+        """
+        base_url = base_url.rstrip('/').replace('/login', '')
+        access_token = self.get_access_token(base_url)
+        template_type = "SYSTEM"
+
+        url = f"{base_url}/api/configuration/v1/template"
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "templateId": "1",
+            "templateType": template_type,
+            "templatePropertyByPropertyCode": {
+                property_code: {
+                    "defaultValue": property_value
+                }
+            },
+            "updatedBy": "Master, PP (0)"
+        }
+        response = requests.put(url, json=payload, headers=headers, verify=False)
+        print(f"Update SYSTEM Tab Response: {response.status_code}")
+        return response  
+
 if __name__ == "__main__":
     api = ConfigurationAPI()
     base_url = "https://wdts-gateway-cs01.wdts.local:792"  # Replace with your actual URL if needed
     token = api.get_access_token(base_url)
-    print(f"Access token: {token}")
+    response = api.update_system_tab("172.31.3.83", base_url, "com.walkerdigital.table.insurance.elite.bets.enabled", "false")
