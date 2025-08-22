@@ -68,9 +68,9 @@ class TBDBaseTest:
         self.login_page.navigate(self.config["url"])
         self.login_page.login(self.config["username"], self.config["password"])
         self.setup.wait_for_timeout(2000)
-        # self.table_actions.table_close_and_open()
-        # self.expire_and_adjust_variance.expire_and_adjust()
-        # self.setup.wait_for_timeout(3000)
+        self.table_actions.table_close_and_open()
+        self.expire_and_adjust_variance.expire_and_adjust()
+        self.setup.wait_for_timeout(3000)
 
     def void_game(self):
         try:
