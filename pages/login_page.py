@@ -13,7 +13,10 @@ class LoginPage(BasePage):
         self.page.goto(url)
 
     def login(self, username, password):
-        # Check if the login page is visible before attempting login
+        """Logs in to the application.
+        Author:
+            Prasad Kamble
+        """
         self.page.wait_for_timeout(4000) 
         if self.username_selector.is_visible():
             self.username_selector.fill(username)

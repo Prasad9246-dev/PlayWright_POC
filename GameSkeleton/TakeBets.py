@@ -11,6 +11,9 @@ class TakeBets:
             table_ip: Table IP address as string.
             wager_result: List of dicts from wager function.
             takebets_list: List of antenna names from get_takeBets_data.
+        
+        Author:
+            Prasad Kamble
         """
         for antenna in takebets_list:
             chips_to_remove = []

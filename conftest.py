@@ -11,6 +11,7 @@ def setup():
         root = tk.Tk()
         screen_width = root.winfo_screenwidth()
         screen_height = root.winfo_screenheight()
+        screen_height = screen_height - 118
         print(f"Screen width: {screen_width}, Screen height: {screen_height}")
         browser = p.chromium.launch(
             headless=False,
@@ -18,7 +19,7 @@ def setup():
             args=["--start-fullscreen"]
         )
         # Set viewport=None to use the full window size
-        context = browser.new_context(ignore_https_errors=True,viewport={"width": screen_width, "height": 650})
+        context = browser.new_context(ignore_https_errors=True,viewport={"width": screen_width, "height": screen_height})
         page = context.new_page()
         # page.set_viewport_size({"width": screen_width, "height": screen_height})
         yield page

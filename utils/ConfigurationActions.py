@@ -25,6 +25,20 @@ class ConfigurationActions:
         return [part.strip() for part in table_path.split('/') if part.strip()]
 
     def drill_down(self, tbd, setup, table_ip):
+        """
+        Navigates through the configuration UI to locate a table by its IP.
+
+        Args:
+            tbd: API access object.
+            setup: Playwright setup/context.
+            table_ip: Table IP address.
+
+        Returns:
+            page1: Casino Manager popup page object.
+        
+        Author:
+            Prasad Kamble
+        """
         config_page = setup.context.new_page()
         config_page.goto(self.config_utils.get_ppApplication_Url())  
 

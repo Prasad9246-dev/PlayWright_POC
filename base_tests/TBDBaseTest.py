@@ -5,6 +5,7 @@ from pages.login_page import LoginPage
 from pages.PlayerTab import PlayerTab
 from pages.GamesTab import GamesTab
 from pages.OverrideTab import OverrideTab
+from pages.SessionsTab import SessionsTab
 from utils.Expire_And_Adjust_Variance import ExpireAndAdjustVariance
 from utils.TableActions import TableActions
 from utils.excel_reader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data
@@ -53,7 +54,8 @@ class TBDBaseTest:
         self.games_tab = GamesTab(setup)
         self.view_table_tab = ViewTableTab(setup)
         self.Override_Tab = OverrideTab(setup)
-        self.UI_Utils = UIUtils(setup)
+        self.sessions_tab = SessionsTab(setup)
+        self.ui_utils = UIUtils(setup)
         self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup)
         self.buyin_processor = BuyIN(setup)
         self.wager_processor = Wager(setup)
@@ -66,9 +68,9 @@ class TBDBaseTest:
         self.login_page.navigate(self.config["url"])
         self.login_page.login(self.config["username"], self.config["password"])
         self.setup.wait_for_timeout(2000)
-        self.table_actions.table_close_and_open()
-        self.expire_and_adjust_variance.expire_and_adjust()
-        self.setup.wait_for_timeout(3000)
+        # self.table_actions.table_close_and_open()
+        # self.expire_and_adjust_variance.expire_and_adjust()
+        # self.setup.wait_for_timeout(3000)
 
     def void_game(self):
         try:

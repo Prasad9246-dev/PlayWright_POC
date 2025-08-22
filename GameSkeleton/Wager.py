@@ -10,6 +10,9 @@ class Wager:
         For each wager, match player and denom with buyin_result,
         then place the correct chips on the specified antenna using chipMove API.
         Returns a list of processed wager entries.
+        
+        Author:
+            Prasad Kamble
         """
         results = []
         for wager in wager_data.values():

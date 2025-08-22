@@ -1,3 +1,4 @@
+import time
 from base_tests.TBDBaseTest import TBDBaseTest
 import allure
 
@@ -10,11 +11,9 @@ def test_1999(setup,request):
     tbd = TBDBaseTest(setup, "TEST-1999")
     request.node.tbd = tbd
     table_ip = tbd.config["tableIP"]
-    
-    tbd.table_actions.navigate_to_tab(tbd.player_tab.Players_TAB)
-    tbd.UI_Utils.click_to_element(tbd.player_tab.player_card_position(2))
-    tbd.UI_Utils.fill_element(tbd.player_tab.Enter_Player_ID, "6001")
-    tbd.UI_Utils.press_enter(tbd.player_tab.Enter_Player_ID)
-    tbd.UI_Utils.click_to_element(tbd.player_tab.first_row_first_col_selector)
-    tbd.UI_Utils.click_to_element(tbd.player_tab.clock_in_player_button)
-    setup.pause()
+
+    table_data = tbd.sessions_tab.sessions_tab_extract_table_data()
+    print("Extracted Table Data:", table_data)
+
+    table_data = tbd.games_tab.games_tab_extract_table_data()
+    print("Extracted Table Data:", table_data)

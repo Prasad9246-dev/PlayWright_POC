@@ -4,6 +4,7 @@ from pages.ViewTableTab import ViewTableTab
 from pages.login_page import LoginPage
 from pages.GamesTab import GamesTab
 from pages.OverrideTab import OverrideTab
+from pages.ConfigurationLoginPage import ConfigurationLoginPage
 from utils.Expire_And_Adjust_Variance import ExpireAndAdjustVariance
 from utils.TableActions import TableActions
 from utils.excel_reader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data
@@ -15,6 +16,7 @@ from GameSkeleton.TakeBets import TakeBets
 from GameSkeleton.Payouts import Payout
 from utils.ConfigurationAPI import ConfigurationAPI
 from utils.ScreenshotUtil import ScreenshotUtil
+
 
 class PPBaseTest:
     def __init__(self, setup, test_case_id):
@@ -50,17 +52,18 @@ class PPBaseTest:
         self.table_actions = TableActions(setup)
         self.games_tab = GamesTab(setup)
         self.view_table_tab = ViewTableTab(setup)
-        self.Override_Tab = OverrideTab(setup)
-        self.UI_Utils = UIUtils(setup)
+        self.override_tab = OverrideTab(setup)
+        self.ui_utils = UIUtils(setup)
         self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup)
         self.buyin_processor = BuyIN(setup)
         self.wager_processor = Wager(setup)
         self.card_processor = GameoutComes()
         self.take_bets_processor = TakeBets(setup)
         self.payout_processor = Payout(setup)
-        self.Configuration_API = ConfigurationAPI()
+        self.configuration_api = ConfigurationAPI()
+        self.configuration_login = ConfigurationLoginPage(setup)
 
     def _run_base_setup(self):
-        self.login_page.navigate(self.config["pp_application_url"])
-        self.login_page.login(self.config["username"], self.config["password"])
+        self.configuration_login.navigate(self.config["pp_application_url"])
+        self.configuration_login.configuration_login(self.config["username"], self.config["password"])
         self.setup.wait_for_timeout(3000)

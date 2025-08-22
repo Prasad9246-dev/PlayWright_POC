@@ -25,6 +25,9 @@ class GameoutComes:
     def draw_cards_and_shoe_press(self, cards, table_ip):
         """
         Calls draw_cards and then press_shoe_button.
+        
+        Author:
+            Prasad Kamble
         """
         self.draw_cards(cards, table_ip)
         self.press_shoe_button(table_ip)
@@ -35,6 +38,9 @@ class GameoutComes:
         After all cards are dealt, activates the shoe button API.
         :param table_ip: The table IP address as a string.
         :param cards: Variable number of card strings (e.g., "4s", "5h", "6d").
+        
+        Author:
+            Prasad Kamble
         """
         api_url = f"https://{table_ip}:790/api/table/v1/drawcard"
         headers = {'Content-Type': 'application/json'}

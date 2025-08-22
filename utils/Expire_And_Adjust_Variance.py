@@ -18,6 +18,10 @@ class ExpireAndAdjustVariance:
         self.table_actions = TableActions(page)
 
     def expire_and_adjust(self):
+        """Expires and adjusts chip variance.
+        Author:
+            Prasad Kamble
+        """
         self.page.wait_for_timeout(2000)
         self.player_tab.table_dashboard_button().click()
         self.player_tab.table_controls_menu_item().click()
@@ -83,6 +87,8 @@ class ExpireAndAdjustVariance:
     def move_all_chips_to_tt(self, table_ip, excel_path):
         """
         Moves all chips from the Excel file to antenna 'TT' in a single API call.
+        Author:
+                Prasad Kamble
         """
         chips_df = read_chip_ids_df(excel_path)
         api_url = f"https://{table_ip}:790/api/table/v1/chipMove"

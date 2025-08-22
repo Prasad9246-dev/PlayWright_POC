@@ -5,6 +5,8 @@ def read_excel_config(path):
     """
     Reads a key-value config Excel file (first column: key, second column: value).
     Returns a dictionary with lowercase, stripped keys.
+    Author:
+            Prasad Kamble
     """
     config = {}
     try:
@@ -24,6 +26,8 @@ def read_excel_config(path):
 def read_chip_ids_df(path):
     """
     Reads the 'ChipIds' sheet and returns a DataFrame with 'chipsID' and 'Denom'.
+    Author:
+            Prasad Kamble
     """
     df = pd.read_excel(path, sheet_name="ChipIds")
     return df[["All-chips", "Denom"]].rename(columns={"All-chips": "chipsID"})
@@ -33,6 +37,8 @@ def get_buyin_data(excel_path, test_case_id):
     Reads all buyIn columns for the given test_case_id and returns a dict:
     { 'P1': {...}, 'P2': {...}, ... }
     Handles missing seat/player_id for known/anon types.
+    Author:
+            Prasad Kamble
     """
     df = pd.read_excel(excel_path)
     if test_case_id not in df['testCase_ID'].values:
@@ -81,6 +87,8 @@ def get_wager_data(excel_path, test_case_id):
     Reads all wager columns for the given test_case_id and returns a dict:
     { 'W1': {...}, 'W2': {...}, ... }
     Handles any number of wager columns, including tagged bets.
+    Author:
+            Prasad Kamble
     """
     df = pd.read_excel(excel_path)
     # row = df[df['testCase_ID'] == test_case_id].iloc[0]
@@ -113,6 +121,8 @@ def get_cards_data(excel_path, test_case_id):
     """
     Reads card columns (card1, card2, ...) for the given test_case_id and returns a list of card values.
     Example return: ['2s', '4d', '3s', '4d']
+    Author:
+            Prasad Kamble
     """
     df = pd.read_excel(excel_path)
     # row = df[df['testCase_ID'] == test_case_id].iloc[0]
@@ -130,6 +140,8 @@ def get_takeBets_data(excel_path, test_case_id):
     """
     Reads the TakeBets column for the given test_case_id and returns a list of bets, split by ';'.
     Example return: ['B3', 'B5']
+    Author:
+            Prasad Kamble
     """
     df = pd.read_excel(excel_path)
     # row = df[df['testCase_ID'] == test_case_id].iloc[0]
@@ -149,6 +161,8 @@ def get_payout_data(excel_path, test_case_id):
     and returns a list of dicts: [{'antenna': ..., 'denom': ...}, ...]
     Handles any number of payout columns.
     Example return: [{'antenna': 'P1', 'denom': '100'}, {'antenna': 'P2', 'denom': '100'}, ...]
+    Author:
+            Prasad Kamble
     """
     df = pd.read_excel(excel_path)
     # row = df[df['testCase_ID'] == test_case_id].iloc[0]

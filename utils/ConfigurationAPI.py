@@ -13,6 +13,8 @@ class ConfigurationAPI:
         - base_url: The base config URL (e.g., "https://wdts-gateway-cs01.wdts.local:792")
         Reads username, pin, and client_id from config.
         Returns: Response object from requests.post
+        Author:
+            Prasad Kamble
         """
         
         # Remove '/login' from base_url if present
@@ -54,6 +56,8 @@ class ConfigurationAPI:
         """
         Calls the tableInfo API using the provided table_ip and access_token.
         Returns: Response object from requests.get
+        Author:
+            Prasad Kamble
         """
         url = f"https://{table_ip}:790/api/table/v1/tableInfo"
         headers = {
@@ -75,6 +79,8 @@ class ConfigurationAPI:
         - access_token: Bearer token string
         - template_type: The templateType value (e.g., "TABLE")
         Returns: templateId value if present, else None
+        Author:
+            Prasad Kamble
         """
         # Remove '/login' from base_url if present
         base_url = base_url.rstrip('/').replace('/login', '')
@@ -102,6 +108,8 @@ class ConfigurationAPI:
         - base_url: The base URL for the API (e.g., "https://wdts-gateway-cs01.wdts.local:796")
         - table_ip: The table IP address (e.g., "172.31.3.83")
         - template_type: The templateType value (e.g., "TABLE")
+        Author:
+            Prasad Kamble
         """
         base_url = base_url.rstrip('/').replace('/login', '')
         access_token = self.get_access_token(base_url)
@@ -131,6 +139,10 @@ class ConfigurationAPI:
         return response
 
     def get_connection(self, tableIP):
+        """Returns a database connection object.
+        Author:
+            Prasad Kamble
+        """
         conn_str = (
             f"dbname=wdts_db "
             f"user=wdts_admin "
@@ -147,6 +159,10 @@ class ConfigurationAPI:
             return None
 
     def get_game_template_id(self, tableIP, template_name):
+        """Returns the game template ID for the given template name.
+        Author:
+            Prasad Kamble
+        """
         query = "SELECT template_id FROM t_template_configuration WHERE name = %s and template_type = 'GAME' limit 1;"
         conn = self.get_connection(tableIP)
         if conn is None:
@@ -173,6 +189,8 @@ class ConfigurationAPI:
         - tableIP: Database IP address
         - query: SQL query string (no parameters)
         Returns: First row of the result or None
+        Author:
+            Prasad Kamble
         """
         conn = self.get_connection(tableIP)
         if conn is None:
@@ -196,6 +214,8 @@ class ConfigurationAPI:
         - base_url: API base URL (e.g., "https://wdts-gateway-cs01.wdts.local:792")
         - template_type: e.g., "TABLE_LIMITS" or "GAME"
         Returns: Template details as JSON or None
+        Author:
+            Prasad Kamble
         """
         base_url = base_url.rstrip('/').replace('/login', '')
         access_token = self.get_access_token(base_url)
@@ -226,6 +246,9 @@ class ConfigurationAPI:
             property_value (str): Value to set for the property
         Returns:
             Response object from requests.put
+            
+        Author:
+            Prasad Kamble
         """
         base_url = base_url.rstrip('/').replace('/login', '')
         access_token = self.get_access_token(base_url)

@@ -17,6 +17,11 @@ class TestReportWriter:
         self.results = []
 
     def add_result(self, test_set_name, test_case_id, status, remarks, time_str):
+        """
+        Adds a test result to the report.
+        Author:
+            Prasad Kamble
+        """
         self.results.append({
             "test_set_name": test_set_name,
             "test_case_id": test_case_id,
@@ -26,6 +31,11 @@ class TestReportWriter:
         })
 
     def write_report(self):
+        """
+        Writes the test report to an Excel file.
+        Author:
+            Prasad Kamble
+        """
         if os.path.exists(self.file_path):
             wb = load_workbook(self.file_path)
             ws = wb.active

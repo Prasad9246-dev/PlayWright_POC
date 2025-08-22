@@ -10,6 +10,8 @@ class OverrideTab:
         """
         Clicks the 'Void Hand' button if it is enabled.
         Returns True if clicked, False otherwise.
+        Author:
+            Prasad Kamble
         """
         self.table_actions.navigate_to_tab(self.override_tab_selector, wait_time=2000)
         if self.void_hand_button.is_enabled():

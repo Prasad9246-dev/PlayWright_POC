@@ -20,6 +20,9 @@ class BuyIN:
         :param buyin_type: "rated", "known", or "anonymous"
         :param chips_df: DataFrame containing chip IDs and Denoms
         :return: List of chip IDs used for buy-in
+        
+        Author:
+            Prasad Kamble
         """
         try:
             # Determine which function to use based on denom format
@@ -84,6 +87,9 @@ class BuyIN:
             {"player": "P2", "denom": ..., "chips_ID": [...]},
             ...
         ]
+        
+        Author:
+            Prasad Kamble
         """
         result_table = []
         for player_label, pdata in buyin_data.items():

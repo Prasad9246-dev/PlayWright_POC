@@ -11,6 +11,8 @@ class ViewTableTab:
         self.quick_buy_in_selector = self.page.get_by_text('QUICK BUY IN')
         self.take_player = self.page.locator("div.error-message", has_text="TAKE")
         self.reveal_button = self.page.get_by_text('REVEAL')
+        self.player_id_input = self.page.locator("app-player-session").get_by_role("textbox")
+        self.clock_in_button = self.page.get_by_role("button", name="Clock-in")
 
     def view_table_tab(self):
         return self.view_table_tab_selector
@@ -65,4 +67,10 @@ class ViewTableTab:
             time.sleep(5) 
             return self.take_player.is_visible()
         except Exception:
-            return False        
+            return False
+
+    def clockin_seat_num(self, seat_num):
+        """
+        Returns a locator for the seat element by seat number.
+        """
+        return self.page.locator(f"#seat__{seat_num}")  

@@ -17,5 +17,7 @@ def run():
         page.get_by_role("button", name="Configuration v.2.6.3.0").click()
         # browser.close()
 
+
 if __name__ == "__main__":
-    run()
+    pass
+    # run()
