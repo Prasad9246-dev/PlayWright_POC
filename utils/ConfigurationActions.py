@@ -3,11 +3,13 @@ from pages.ConfigurationPage import ConfigurationPage
 from utils.config_read import ConfigUtils
 from utils.UIUtils import UIUtils
 from pages.CasinoManager import CasinoManager
+from utils.ConfigurationAPI import ConfigurationAPI
 
 class ConfigurationActions:
     def __init__(self, page):
         self.page = page
         self.configuration_page = ConfigurationPage(page)
+        self.configuration_api = ConfigurationAPI()
         self.ui_utils = UIUtils(page)
         self.config_utils = ConfigUtils()
 
@@ -24,7 +26,7 @@ class ConfigurationActions:
         """
         return [part.strip() for part in table_path.split('/') if part.strip()]
 
-    def drill_down(self, tbd, setup, table_ip):
+    def drill_down(self, setup, table_ip):
         """
         Navigates through the configuration UI to locate a table by its IP.
 
@@ -51,7 +53,7 @@ class ConfigurationActions:
         config_page.wait_for_timeout(2000)
 
         # Get table info and name from API
-        table_info = tbd.Configuration_API.get_table_info(table_ip)
+        table_info = self.configuration_api.get_table_info(table_ip)
         table_name = table_info.get("tableName")
         print(f"Table Name: {table_name}")
 
