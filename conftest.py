@@ -9,7 +9,7 @@ import tkinter as tk
 def setup():
     with sync_playwright() as p:
         screen_width = tk.Tk().winfo_screenwidth()
-        screen_height = tk.Tk().winfo_screenheight()
+        screen_height = tk.Tk().winfo_screenheight() - 118
         browser = p.chromium.launch(
             headless=False,
             channel="chrome", # Use the Edge browser msedge
