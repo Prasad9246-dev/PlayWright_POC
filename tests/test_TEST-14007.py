@@ -22,7 +22,7 @@ def test_14007(setup,request):
     wager_data_result = tbd.wager_processor.process_wagers(table_ip, buyin_data_result, wager_data)
     # Draw cards and press shoe button
     tbd.card_processor.draw_cards_and_shoe_press(tbd.card_data, table_ip) 
-    tbd.UI_Utils.click_to_element(tbd.view_table_tab.reveal_button)
+    tbd.ui_utils.click_to_element(tbd.view_table_tab.reveal_button)
     # Wait for the game to complete
     time.sleep(3)
     chips_ID = ",".join(tbd.table_actions.get_chip_ids_for_denom(chips_df, "1000"))

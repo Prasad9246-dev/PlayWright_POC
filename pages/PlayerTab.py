@@ -2,12 +2,7 @@ class PlayerTab:
     def __init__(self, page):
         self.page = page
         self.Players_TAB = self.page.get_by_role('tab', name="Players")
-        self.Enter_Player_ID = self.page.get_by_placeholder("Enter Player ID")
-        self.first_row_first_col_selector = 'tbody.mdc-data-table__content tr[role="row"]:nth-of-type(1) td:nth-of-type(1)'
-        self.clock_in_player_button = self.page.get_by_role("button", name="Clock-In Player")
-        self.clock_out_button = self.page.get_by_role("button", name="Clock-Out")
-        self.clock_out_close_button = self.page.get_by_label("Clock-Outclose").get_by_role("button", name="Clock-Out")
- 
+
     def dropdown_button(self):
         """Returns the locator for the dropdown button.
         Author:
@@ -59,21 +54,3 @@ class PlayerTab:
             Prasad Kamble
         """
         return self.page.get_by_role('button', name='Close')
- 
-    def player_card_position(self, position_num):
-        """
-        Returns a Playwright locator for a player card by position number.
-        Author:
-            Prasad Kamble
-        """
-        selector = f'#player-card--0\\.{position_num}'
-        return self.page.locator(selector)
-   
-    def player_card_dot(self, seat_num):
-        """
-        Returns the locator for the dot button inside the player card for the given seat number.
-        Author:
-            Prasad Kamble
-        """
-        selector = f'[id="player-card--0\\.{seat_num}"]'
-        return self.page.locator(selector).get_by_role("button").nth(3)

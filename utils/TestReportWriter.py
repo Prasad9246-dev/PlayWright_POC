@@ -9,13 +9,19 @@ class TestReportWriter:
         self.build_version = build_version
         self.feature_name = feature_name
         self.date_str = datetime.now().strftime("%Y-%m-%d")
-        self.folder_path = rf"C:\Users\{self.username}\Walker Digital Table Systems\WDTS INDIA - automation\Playwright\TestCaseReport"
+        # self.folder_path = rf"C:\Users\{self.username}\Walker Digital Table Systems\WDTS INDIA - automation\Playwright\TestCaseReport"
+        self.folder_path = "reports/"
         os.makedirs(self.folder_path, exist_ok=True)
         self.file_name = f"{self.build_version}_{self.date_str}.xlsx"
         self.file_path = os.path.join(self.folder_path, self.file_name)
         self.results = []
 
     def add_result(self, test_set_name, test_case_id, status, remarks, time_str):
+        """
+        Adds a test result to the report.
+        Author:
+            Prasad Kamble
+        """
         self.results.append({
             "test_set_name": test_set_name,
             "test_case_id": test_case_id,
@@ -25,6 +31,11 @@ class TestReportWriter:
         })
 
     def write_report(self):
+        """
+        Writes the test report to an Excel file.
+        Author:
+            Prasad Kamble
+        """
         if os.path.exists(self.file_path):
             wb = load_workbook(self.file_path)
             ws = wb.active

@@ -3,11 +3,18 @@ class BasePage:
         self.page = page
 
     def navigate(self, url: str):
-        """Navigate to a specific URL."""
+        """Navigate to a specific URL.
+        
+        Author:
+            Prasad Kamble
+        """
         self.page.goto(url)
 
     def get_title(self):
-        """Return the page title."""
+        """Return the page title.
+        Author:
+            Prasad Kamble
+        """
         return self.page.title()
     
     def get_text(self, locator):
@@ -15,6 +22,8 @@ class BasePage:
         Returns the text content of the given locator.
         :param locator: a selector string or Playwright locator
         :return: The text content as a string, or None if not found.
+        Author:
+            Prasad Kamble
         """
         try:
             return self.page.locator(locator).inner_text()

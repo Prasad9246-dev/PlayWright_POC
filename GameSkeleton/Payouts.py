@@ -11,6 +11,9 @@ class Payout:
         Args:
             table_ip: Table IP address as string.
             payout_data: List of dicts [{'antenna': ..., 'denom': ...}, ...] from get_payout_data.
+        
+        Author:
+            Prasad Kamble
         """
         for entry in payout_data:
             antenna = entry["antenna"]

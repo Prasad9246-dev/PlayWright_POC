@@ -6,16 +6,9 @@ class UIUtils:
         self.view_table_tab = ViewTableTab(self.page)
  
     def click_to_element(self, element_selector):
-        """
-        Clicks the given element.
-        Author:
-            Prasad Kamble
-        """
-        if isinstance(element_selector, str):
-            self.page.locator(element_selector).click()
-        else:
-            element_selector.click()
- 
+        """Clicks the given element."""
+        element_selector.click()
+
     def fill_element(self, locator, text):
         """
         Types the given text into the locator or selector.
