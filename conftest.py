@@ -11,7 +11,7 @@ def setup():
         root = tk.Tk()
         screen_width = root.winfo_screenwidth()
         screen_height = root.winfo_screenheight()
-        screen_height = screen_height - 118
+        screen_height = screen_height - 118 
         print(f"Screen width: {screen_width}, Screen height: {screen_height}")
         browser = p.chromium.launch(
             headless=False,
