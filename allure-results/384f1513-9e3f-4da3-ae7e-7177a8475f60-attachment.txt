@@ -1,0 +1,1 @@
+SUCCESS: 'Player Search' header is visible in dialog.
