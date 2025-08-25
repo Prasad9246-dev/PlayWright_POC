@@ -91,6 +91,9 @@ def get_wager_data(excel_path, test_case_id):
             Prasad Kamble
     """
     df = pd.read_excel(excel_path)
+    if test_case_id not in df['testCase_ID'].values:
+        print(f"Test case ID '{test_case_id}' not present in test data")
+        return {}
     row = df[df['testCase_ID'] == test_case_id].iloc[0]
     wager_dict = {}
     idx = 1
@@ -121,6 +124,9 @@ def get_cards_data(excel_path, test_case_id):
             Prasad Kamble
     """
     df = pd.read_excel(excel_path)
+    if test_case_id not in df['testCase_ID'].values:
+        print(f"Test case ID '{test_case_id}' not present in test data")
+        return {}
     row = df[df['testCase_ID'] == test_case_id].iloc[0]
     cards = []
     for col in df.columns:
@@ -136,6 +142,9 @@ def get_takeBets_data(excel_path, test_case_id):
             Prasad Kamble
     """
     df = pd.read_excel(excel_path)
+    if test_case_id not in df['testCase_ID'].values:
+        print(f"Test case ID '{test_case_id}' not present in test data")
+        return {}
     row = df[df['testCase_ID'] == test_case_id].iloc[0]
     takebets_raw = row.get("TakeBets", "")
     if pd.notna(takebets_raw):
@@ -171,6 +180,3 @@ def get_payout_data(excel_path, test_case_id):
                     "denom": denom
                 })
     return payout_list
-
-
-print(get_payout_data("data/testData.xlsx", "TEST-0608"))
