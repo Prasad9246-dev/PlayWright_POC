@@ -153,6 +153,10 @@ def get_payout_data(excel_path, test_case_id):
             Prasad Kamble
     """
     df = pd.read_excel(excel_path)
+    # row = df[df['testCase_ID'] == test_case_id].iloc[0]
+    if test_case_id not in df['testCase_ID'].values:
+        print(f"Test case ID '{test_case_id}' not present in test data")
+        return {}
     row = df[df['testCase_ID'] == test_case_id].iloc[0]
     payout_list = []
     for col in df.columns:
