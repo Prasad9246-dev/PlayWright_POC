@@ -8,8 +8,11 @@ import tkinter as tk
 @pytest.fixture(scope="function")
 def setup():
     with sync_playwright() as p:
-        screen_width = tk.Tk().winfo_screenwidth()
-        screen_height = tk.Tk().winfo_screenheight() - 118
+        root = tk.Tk()
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        screen_height = screen_height - 118 
+        print(f"Screen width: {screen_width}, Screen height: {screen_height}")
         browser = p.chromium.launch(
             headless=False,
             channel="chrome", # Use the Edge browser msedge
