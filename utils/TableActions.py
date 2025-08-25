@@ -190,4 +190,42 @@ class TableActions:
             chip_ids = matching_chips.iloc[:count]["chipsID"].tolist()
             chips_df.drop(matching_chips.iloc[:count].index, inplace=True)
             return chip_ids
+        
+
+
+    def clock_in_player(self, tab_name, seat_num, player_id):
+        """
+        Navigates to the given tab, selects the player card by seat number, enters the player ID,
+        clicks the first row/first column cell, and clicks the clock-in player button.
+        Handles Players_TAB and View_Table_TAB, else prints error.
+        Author:
+            Prasad Kamble
+        """
+        if tab_name == "Players_TAB":
+            self.navigate_to_tab(self.player_tab.Players_TAB)
+            self.ui_utils.click_to_element(self.player_tab.player_card_position(seat_num))
+            self.ui_utils.fill_element(self.player_tab.Enter_Player_ID, player_id)
+            self.ui_utils.press_enter(self.player_tab.Enter_Player_ID)
+            self.ui_utils.click_to_element(self.player_tab.first_row_first_col_selector)
+            self.ui_utils.click_to_element(self.player_tab.clock_in_player_button)
+        elif tab_name == "View_Table_TAB":
+            self.navigate_to_tab(self.view_table_tab.view_table_tab())
+            self.ui_utils.click_to_element(self.view_table_tab.clockin_seat_num(seat_num))
+            self.ui_utils.fill_element(self.view_table_tab.player_id_input, player_id)
+            self.ui_utils.press_enter(self.view_table_tab.player_id_input)
+            self.ui_utils.click_to_element(self.view_table_tab.clock_in_button)
+        else:
+            print(f"Tab name '{tab_name}' is incorrect. Supported: 'Players_TAB', 'View_Table_TAB'.")
+           
+    def clock_out_player(self, seat_num):
+        """
+        Navigates to the Players tab, clicks the dot button for the given seat number,
+        then clicks the clock-out and clock-out close buttons.
+        Author:
+            Prasad Kamble
+        """
+        self.navigate_to_tab(self.player_tab.Players_TAB)
+        self.ui_utils.click_to_element(self.player_tab.player_card_dot(seat_num))
+        self.ui_utils.click_to_element(self.player_tab.clock_out_button)
+        self.ui_utils.click_to_element(self.player_tab.clock_out_close_button)
 

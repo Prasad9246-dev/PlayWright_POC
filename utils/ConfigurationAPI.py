@@ -220,4 +220,5 @@ if __name__ == "__main__":
     api = ConfigurationAPI()
     base_url = "https://wdts-gateway-cs01.wdts.local:792"  # Replace with your actual URL if needed
     token = api.get_access_token(base_url)
-    print(f"Access token: {token}")
+    db_out = api.run_query("172.31.3.83","select * from ui_app_properties;")
+    print(f"Database Output: {db_out}")

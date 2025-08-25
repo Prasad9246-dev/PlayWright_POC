@@ -58,7 +58,7 @@ class TBDBaseTest:
         self.card_processor = GameoutComes()
         self.take_bets_processor = TakeBets(setup)
         self.payout_processor = Payout(setup)
-        self.Configuration_API = ConfigurationAPI()
+        self.configuration_API = ConfigurationAPI()
 
     def _run_base_setup(self):
         self.login_page.navigate(self.config["url"])

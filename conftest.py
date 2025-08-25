@@ -3,17 +3,22 @@ from playwright.sync_api import sync_playwright
 from utils.TestReportWriter import TestReportWriter
 from utils.config_read import ConfigUtils
 from datetime import datetime
+import tkinter as tk
 
 @pytest.fixture(scope="function")
 def setup():
     with sync_playwright() as p:
+        root = tk.Tk()
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        screen_height = screen_height - 118
         browser = p.chromium.launch(
             headless=False,
             channel="chrome", # Use the Edge browser msedge
-            args=["--start-maximized"]
+            args=["--start-fullscreen"]
         )
         # Set viewport=None to use the full window size
-        context = browser.new_context(ignore_https_errors=True,viewport={"width": 1366, "height": 650})
+        context = browser.new_context(ignore_https_errors=True,viewport={"width": screen_width, "height": screen_height})
         page = context.new_page()
         yield page
 

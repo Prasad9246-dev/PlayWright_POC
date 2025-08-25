@@ -1,5 +1,5 @@
 import time
-
+ 
 class ViewTableTab:
     def __init__(self, page):
         self.page = page
@@ -11,31 +11,33 @@ class ViewTableTab:
         self.quick_buy_in_selector = self.page.get_by_text('QUICK BUY IN')
         self.take_player = self.page.locator("div.error-message", has_text="TAKE")
         self.reveal_button = self.page.get_by_text('REVEAL')
-
+        self.player_id_input = self.page.locator("app-player-session").get_by_role("textbox")
+        self.clock_in_button = self.page.get_by_role("button", name="Clock-in")
+ 
     def view_table_tab(self):
         return self.view_table_tab_selector
-
+ 
     def seat_section(self, seat_number):
         return self.page.locator(f'div.seat__seat-wrapper:has(button.seat.pos__{seat_number})').click()
-
+ 
     def player_search_box(self):
         return self.player_search_box_selector
-
+ 
     def buy_in_confirm_button(self):
         return self.buy_in_confirm_button_selector
-
+ 
     def is_dot_present(self):
         """
         Returns True if get_dot_count() is greater than 0, else False.
         """
         return self.get_dot_count() > 0
-
+ 
     def count_dots(self):
         """
         Returns the number of visible divs with class 'dots' on the screen.
         """
         return self.dot_locator.count()
-
+ 
     def get_dot_count(self):
         """
         Returns the number of dots:
@@ -50,19 +52,25 @@ class ViewTableTab:
                 return 0
         else:
             return self.dot_locator.count()
-
+ 
     def quick_buy_in(self):
             """
             Returns the locator for the 'QUICK BUY IN' button/text.
             """
             return self.quick_buy_in_selector
-        
+       
     def is_take_player_visible(self):
         """
         Returns True if the 'TAKE PLAYER' element is visible on the screen, else False.
         """
         try:
-            time.sleep(5) 
+            time.sleep(5)
             return self.take_player.is_visible()
         except Exception:
-            return False        
+            return False
+ 
+    def clockin_seat_num(self, seat_num):
+        """
+        Returns a locator for the seat element by seat number.
+        """
+        return self.page.locator(f"#seat__{seat_num}")  
