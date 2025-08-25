@@ -6,6 +6,7 @@ import allure
 @allure.story("TEST-34881: CF_TableUI")
 @allure.title("TEST-34881 To verify that the user is able to search the player with the PlayerId, firstName,LastName,PPID with the keyvalue properties for the active player search for the WDTS Client")
 def test_34881(setup,request):
+    
     # Initialize base test and get required data
     tbd = TBDBaseTest(setup, "TEST-34881")
     page = setup
@@ -14,31 +15,43 @@ def test_34881(setup,request):
     chips_df = tbd.chips_df
     # Step 1: Click 'Players' tab
     tbd.table_actions.clock_in_player("Players_TAB",1,"6001")
+    time.sleep(4)
 
-    if tbd.table_actions.player_tab.Players_TAB.is_visible():
-        tbd.table_actions.player_tab.Players_TAB.click()
-        print("SUCCESS: 'Players' tab clicked.")
-        tbd.screenshot_util.attach_screenshot(name="Players Tab Click")
-        tbd.screenshot_util.attach_text("Clicked 'Players' tab.", name="Verification Message")
+    # if tbd.table_actions.player_tab.Players_TAB.is_visible():
+    #     tbd.table_actions.player_tab.Players_TAB.click()
+    #     print("SUCCESS: 'Players' tab clicked.")
+    #     tbd.screenshot_util.attach_screenshot(name="Players Tab Click")
+    #     tbd.screenshot_util.attach_text("Clicked 'Players' tab.", name="Verification Message")
+    # else:
+    #     print("FAILED: 'Players' tab not visible.")
+    #     tbd.screenshot_util.attach_screenshot(name="Players Tab Not Visible")
+    #     tbd.screenshot_util.attach_text("'Players' tab not visible.", name="Verification Message")
+    #     assert False, "'Players' tab not visible."
+    #     time.sleep(2)  # Wait for tab to load
+    # # Step 2: Click clock-in icon for first player card
+    # # Step 1: Try to click the 3rd button with empty text (Player clock-in)
+    # clock_in_buttons = page.get_by_role("button").filter(has_text="")
+    # if clock_in_buttons.nth(2).is_visible():
+    #     clock_in_buttons.nth(2).click()
+    #     print("SUCCESS: Player clock-in button is visible and clicked.")
+    #     allure.attach("Player clock-in button is visible and clicked.", name="Clock-In Log")
+    #     assert True, "SUCCESS: Player clock-in button is visible and clicked."
+    # else:
+    #     print("FAILED: Player is not clocked-In. Skipping rest of the test.")
+    #     allure.attach("Player is not clocked-In. Skipping rest of the test.", name="Clock-In Log")
+    #     assert False, "Player is not clocked-In. Skipping rest of the test."
+    # Recorded Step: Click the element if it is visible
+    # Example: Click the 3rd button with empty text (Player clock-in)
+    element = page.get_by_role("button").filter(has_text="").nth(2)
+    if element.is_visible():
+        element.click()
+        print("SUCCESS: Element is visible and clicked.")
+        allure.attach("Element is visible and clicked.", name="Element Click Log")
+        assert True, "SUCCESS: Element is visible and clicked."
     else:
-        print("FAILED: 'Players' tab not visible.")
-        tbd.screenshot_util.attach_screenshot(name="Players Tab Not Visible")
-        tbd.screenshot_util.attach_text("'Players' tab not visible.", name="Verification Message")
-        assert False, "'Players' tab not visible."
-        time.sleep(2)  # Wait for tab to load
-    # Step 2: Click clock-in icon for first player card
-    # Step 1: Try to click the 3rd button with empty text (Player clock-in)
-    clock_in_buttons = page.get_by_role("button").filter(has_text="")
-    if clock_in_buttons.nth(2).is_visible():
-        clock_in_buttons.nth(2).click()
-        print("SUCCESS: Player clock-in button is visible and clicked.")
-        allure.attach("Player clock-in button is visible and clicked.", name="Clock-In Log")
-        assert True, "SUCCESS: Player clock-in button is visible and clicked."
-    else:
-        print("FAILED: Player is not clocked-In. Skipping rest of the test.")
-        allure.attach("Player is not clocked-In. Skipping rest of the test.", name="Clock-In Log")
-        assert False, "Player is not clocked-In. Skipping rest of the test."
-
+        print("FAILED: Element not visible, skipping click.")
+        allure.attach("Element not visible, skipping click.", name="Element Click Log")
+        assert False, "FAILED: Element not visible, skipping click."
     # Step 2: Click on MID header and assert visibility
     mid_header = page.get_by_text("MID", exact=True)
     if mid_header.is_visible():
