@@ -30,8 +30,8 @@ def test_0608(setup,request):
     # Draw cards and press shoe button
     tbd.card_processor.draw_cards_and_shoe_press(tbd.card_data, table_ip)
 
-    # Take bets
-    tbd.take_bets_processor.take(table_ip, wager_result, tbd.take_bets_data)
+    # Process payouts
+    tbd.payout_processor.process_payouts(table_ip, tbd.payout_data, chips_df)
 
     # Verify game ID increment logic
     tbd.table_actions.navigate_to_tab(tbd.games_tab.GAMES_TAB)

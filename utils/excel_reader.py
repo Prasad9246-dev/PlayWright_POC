@@ -176,10 +176,13 @@ def get_payout_data(excel_path, test_case_id):
             val = row[col]
             if pd.notna(val):
                 parts = [p.strip() for p in str(val).split(';')]
-                antenna = parts[0] if len(parts) > 0 else None
-                denom = parts[1] if len(parts) > 1 else None
+                denom = parts[0] if len(parts) > 0 else None
+                antenna = parts[1] if len(parts) > 1 else None
                 payout_list.append({
                     "antenna": antenna,
                     "denom": denom
                 })
     return payout_list
+
+
+print(get_payout_data("data/testData.xlsx", "TEST-0608"))
