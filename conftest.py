@@ -1,7 +1,7 @@
 import pytest
 from playwright.sync_api import sync_playwright
-from utils.TestReportWriter import TestReportWriter
-from utils.config_read import ConfigUtils
+from Utilites.ExcelRead.TestReportWriter import TestReportWriter
+from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from datetime import datetime
 import tkinter as tk
 

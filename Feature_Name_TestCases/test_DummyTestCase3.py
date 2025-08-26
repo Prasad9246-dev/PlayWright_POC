@@ -1,0 +1,53 @@
+import time
+from Execution_Templates.Table_Execution_Template import TableExecutionTemplate
+import allure
+
+@allure.feature("Player antenna logic on commission table")
+@allure.story("Insurance on Banker antenna disables Player antenna")
+@allure.title("Player antenna should remain off when Banker antenna has insurance on commission table")
+def test_DummyTestCase3(setup,request):
+    tbd = TableExecutionTemplate(setup,"TEST-14007")
+    request.node.tbd = tbd
+    table_ip = tbd.config["tableIP"]
+    chips_df = tbd.chips_df
+    
+    tbd.table_actions.navigate_to_tab(tbd.games_tab.GAMES_TAB)
+    previousGameID = tbd.games_tab.get_first_row_first_column_text()
+    
+    # Get buy-in data from Excel for this test case
+    buyin_data = tbd.buyin_data
+    buyin_data_result = tbd.buyin_processor.process_buyins(table_ip, buyin_data, chips_df)
+    # Process wagers after buy-in
+    wager_data = tbd.wager_data
+    wager_data_result = tbd.wager_processor.process_wagers(table_ip, buyin_data_result, wager_data)
+    # Draw cards and press shoe button
+    tbd.card_processor.draw_cards_and_shoe_press(tbd.card_data, table_ip) 
+    tbd.ui_utils.click_to_element(tbd.view_table_tab.reveal_button)
+    # Wait for the game to complete
+    time.sleep(3)
+    chips_ID = ",".join(tbd.table_actions.get_chip_ids_for_denom(chips_df, "1000"))
+    print(f"Chips ID: {chips_ID}")
+    tbd.table_actions.move_chips_between_antennas(table_ip,"TT","P3",chips_ID)
+    # Verify the game result
+    tbd.card_processor.deal_cards_and_activate_shoe(table_ip,"2H")
+    
+    # Take bets using the wager results
+    takebets_list = tbd.take_bets_data
+    tbd.take_bets_processor.take(table_ip, wager_data_result, takebets_list)
+    tbd.table_actions.move_chips_between_antennas(table_ip,"P3","TT",chips_ID)
+    
+    # Verify game ID increment logic
+    tbd.table_actions.navigate_to_tab(tbd.games_tab.GAMES_TAB)
+    CurrentGameID = tbd.games_tab.get_first_row_first_column_text()
+    
+    if previousGameID == CurrentGameID:
+        print("Game record is not present on Games tab.")
+        tbd.screenshot_util.attach_screenshot(name="Game record is not present on Games tab.")
+        tbd.screenshot_util.attach_text("Game record is not present on Games tab.", name="Verification Message")
+        assert previousGameID == CurrentGameID, "Game record is not present on Games tab."
+    else:
+        print("Game record is present on Games tab.")
+        tbd.screenshot_util.attach_screenshot(name="Game record is present on Games tab.")
+        tbd.screenshot_util.attach_text("Game record is present on Games tab.", name="Verification Message")
+        assert previousGameID != CurrentGameID, "Game record should be present on Games tab."
+    
