@@ -236,11 +236,10 @@ class ConfigurationAPI:
             print(f"Error extracting template details: {e}")
             return None
 
-    def update_system_tab(self, tableIP, base_url, property_code, property_value):
+    def update_system_tab(self, base_url, property_code, property_value):
         """
         Updates a SYSTEM template property for the given tableIP.
         Args:
-            tableIP (str): Table IP address
             base_url (str): API base URL
             property_code (str): Property code to update
             property_value (str): Value to set for the property
