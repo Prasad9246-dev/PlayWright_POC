@@ -13,9 +13,13 @@ def setup():
         screen_height = root.winfo_screenheight()
         screen_height = screen_height - 118 
         print(f"Screen width: {screen_width}, Screen height: {screen_height}")
+         # Get channel from config
+        config_utils = ConfigUtils()
+        config = config_utils.get_config()
+        channel_name = config.get("browser")
         browser = p.chromium.launch(
             headless=False,
-            channel="chrome",
+            channel=channel_name,
             args=["--start-fullscreen"]
         )
         # Set viewport=None to use the full window size
