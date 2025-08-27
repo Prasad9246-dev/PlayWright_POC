@@ -28,7 +28,7 @@ class ExpireAndAdjustVariance:
         self.player_tab.expire_chips_button().click()
         self.player_tab.confirm_button().click()
         self.player_tab.close_button().click()
-        self.move_all_chips_to_tt(self.table_ip,"Configuration/AutomationChips.xlsx")
+        self.move_all_chips_to_tt(self.table_ip)
         self.page.wait_for_timeout(2000)
         self.table_actions.navigate_to_tab(self.inventory_tab.inventory_tab(), wait_time=2000)
         # self.inventory_tab.inventory_tab().click()
@@ -84,13 +84,13 @@ class ExpireAndAdjustVariance:
             print("Timeout waiting for isScanning to become False (after Adjust).")
             return
 
-    def move_all_chips_to_tt(self, table_ip, excel_path):
+    def move_all_chips_to_tt(self, table_ip):
         """
         Moves all chips from the Excel file to antenna 'TT' in a single API call.
         Author:
                 Prasad Kamble
         """
-        chips_df = read_chip_ids_df(excel_path)
+        chips_df = read_chip_ids_df()
         api_url = f"https://{table_ip}:790/api/table/v1/chipMove"
         headers = {'Content-Type': 'application/json'}
 

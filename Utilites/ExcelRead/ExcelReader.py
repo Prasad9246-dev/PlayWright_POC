@@ -1,5 +1,6 @@
 import openpyxl
 import pandas as pd
+import json
 
 def read_excel_config(path):
     """
@@ -23,14 +24,26 @@ def read_excel_config(path):
         print(f"Error reading Excel file: {e}")
     return config
 
-def read_chip_ids_df(path):
+def read_chip_ids_df():
     """
     Reads the 'ChipIds' sheet and returns a DataFrame with 'chipsID' and 'Denom'.
     Author:
             Prasad Kamble
     """
-    df = pd.read_excel(path, sheet_name="ChipIds")
+    excel_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\MasterFiles\AutomationChips.xlsx"
+    excel_path = excel_path.replace(r'\u00A0', '\u00A0')
+    df = pd.read_excel(excel_path, sheet_name="ChipIds")
     return df[["All-chips", "Denom"]].rename(columns={"All-chips": "chipsID"})
+
+def read_master_config(json_path):
+    """
+    Reads the master config JSON file and returns its contents as a dictionary.
+    Author:
+        Prasad Kamble
+    """
+    
+    with open(json_path, 'r') as f:
+        return json.load(f)
 
 def get_buyin_data(excel_path, test_case_id):
     """
@@ -182,3 +195,9 @@ def get_payout_data(excel_path, test_case_id):
                     "denom": denom
                 })
     return payout_list
+
+
+# excel_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\MasterFiles\AutomationChips.xlsx"
+# excel_path = excel_path.replace(r'\u00A0', '\u00A0')
+
+# print(read_chip_ids_df(excel_path))

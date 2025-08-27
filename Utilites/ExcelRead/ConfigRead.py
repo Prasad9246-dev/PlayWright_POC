@@ -1,8 +1,14 @@
-from Utilites.ExcelRead.ExcelReader import read_excel_config
+import os
+from Utilites.ExcelRead.ExcelReader import read_excel_config ,read_master_config
 
 class ConfigUtils:
+    
     def __init__(self):
-        self.config = read_excel_config("Configuration/ConfigData.xlsx")
+        self.feature_name = "PlayWright_POC"
+        self.username = os.getlogin()
+        self.master_config = read_master_config("MasterConfig.json")
+        self.config_path = os.path.join(self.master_config.get("configPath").replace("{userName}", self.username).replace(r'\u00A0', '\u00A0'),self.feature_name+".xlsx")
+        self.config = read_excel_config(self.config_path)
 
     def get_config(self):
         """Returns the entire configuration dictionary.
@@ -12,16 +18,100 @@ class ConfigUtils:
         return self.config
 
     def get_tableIP(self):
-        """Returns the Table IP address.
+        """
+        Returns the Table IP address, prioritizing runtime environment variable if set.
+        Author:
+        Prasad Kamble
+        """
+        if getattr(self, "table_ip", None):
+            return self.table_ip
+        runtime_table_ip = os.getenv("RUNTIME_TABLE_IP")
+        self.table_ip = runtime_table_ip if runtime_table_ip is not None else self.config.get("tableip")
+        return self.table_ip
+
+    def get_managementIP(self):
+        """
+        Returns the Management IP, prioritizing runtime environment variable if set.
         Author:
             Prasad Kamble
         """
-        table_ip = self.config.get("tableip")
-        print(table_ip)
-        return table_ip
+        if getattr(self, "management_ip", None):
+            return self.management_ip
+        runtime_management_ip = os.getenv("RUNTIME_MANAGEMENT_IP")
+        self.management_ip = runtime_management_ip if runtime_management_ip is not None else self.config.get("managementip")
+        return self.management_ip
+
+    def get_transactionIP(self):
+        """
+        Returns the Transaction IP, prioritizing runtime environment variable if set.
+        Author:
+            Prasad Kamble
+        """
+        if getattr(self, "transaction_ip", None):
+            return self.transaction_ip
+        runtime_transaction_ip = os.getenv("RUNTIME_TRANSACTION_IP")
+        self.transaction_ip = runtime_transaction_ip if runtime_transaction_ip is not None else self.config.get("transactionip")
+        return self.transaction_ip
+
+    def get_integrationIP(self):
+        """
+        Returns the Integration IP, prioritizing runtime environment variable if set.
+        Author:
+            Prasad Kamble
+        """
+        if getattr(self, "integration_ip", None):
+            return self.integration_ip
+        runtime_integration_ip = os.getenv("RUNTIME_INTEGRATION_IP")
+        self.integration_ip = runtime_integration_ip if runtime_integration_ip is not None else self.config.get("integrationip")
+        return self.integration_ip
+
+    def get_cmsIP(self):
+        """
+        Returns the CMS IP, prioritizing runtime environment variable if set.
+        Author:
+            Prasad Kamble
+        """
+        if getattr(self, "cms_ip", None):
+            return self.cms_ip
+        runtime_cms_ip = os.getenv("RUNTIME_CMS_IP")
+        self.cms_ip = runtime_cms_ip if runtime_cms_ip is not None else self.config.get("cmsip")
+        return self.cms_ip
+
+    def get_cageIP(self):
+        """
+        Returns the Cage IP, prioritizing runtime environment variable if set.
+        Author:
+            Prasad Kamble
+        """
+        if getattr(self, "cage_ip", None):
+            return self.cage_ip
+        runtime_cage_ip = os.getenv("RUNTIME_CAGE_IP")
+        self.cage_ip = runtime_cage_ip if runtime_cage_ip is not None else self.config.get("cageip")
+        return self.cage_ip
+
+    def get_externalKafkaIP(self):
+        """
+        Returns the External Kafka IP, prioritizing runtime environment variable if set.
+        Author:
+            Prasad Kamble
+        """
+        if getattr(self, "external_kafka_ip", None):
+            return self.external_kafka_ip
+        runtime_kafka_ip = os.getenv("RUNTIME_EXTERNAL_KAFKA_IP")
+        self.external_kafka_ip = runtime_kafka_ip if runtime_kafka_ip is not None else self.config.get("externalkafkaip")
+        return self.external_kafka_ip
+
+    def get_tableType(self):
+        """
+        Returns the Table Type from config.
+        Author:
+            Prasad Kamble
+        """
+        return self.config.get("tabletype")
 
     def get_username(self):
-        """Returns the username.
+        """
+        Returns the username.
         Author:
             Prasad Kamble
         """
@@ -46,22 +136,40 @@ class ConfigUtils:
         Author:
             Prasad Kamble
         """
-        url_template = self.config.get("ppapplicationurl")
+        url_template = self.master_config.get("ppapplicationurl")
         env = self.config.get("env")
-        print(f"url_template: {url_template}, env: {env}")
         if url_template and env:
             return url_template.replace("env", env)
         print(url_template)
         return url_template
 
-    def get_url(self):
+    def get_table_url(self):
         """Returns the URL.
         Author:
             Prasad Kamble
         """
-        url_template = self.config.get("url")
-        table_ip = self.config.get("tableip")
+        url_template = self.master_config.get("tableurl")
+        table_ip = self.get_tableIP()
         if url_template and table_ip:
             return url_template.replace("tableIP", table_ip)
         print(url_template)
         return url_template
+    
+    def get_cageURL(self):
+        """
+        Returns the Cage URL from config.
+        Author:
+            Prasad Kamble
+        """
+        url_template = self.master_config.get("cageurl")
+        cage_ip = self.get_cageIP()
+        if url_template and cage_ip:
+            return url_template.replace("CageIP", cage_ip)
+        print(url_template)
+        return url_template
+    
+if __name__ == "__main__":
+    config_utils = ConfigUtils()
+    print(config_utils.get_table_url())
+    print(config_utils.get_cageURL())
+    print(config_utils.get_ppApplication_Url())

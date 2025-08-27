@@ -30,7 +30,7 @@ class TableExecutionTemplate:
     def _load_config(self):
         config_utils = ConfigUtils()
         return {
-            "url": config_utils.get_url(),
+            "url": config_utils.get_table_url(),
             "username": config_utils.get_username(),
             "password": config_utils.get_password(),
             "tableIP": config_utils.get_tableIP(),
@@ -38,7 +38,9 @@ class TableExecutionTemplate:
         }
 
     def _init_data(self):
-        self.chips_df = read_chip_ids_df("Configuration/AutomationChips.xlsx")
+        # self.excel_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\MasterFiles\AutomationChips.xlsx"
+        # self.excel_path = self.excel_path.replace(r'\u00A0', '\u00A0')
+        self.chips_df = read_chip_ids_df()
         self.buyin_data = get_buyin_data("Configuration/TestData.xlsx", self.test_case_id)
         self.wager_data = get_wager_data("Configuration/TestData.xlsx", self.test_case_id)
         self.card_data = get_cards_data("Configuration/TestData.xlsx", self.test_case_id)
