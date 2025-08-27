@@ -1,4 +1,4 @@
-from pages.TablePages.ViewTableTab import ViewTableTab
+from Pages.TablePages.ViewTableTab import ViewTableTab
 
 class UIUtils:
     def __init__(self, page):

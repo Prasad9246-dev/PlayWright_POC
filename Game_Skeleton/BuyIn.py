@@ -1,6 +1,6 @@
 from Utilites.TableUtils.TableActions import TableActions
 from Utilites.UIUtils import UIUtils
-from pages.TablePages.ViewTableTab import ViewTableTab
+from Pages.TablePages.ViewTableTab import ViewTableTab
 class BuyIn:
     def __init__(self,page):
         self.page = page

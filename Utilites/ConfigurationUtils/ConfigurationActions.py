@@ -1,8 +1,8 @@
-from pages.ConfigurationLoginPage import ConfigurationLoginPage
-from pages.ConfigurationPage import ConfigurationPage
+from Pages.ConfigurationPages import ConfigurationLoginPage
+from Pages.ConfigurationPages import ConfigurationPage
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Utilites.UIUtils import UIUtils
-from pages.CasinoManager import CasinoManager
+from Pages.ConfigurationPages import CasinoManager
 from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
 
 class ConfigurationActions:

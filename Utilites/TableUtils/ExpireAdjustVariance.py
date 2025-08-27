@@ -1,9 +1,9 @@
 import requests
 import time
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
-from pages.TablePages.PlayerTab import PlayerTab
-from pages.TablePages.InventoryTab import InventoryTab
-from pages.TablePages.ViewTableTab import ViewTableTab
+from Pages.TablePages.PlayerTab import PlayerTab
+from Pages.TablePages.InventoryTab import InventoryTab
+from Pages.TablePages.ViewTableTab import ViewTableTab
 from Utilites.TableUtils.TableActions import TableActions
 from Utilites.ExcelRead.ExcelReader import read_chip_ids_df
 

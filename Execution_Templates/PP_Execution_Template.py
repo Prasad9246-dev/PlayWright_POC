@@ -1,10 +1,10 @@
 from Game_Skeleton.GameOutcomes import GameoutComes
 from Game_Skeleton.Wager import Wager
-from pages.TablePages.ViewTableTab import ViewTableTab
-from pages.TablePages.LoginPage import LoginPage
-from pages.TablePages.GamesTab import GamesTab
-from pages.TablePages.OverrideTab import OverrideTab
-from pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPage
+from Pages.TablePages.ViewTableTab import ViewTableTab
+from Pages.TablePages.LoginPage import LoginPage
+from Pages.TablePages.GamesTab import GamesTab
+from Pages.TablePages.OverrideTab import OverrideTab
+from Pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPage
 from Utilites.TableUtils.ExpireAdjustVariance import ExpireAndAdjustVariance
 from Utilites.TableUtils.TableActions import TableActions
 from Utilites.ExcelRead.ExcelReader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data
