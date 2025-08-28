@@ -10,7 +10,7 @@ class TestReportWriter:
         self.feature_name = feature_name
         self.date_str = datetime.now().strftime("%Y-%m-%d")
         # self.folder_path = rf"C:\Users\{self.username}\Walker Digital Table Systems\WDTS INDIA - automation\Playwright\TestCaseReport"
-        self.test_case_report_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\TestCaseReport"
+        self.test_case_report_path = r"C:\Users\chiac\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\TestCaseReport"
         self.test_case_report_path = self.test_case_report_path.replace(r'\u00A0', '\u00A0')
         self.folder_path = os.path.join(self.test_case_report_path, self.date_str)
         os.makedirs(self.folder_path, exist_ok=True)

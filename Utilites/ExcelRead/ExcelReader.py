@@ -30,7 +30,7 @@ def read_chip_ids_df():
     Author:
             Prasad Kamble
     """
-    excel_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\MasterFiles\AutomationChips.xlsx"
+    excel_path = r"C:\Users\chiac\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\MasterFiles\AutomationChips.xlsx"
     excel_path = excel_path.replace(r'\u00A0', '\u00A0')
     df = pd.read_excel(excel_path, sheet_name="ChipIds")
     return df[["All-chips", "Denom"]].rename(columns={"All-chips": "chipsID"})
