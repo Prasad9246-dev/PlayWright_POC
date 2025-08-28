@@ -1,6 +1,7 @@
 import openpyxl
 import pandas as pd
 import json
+import os
 
 def read_excel_config(path):
     """
@@ -24,14 +25,18 @@ def read_excel_config(path):
         print(f"Error reading Excel file: {e}")
     return config
 
+
+
 def read_chip_ids_df():
     """
     Reads the 'ChipIds' sheet and returns a DataFrame with 'chipsID' and 'Denom'.
     Author:
             Prasad Kamble
     """
-    excel_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\MasterFiles\AutomationChips.xlsx"
-    excel_path = excel_path.replace(r'\u00A0', '\u00A0')
+  
+    username = os.getlogin()
+    master_config = read_master_config("MasterConfig.json")
+    excel_path = master_config.get("automationChipsPath").replace("{userName}", username)
     df = pd.read_excel(excel_path, sheet_name="ChipIds")
     return df[["All-chips", "Denom"]].rename(columns={"All-chips": "chipsID"})
 

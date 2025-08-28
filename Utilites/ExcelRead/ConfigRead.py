@@ -4,7 +4,7 @@ from Utilites.ExcelRead.ExcelReader import read_excel_config ,read_master_config
 class ConfigUtils:
     
     def __init__(self):
-        self.feature_name = "PlayWright_POC"
+        self.feature_name = "Dummy_Feature"
         self.username = os.getlogin()
         self.master_config = read_master_config("MasterConfig.json")
         self.config_path = os.path.join(self.master_config.get("configPath").replace("{userName}", self.username),self.feature_name+".xlsx")
