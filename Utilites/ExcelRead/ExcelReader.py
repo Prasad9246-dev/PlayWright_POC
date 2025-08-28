@@ -33,7 +33,7 @@ def read_chip_ids_df():
     """
     username = os.getlogin()
     master_config = read_master_config("MasterConfig.json")
-    excel_path = os.path.join(master_config.get("automationChipsPath").replace("{userName}", username))
+    excel_path = master_config.get("automationChipsPath").replace("{userName}", username)
     df = pd.read_excel(excel_path, sheet_name="ChipIds")
     return df[["All-chips", "Denom"]].rename(columns={"All-chips": "chipsID"})
 

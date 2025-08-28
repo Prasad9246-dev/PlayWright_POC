@@ -11,7 +11,7 @@ class TestReportWriter:
         self.feature_name = feature_name
         self.date_str = datetime.now().strftime("%Y-%m-%d")
         self.master_config = read_master_config("MasterConfig.json")
-        self.test_case_report_path = os.path.join(self.master_config.get("testCaseReportPath").replace("{userName}", self.username))
+        self.test_case_report_path = self.master_config.get("testCaseReportPath").replace("{userName}", self.username)
         self.folder_path = os.path.join(self.test_case_report_path, self.date_str)
         os.makedirs(self.folder_path, exist_ok=True)
         self.file_name = f"{self.build_version}_{self.date_str}.xlsx"
