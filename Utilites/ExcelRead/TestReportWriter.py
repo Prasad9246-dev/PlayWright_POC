@@ -2,6 +2,7 @@ import os
 import getpass
 from datetime import datetime
 from openpyxl import Workbook, load_workbook
+from Utilites.ExcelRead.ExcelReader import read_master_config
 
 class TestReportWriter:
     def __init__(self, build_version, feature_name):
@@ -9,9 +10,8 @@ class TestReportWriter:
         self.build_version = build_version
         self.feature_name = feature_name
         self.date_str = datetime.now().strftime("%Y-%m-%d")
-        # self.folder_path = rf"C:\Users\{self.username}\Walker Digital Table Systems\WDTS INDIA - automation\Playwright\TestCaseReport"
-        self.test_case_report_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\TestCaseReport"
-        self.test_case_report_path = self.test_case_report_path.replace(r'\u00A0', '\u00A0')
+        self.master_config = read_master_config("MasterConfig.json")
+        self.test_case_report_path = os.path.join(self.master_config.get("testCaseReportPath").replace("{userName}", self.username))
         self.folder_path = os.path.join(self.test_case_report_path, self.date_str)
         os.makedirs(self.folder_path, exist_ok=True)
         self.file_name = f"{self.build_version}_{self.date_str}.xlsx"

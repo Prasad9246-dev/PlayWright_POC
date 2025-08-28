@@ -1,6 +1,7 @@
 import openpyxl
 import pandas as pd
 import json
+import os
 
 def read_excel_config(path):
     """
@@ -30,8 +31,9 @@ def read_chip_ids_df():
     Author:
             Prasad Kamble
     """
-    excel_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\MasterFiles\AutomationChips.xlsx"
-    excel_path = excel_path.replace(r'\u00A0', '\u00A0')
+    username = os.getlogin()
+    master_config = read_master_config("MasterConfig.json")
+    excel_path = os.path.join(master_config.get("automationChipsPath").replace("{userName}", username))
     df = pd.read_excel(excel_path, sheet_name="ChipIds")
     return df[["All-chips", "Denom"]].rename(columns={"All-chips": "chipsID"})
 
@@ -41,7 +43,6 @@ def read_master_config(json_path):
     Author:
         Prasad Kamble
     """
-    
     with open(json_path, 'r') as f:
         return json.load(f)
 
