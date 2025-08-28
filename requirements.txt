@@ -1,0 +1,6 @@
+python==3.13.5
+playwright==1.53.0
+pytest==8.4.1
+pandas==2.3.1
+openpyxl==3.1.5
+psycopg2==2.9.10
