@@ -13,6 +13,7 @@ class ViewTableTab:
         self.reveal_button = self.page.get_by_text('REVEAL')
         self.player_id_input = self.page.locator("app-player-session").get_by_role("textbox")
         self.clock_in_button = self.page.get_by_role("button", name="Clock-in")
+        self.add_player_input = self.page.get_by_role("textbox", name="Add Player")
 
     def view_table_tab(self):
         return self.view_table_tab_selector

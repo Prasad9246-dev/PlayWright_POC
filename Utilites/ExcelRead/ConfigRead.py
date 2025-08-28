@@ -7,7 +7,7 @@ class ConfigUtils:
         self.feature_name = "PlayWright_POC"
         self.username = os.getlogin()
         self.master_config = read_master_config("MasterConfig.json")
-        self.config_path = os.path.join(self.master_config.get("configPath").replace("{userName}", self.username).replace(r'\u00A0', '\u00A0'),self.feature_name+".xlsx")
+        self.config_path = os.path.join(self.master_config.get("configPath").replace("{userName}", self.username),self.feature_name+".xlsx")
         self.config = read_excel_config(self.config_path)
 
     def get_config(self):
