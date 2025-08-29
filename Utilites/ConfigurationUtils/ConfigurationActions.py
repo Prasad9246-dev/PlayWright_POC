@@ -6,12 +6,14 @@ from Pages.ConfigurationPages.CasinoManager import CasinoManager
 from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
 
 class ConfigurationActions:
-    def __init__(self, page):
+    def __init__(self, page, feature_name):
         self.page = page
+        self.feature_name = feature_name
         self.configuration_page = ConfigurationPage(page)
         self.configuration_api = ConfigurationAPIs()
         self.ui_utils = UIUtils(page)
         self.config_utils = ConfigUtils()
+        self.config_utils.set_feature_name(feature_name)
 
     def table_path_search(self, table_name):
         self.ui_utils.click_to_element(self.configuration_page.location_tab)
@@ -44,7 +46,7 @@ class ConfigurationActions:
         config_page = setup.context.new_page()
         config_page.goto(self.config_utils.get_ppApplication_Url())  
         config_login = ConfigurationLoginPage(config_page)
-        config_actions = ConfigurationActions(config_page)
+        config_actions = ConfigurationActions(config_page, self.feature_name)  # Pass feature name
         configuration_page = ConfigurationPage(config_page)
         ui_utils = UIUtils(config_page)
         config_login.configuration_login(self.config_utils.get_username(), self.config_utils.get_password())

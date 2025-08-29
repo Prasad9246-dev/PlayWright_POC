@@ -7,7 +7,7 @@ import allure
 @allure.story("test_DummyTestCase1: Rated Buy-In")
 @allure.title("test_DummyTestCase1 Rated Buy-In Test")
 def test_TEST_0608(setup):
-    tbd = TableExecutionTemplate(setup, "TEST-0608","PlayWright_POC_1")
+    tbd = TableExecutionTemplate(setup, "TEST-0608","PlayWright_POC")
     status = "Pass"
     remarks = ""
     try:
