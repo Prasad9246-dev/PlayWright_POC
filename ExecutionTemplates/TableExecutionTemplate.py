@@ -19,27 +19,27 @@ from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
 from Utilites.Reporting.ScreenshotUtil import ScreenshotUtil
 
 class TableExecutionTemplate:
-    def __init__(self, setup, test_case_id):
+    def __init__(self, setup, test_case_id,feature_name):
         self.setup = setup
+        self.feature_name = feature_name
         self.config = self._load_config()
         self.test_case_id = test_case_id
         self._init_data()
         self._init_pages_and_utils()
         self._run_base_setup()
+        
 
     def _load_config(self):
         config_utils = ConfigUtils()
         return {
-            "url": config_utils.get_table_url(),
+            "tbd_url": config_utils.get_table_url(),
             "username": config_utils.get_username(),
             "password": config_utils.get_password(),
             "tableIP": config_utils.get_tableIP(),
-            "base_url": config_utils.get_ppApplication_Url(),
+            "pp_application_url": config_utils.get_ppApplication_Url(),
         }
 
     def _init_data(self):
-        # self.excel_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\MasterFiles\AutomationChips.xlsx"
-        # self.excel_path = self.excel_path.replace(r'\u00A0', '\u00A0')
         self.chips_df = read_chip_ids_df()
         self.buyin_data = get_buyin_data("Configuration/TestData.xlsx", self.test_case_id)
         self.wager_data = get_wager_data("Configuration/TestData.xlsx", self.test_case_id)
@@ -67,7 +67,7 @@ class TableExecutionTemplate:
         self.configuration_api = ConfigurationAPIs()
 
     def _run_base_setup(self):
-        self.login_page.navigate(self.config["url"])
+        self.login_page.navigate(self.config["tbd_url"])
         self.login_page.login(self.config["username"], self.config["password"])
         self.setup.wait_for_timeout(2000)
         self.table_actions.table_close_and_open()

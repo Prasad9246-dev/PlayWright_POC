@@ -10,8 +10,8 @@ from Utilites.ExcelRead.ExcelReader import read_chip_ids_df
 class ExpireAndAdjustVariance:
     def __init__(self, page):
         self.page = page
-        config_utils = ConfigUtils()
-        self.table_ip = config_utils.get_tableIP()
+        self.config_utils = ConfigUtils()
+        self.table_ip = self.config_utils.get_tableIP()
         self.player_tab = PlayerTab(page)
         self.inventory_tab = InventoryTab(page)
         self.view_table_tab = ViewTableTab(page)

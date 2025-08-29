@@ -10,6 +10,14 @@ class ConfigUtils:
         self.config_path = os.path.join(self.master_config.get("configPath").replace("{userName}", self.username),self.feature_name+".xlsx")
         self.config = read_excel_config(self.config_path)
 
+    def set_feature_name(self, feature_name):
+        self.feature_name = feature_name
+        self.config_path = os.path.join(
+            self.master_config.get("configPath").replace("{userName}", self.username),
+            self.feature_name + ".xlsx"
+        )
+        self.config = read_excel_config(self.config_path)
+
     def get_config(self):
         """Returns the entire configuration dictionary.
         Author:

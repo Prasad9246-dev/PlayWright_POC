@@ -1,8 +1,8 @@
-from Pages.ConfigurationPages import ConfigurationLoginPage
-from Pages.ConfigurationPages import ConfigurationPage
+from Pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPage
+from Pages.ConfigurationPages.ConfigurationPage import ConfigurationPage
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Utilites.UIUtils import UIUtils
-from Pages.ConfigurationPages import CasinoManager
+from Pages.ConfigurationPages.CasinoManager import CasinoManager
 from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
 
 class ConfigurationActions:
@@ -43,11 +43,10 @@ class ConfigurationActions:
         """
         config_page = setup.context.new_page()
         config_page.goto(self.config_utils.get_ppApplication_Url())  
-
         config_login = ConfigurationLoginPage(config_page)
         config_actions = ConfigurationActions(config_page)
         configuration_page = ConfigurationPage(config_page)
-        ui_Utils = UIUtils(config_page)
+        ui_utils = UIUtils(config_page)
         config_login.configuration_login(self.config_utils.get_username(), self.config_utils.get_password())
         config_login.navigate_to_configuration("Configuration")
         config_page.wait_for_timeout(2000)
@@ -62,20 +61,20 @@ class ConfigurationActions:
         split_path = config_actions.split_table_path(table_path)
         print(f"Table Path: {table_path}")
         print(f"Split Table Path: {split_path}")
-        ui_Utils.click_to_element(configuration_page.apps_configuration)
+        ui_utils.click_to_element(configuration_page.apps_configuration)
         with config_page.expect_popup() as page1_info:
-            ui_Utils.click_to_element(configuration_page.casino_manager)
+            ui_utils.click_to_element(configuration_page.casino_manager)
         page1 = page1_info.value
         casino_manager = CasinoManager(page1)
-        ui_Utils = UIUtils(page1)
+        ui_utils = UIUtils(page1)
         # Store split_path values in variables for clarity
         site_name = split_path[1]
         ga_name = split_path[2]
         oa_name = split_path[3]
         pit_name = split_path[4]
 
-        ui_Utils.click_to_element(casino_manager.site_button(site_name))
-        ui_Utils.click_to_element(casino_manager.ga_button(ga_name))
-        ui_Utils.click_to_element(casino_manager.oa_text(oa_name))
-        ui_Utils.click_to_element(casino_manager.pit_text(pit_name))
+        ui_utils.click_to_element(casino_manager.site_button(site_name))
+        ui_utils.click_to_element(casino_manager.ga_button(ga_name))
+        ui_utils.click_to_element(casino_manager.oa_text(oa_name))
+        ui_utils.click_to_element(casino_manager.pit_text(pit_name))
         return page1
