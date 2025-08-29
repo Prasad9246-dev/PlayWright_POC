@@ -7,6 +7,7 @@ from Utilites.UIUtils import UIUtils
 
 class TableActions:
     def __init__(self, page, feature_name):
+        from Pages.TablePages.SessionsTab import SessionsTab
         self.page = page
         self.feature_name = feature_name
         self.config_utils = ConfigUtils()
@@ -14,6 +15,7 @@ class TableActions:
         self.player_tab = PlayerTab(page)
         self.inventory_tab = InventoryTab(page)
         self.view_table_tab = ViewTableTab(page)  
+        self.sessions_tab = SessionsTab(page, self.feature_name, self)
         self.ui_utils = UIUtils(self.page)
 
     def get_api_url(self):
@@ -256,4 +258,84 @@ class TableActions:
         self.navigate_to_tab(self.player_tab.Players_TAB)
         self.ui_utils.click_to_element(self.player_tab.player_card_dot(seat_num))
         self.ui_utils.click_to_element(self.player_tab.clock_out_button)
-        self.ui_utils.click_to_element(self.player_tab.clock_out_close_button)
+        self.ui_utils.click_to_element(self.player_tab.clock_out_close_button)     
+    
+    def submit_manual_rating(self, player_id, tab_name, seat_num, buyin, average_bet, casino_win_loss, mid):
+        """
+        Submits a manual rating for a player on Players tab or Sessions tab.
+        Args:
+            player_id: Player ID to enter
+            tab_name: 'Players_TAB' or 'Sessions_TAB'
+            seat_num: Seat number
+            buyin: Cash Buy In value
+            average_bet: Average Bet value
+            casino_win_loss: Casino Win/Loss value
+            mid: Manual ID (if needed)
+        """
+        if tab_name == "Sessions_TAB":
+            self._submit_manual_rating_sessions_tab(player_id, seat_num, buyin, average_bet, casino_win_loss, mid)
+        elif tab_name == "Players_TAB":
+            self._submit_manual_rating_players_tab(player_id, seat_num, buyin, average_bet, casino_win_loss, mid)
+        else:
+            print(f"Tab name '{tab_name}' is not supported. Use 'Players_TAB' or 'Sessions_TAB'.")
+                     
+    def _submit_manual_rating_sessions_tab(self, player_id, seat_num, buyin, average_bet, casino_win_loss, mid):
+        """
+        Submits a manual rating for a player on Sessions tab.
+        Args:
+            player_id: Player ID to enter
+            seat_num: Seat number
+            buyin: Cash Buy In value
+            average_bet: Average Bet value
+            casino_win_loss: Casino Win/Loss value
+            mid: Manual ID (if needed)
+        Author:
+            Prasad Kamble
+        """
+        self.navigate_to_tab(self.sessions_tab.session_tab)
+        self.ui_utils.click_to_element(self.sessions_tab.create_manual_rating_btn)
+        self.ui_utils.click_to_element(self.sessions_tab.seat_number)
+        self.ui_utils.click_to_element(self.sessions_tab.get_seat_option(seat_num))
+        self.ui_utils.fill_element(self.sessions_tab.player_id_textbox, player_id)
+        self.ui_utils.press_enter(self.sessions_tab.player_id_textbox)
+        self.ui_utils.click_to_element(self.sessions_tab.first_player_item)
+        self.ui_utils.click_to_element(self.sessions_tab.start_time)
+        self.ui_utils.click_to_element(self.sessions_tab.minus_hour_btn)
+        self.ui_utils.click_to_element(self.sessions_tab.set_btn)
+        self.ui_utils.click_to_element(self.sessions_tab.stop_time)
+        self.ui_utils.click_to_element(self.sessions_tab.set_btn)
+        self.ui_utils.fill_element(self.sessions_tab.cash_buyin_textbox, str(buyin))
+        self.ui_utils.fill_element(self.sessions_tab.average_bet_textbox, str(average_bet))
+        self.ui_utils.fill_element(self.sessions_tab.casino_win_loss_textbox, str(casino_win_loss))
+        self.ui_utils.fill_element(self.sessions_tab.mid_textbox, str(mid))
+        self.ui_utils.click_to_element(self.sessions_tab.submit_btn)    
+        
+    def _submit_manual_rating_players_tab(self, player_id, seat_num, buyin, average_bet, casino_win_loss, mid):
+        """
+        Submits a manual rating for a player on Players tab.
+        Args:
+            player_id: Player ID to enter
+            seat_num: Seat number
+            buyin: Cash Buy In value
+            average_bet: Average Bet value
+            casino_win_loss: Casino Win/Loss value
+            mid: Manual ID (if needed)
+        Author:
+            Prasad Kamble
+        """
+        self.navigate_to_tab(self.player_tab.Players_TAB)
+        self.ui_utils.click_to_element(self.player_tab.radio_A)
+        self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
+        self.ui_utils.fill_element(self.player_tab.player_id_textbox, player_id)
+        self.ui_utils.press_enter(self.player_tab.player_id_textbox)
+        self.ui_utils.click_to_element(self.player_tab.first_player_item)
+        self.ui_utils.click_to_element(self.player_tab.start_time)
+        self.ui_utils.click_to_element(self.player_tab.minus_hour_btn)
+        self.ui_utils.click_to_element(self.player_tab.set_btn)
+        self.ui_utils.click_to_element(self.player_tab.stop_time)
+        self.ui_utils.click_to_element(self.player_tab.set_btn)
+        self.ui_utils.fill_element(self.player_tab.cash_buyin_textbox, str(buyin))
+        self.ui_utils.fill_element(self.player_tab.average_bet_textbox, str(average_bet))
+        self.ui_utils.fill_element(self.player_tab.casino_win_loss_textbox, str(casino_win_loss))
+        self.ui_utils.fill_element(self.player_tab.mid_textbox, str(mid))
+        self.ui_utils.click_to_element(self.player_tab.submit_btn)

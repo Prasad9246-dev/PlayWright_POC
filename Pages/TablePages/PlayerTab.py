@@ -7,6 +7,20 @@ class PlayerTab:
         self.clock_in_player_button = self.page.get_by_role("button", name="Clock-In Player")
         self.clock_out_button = self.page.get_by_role("button", name="Clock-Out")
         self.clock_out_close_button = self.page.get_by_label("Clock-Outclose").get_by_role("button", name="Clock-Out")
+        
+        # Manual Rating selectors
+        self.radio_A = self.page.get_by_role("radio", name="A", exact=True)
+        self.player_id_textbox = self.page.get_by_role("textbox", name="Enter Player ID/Name")
+        self.first_player_item = self.page.locator(".searched-players__list__item").first
+        self.start_time = self.page.get_by_label("Manual Rating Formclose").get_by_text("Start Time")
+        self.stop_time = self.page.get_by_text("Stop Time")
+        self.minus_hour_btn = self.page.get_by_role("button", name="Minus a hour")
+        self.set_btn = self.page.get_by_role("button", name="Set")
+        self.cash_buyin_textbox = self.page.get_by_role("textbox", name="Cash Buy In")
+        self.average_bet_textbox = self.page.get_by_role("textbox", name="Average Bet")
+        self.casino_win_loss_textbox = self.page.get_by_role("textbox", name="Casino W/L")
+        self.mid_textbox = self.page.get_by_role("textbox", name="MID")
+        self.submit_btn = self.page.get_by_role("button", name="Submit")
 
     def dropdown_button(self):
         """Returns the locator for the dropdown button.
@@ -77,3 +91,13 @@ class PlayerTab:
         """
         selector = f'[id="player-card--0\\.{seat_num}"]'
         return self.page.locator(selector).get_by_role("button").nth(3)
+    
+    def select_seat(self, seat_num):
+        """
+        Returns the locator for the seat label like '2A'.
+        Args:
+            seat_num (str or int): The seat number to select.
+        Author:
+            Prasad Kamble
+        """
+        return self.page.get_by_text(f"{seat_num}A")

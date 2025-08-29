@@ -1,74 +1,86 @@
 from Pages.TablePages.ViewTableTab import ViewTableTab
+import time
 
 class UIUtils:
     def __init__(self, page):
         self.page = page
         self.view_table_tab = ViewTableTab(self.page)
 
-    def click_to_element(self, element_selector):
+    def click_to_element(self, element_selector, timeout=5000):
         """
         Clicks the given element.
         Author:
             Prasad Kamble
         """
+        time.sleep(1)
+        element_selector.wait_for(state="visible", timeout=timeout)
         if isinstance(element_selector, str):
             self.page.locator(element_selector).click()
         else:
             element_selector.click()
 
-    def fill_element(self, locator, text):
+    def fill_element(self, element_selector, text, timeout=5000):
         """
         Types the given text into the locator or selector.
         Author:
             Prasad Kamble
         """
-        if isinstance(locator, str):
-            self.page.locator(locator).fill(text)
+        time.sleep(1)
+        element_selector.wait_for(state="visible", timeout=timeout)
+        if isinstance(element_selector, str):
+            self.page.locator(element_selector).fill(text)
         else:
-            locator.fill(text)
+            element_selector.fill(text)
         
-    def press_enter(self, locator):
+    def press_enter(self, element_selector, timeout=5000):
         """
         Presses Enter on the given locator or selector.
         Author:
             Prasad Kamble
         """
-        if isinstance(locator, str):
-            self.page.locator(locator).press("Enter")
+        time.sleep(1)
+        element_selector.wait_for(state="visible", timeout=timeout)
+        if isinstance(element_selector, str):
+            self.page.locator(element_selector).press("Enter")
         else:
-            locator.press("Enter")
+            element_selector.press("Enter")
 
-    def get_text(self, locator):
+    def get_text(self, element_selector, timeout=5000):
         """
         Returns the text content of the locator.
         Author:
             Prasad Kamble
         """
+        time.sleep(1)
+        element_selector.wait_for(state="visible", timeout=timeout)
         try:
             # Wait for the element to be visible before getting text
-            return locator.inner_text()
+            return element_selector.inner_text()
         except Exception as e:
             print(f"Error in get_text: {e}")
             return None
         
-    def is_visible(self, locator):
+    def is_visible(self, element_selector, timeout=5000):
         """
         Checks if the locator is visible on the page.
         Author:
             Prasad Kamble
         """
+        time.sleep(1)
+        element_selector.wait_for(state="visible", timeout=timeout)
         try:
-            return self.page.locator(locator).is_visible()
+            return self.page.locator(element_selector).is_visible()
         except Exception:
             return False
 
-    def wait_for_visible(self, locator, timeout=5000):
+    def wait_for_visible(self, element_selector, timeout=5000):
         """
         Waits for the locator to be visible.
         Author:
             Prasad Kamble
         """
-        self.page.locator(locator).wait_for(state="visible", timeout=timeout)
+        time.sleep(1)
+        self.page.locator(element_selector).wait_for(state="visible", timeout=timeout)
 
     def wait_for_enabled(self, locator, timeout=5000):
         """
