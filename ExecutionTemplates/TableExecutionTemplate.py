@@ -19,7 +19,7 @@ from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
 from Utilites.Reporting.ScreenshotUtil import ScreenshotUtil
 
 class TableExecutionTemplate:
-    def __init__(self, setup, test_case_id,feature_name):
+    def __init__(self, setup, test_case_id, feature_name):
         self.setup = setup
         self.feature_name = feature_name
         self.config = self._load_config()
@@ -31,11 +31,14 @@ class TableExecutionTemplate:
 
     def _load_config(self):
         config_utils = ConfigUtils()
+        config_utils.set_feature_name(self.feature_name)  # <-- This must be called!
         return {
+            "build_version": config_utils.get_config().get("build_version"),
+            "feature_name": self.feature_name,
+            "tableIP": config_utils.get_tableIP(),
             "tbd_url": config_utils.get_table_url(),
             "username": config_utils.get_username(),
             "password": config_utils.get_password(),
-            "tableIP": config_utils.get_tableIP(),
             "pp_application_url": config_utils.get_ppApplication_Url(),
         }
 
@@ -52,18 +55,18 @@ class TableExecutionTemplate:
         self.screenshot_util = ScreenshotUtil(setup)
         self.login_page = LoginPage(setup)
         self.player_tab = PlayerTab(setup)
-        self.table_actions = TableActions(setup)
-        self.games_tab = GamesTab(setup)
+        self.table_actions = TableActions(setup, self.feature_name)
+        self.games_tab = GamesTab(setup, self.feature_name)
         self.view_table_tab = ViewTableTab(setup)
-        self.Override_Tab = OverrideTab(setup)
-        self.sessions_tab = SessionsTab(setup)
+        self.Override_Tab = OverrideTab(setup,self.feature_name)
+        self.sessions_tab = SessionsTab(setup, self.feature_name)
         self.ui_utils = UIUtils(setup)
-        self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup)
-        self.buyin_processor = BuyIn(setup)
-        self.wager_processor = Wager(setup)
+        self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup, self.feature_name)
+        self.buyin_processor = BuyIn(setup, self.feature_name)
+        self.wager_processor = Wager(setup, self.feature_name)
         self.card_processor = GameoutComes()
-        self.take_bets_processor = TakeBets(setup)
-        self.payout_processor = Payout(setup)
+        self.take_bets_processor = TakeBets(setup, self.feature_name)
+        self.payout_processor = Payout(setup, self.feature_name)
         self.configuration_api = ConfigurationAPIs()
 
     def _run_base_setup(self):

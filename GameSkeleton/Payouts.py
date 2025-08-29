@@ -1,9 +1,9 @@
 from Utilites.TableUtils.TableActions import TableActions
 
 class Payout:
-    def __init__(self, page):
+    def __init__(self, page, feature_name):
         self.page = page
-        self.table_actions = TableActions(page)
+        self.table_actions = TableActions(page, feature_name)
 
     def process_payouts(self, table_ip, payout_data, chips_df):
         """

@@ -8,14 +8,16 @@ from Utilites.TableUtils.TableActions import TableActions
 from Utilites.ExcelRead.ExcelReader import read_chip_ids_df
 
 class ExpireAndAdjustVariance:
-    def __init__(self, page):
+    def __init__(self, page, feature_name):
         self.page = page
+        self.feature_name = feature_name
         self.config_utils = ConfigUtils()
+        self.config_utils.set_feature_name(self.feature_name)
         self.table_ip = self.config_utils.get_tableIP()
         self.player_tab = PlayerTab(page)
         self.inventory_tab = InventoryTab(page)
         self.view_table_tab = ViewTableTab(page)
-        self.table_actions = TableActions(page)
+        self.table_actions = TableActions(page, feature_name)
 
     def expire_and_adjust(self):
         """Expires and adjusts chip variance.

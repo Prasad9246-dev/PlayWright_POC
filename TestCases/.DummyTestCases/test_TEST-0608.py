@@ -1,6 +1,5 @@
 from ExecutionTemplates.TableExecutionTemplate import TableExecutionTemplate
 from Utilites.ExcelRead.TestReportWriter import TestReportWriter
-from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from datetime import datetime
 import allure
 
@@ -8,7 +7,7 @@ import allure
 @allure.story("test_DummyTestCase1: Rated Buy-In")
 @allure.title("test_DummyTestCase1 Rated Buy-In Test")
 def test_TEST_0608(setup):
-    tbd = TableExecutionTemplate(setup, "TEST-0608", "PlayWright_POC")
+    tbd = TableExecutionTemplate(setup, "TEST-0608","PlayWright_POC_1")
     status = "Pass"
     remarks = ""
     try:
@@ -63,8 +62,9 @@ def test_TEST_0608(setup):
         raise
     finally:
         # Custom report writing
-        config_utils = ConfigUtils()
-        config = config_utils.get_config()
+        
+        # config_utils = ConfigUtils()
+        config = tbd.config
         BUILD_VERSION = config.get("build_version")
         # FEATURE_NAME = config_utils.set_feature_name(tbd.feature_name)
         FEATURE_NAME = config.get("feature_name")

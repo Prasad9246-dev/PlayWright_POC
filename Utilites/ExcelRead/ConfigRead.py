@@ -4,11 +4,11 @@ from Utilites.ExcelRead.ExcelReader import read_excel_config ,read_master_config
 class ConfigUtils:
     
     def __init__(self):
-        self.feature_name = "PlayWright_POC"
         self.username = os.getlogin()
         self.master_config = read_master_config("MasterConfig.json")
-        self.config_path = os.path.join(self.master_config.get("configPath").replace("{userName}", self.username),self.feature_name+".xlsx")
-        self.config = read_excel_config(self.config_path)
+        self.feature_name = None
+        self.config_path = None
+        self.config = None
 
     def set_feature_name(self, feature_name):
         self.feature_name = feature_name

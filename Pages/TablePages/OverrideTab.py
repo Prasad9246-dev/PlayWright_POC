@@ -1,11 +1,11 @@
 from Utilites.TableUtils.TableActions import TableActions
 class OverrideTab:
-    def __init__(self, page):
+    def __init__(self, page, feature_name):
         self.page = page
         self.override_tab_selector = self.page.get_by_role('tab', name="Override")
         self.void_hand_button = self.page.get_by_role("button", name="Void Hand")
-        self.table_actions = TableActions(page)
-        
+        self.table_actions = TableActions(page, feature_name)
+
     def click_void_hand(self):
         """
         Clicks the 'Void Hand' button if it is enabled.

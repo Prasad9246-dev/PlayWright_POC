@@ -3,9 +3,9 @@ from Utilites.TableUtils.TableActions import TableActions
 
 class GamesTab:
     
-    def __init__(self, page):
+    def __init__(self, page, feature_name):
         self.page = page
-        self.table_actions = TableActions(page)
+        self.table_actions = TableActions(page, feature_name)
         self.GAMES_TAB = self.page.get_by_role('tab', name="Games")
         self.games_tab_table = self.page.locator('table.mat-mdc-table')  # Update selector if needed
         self.header_selector = 'thead tr th'

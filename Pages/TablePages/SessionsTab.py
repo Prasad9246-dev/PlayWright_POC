@@ -2,8 +2,8 @@ from Utilites.TableUtils.TableActions import TableActions
 import pandas as pd
 
 class SessionsTab:
-    def __init__(self, page):
-        self.table_actions = TableActions(page)
+    def __init__(self, page, feature_name):
+        self.table_actions = TableActions(page, feature_name)
         self.page = page
         self.sessions_tab =  self.page.get_by_role("tab", name="Sessions")
         self.sessions_tab_table = self.page.locator('table.mat-mdc-table')

@@ -6,22 +6,24 @@ from Pages.TablePages.ViewTableTab import ViewTableTab
 from Utilites.UIUtils import UIUtils
 
 class TableActions:
+    def __init__(self, page, feature_name):
+        self.page = page
+        self.feature_name = feature_name
+        self.config_utils = ConfigUtils()
+        self.config_utils.set_feature_name(self.feature_name)
+        self.player_tab = PlayerTab(page)
+        self.inventory_tab = InventoryTab(page)
+        self.view_table_tab = ViewTableTab(page)  
+        self.ui_utils = UIUtils(self.page)
+
     def get_api_url(self):
         """
         Constructs the API URL for table information.
         Author:
             Prasad Kamble
         """
-        config_utils = ConfigUtils()
-        table_ip = config_utils.get_tableIP()
-        return f"https://{table_ip}:790/api/table/v1/tableInfo"
-
-    def __init__(self, page):
-        self.page = page
-        self.player_tab = PlayerTab(page)
-        self.inventory_tab = InventoryTab(page)
-        self.view_table_tab = ViewTableTab(page)  
-        self.ui_utils = UIUtils(self.page)  
+        table_ip = self.config_utils.get_tableIP()
+        return f"https://{table_ip}:790/api/table/v1/tableInfo"  
 
     def table_close(self):
         """
