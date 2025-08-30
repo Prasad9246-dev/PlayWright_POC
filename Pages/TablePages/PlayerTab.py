@@ -21,6 +21,7 @@ class PlayerTab:
         self.casino_win_loss_textbox = self.page.get_by_role("textbox", name="Casino W/L")
         self.mid_textbox = self.page.get_by_role("textbox", name="MID")
         self.submit_btn = self.page.get_by_role("button", name="Submit")
+        self.save_btn = self.page.get_by_role("button", name="Save")
 
     def dropdown_button(self):
         """Returns the locator for the dropdown button.
