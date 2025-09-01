@@ -10,6 +10,7 @@ def read_excel_config(path):
     Author:
             Prasad Kamble
     """
+    
     config = {}
     try:
         workbook = openpyxl.load_workbook(path)
@@ -196,9 +197,3 @@ def get_payout_data(excel_path, test_case_id):
                     "denom": denom
                 })
     return payout_list
-
-
-# excel_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\MasterFiles\AutomationChips.xlsx"
-# excel_path = excel_path.replace(r'\u00A0', '\u00A0')
-
-# print(read_chip_ids_df(excel_path))

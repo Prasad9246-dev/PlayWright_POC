@@ -29,7 +29,6 @@ class TableExecutionTemplate:
         self._init_pages_and_utils()
         self._run_base_setup()
         
-
     def _load_config(self):
         config_utils = ConfigUtils()
         config_utils.set_feature_name(self.feature_name)  # <-- This must be called!
@@ -74,8 +73,8 @@ class TableExecutionTemplate:
     def _run_base_setup(self):
         self.login_page.navigate(self.config["tbd_url"])
         self.login_page.login(self.config["username"], self.config["password"])
-        self.setup.wait_for_timeout(2000)
-        self.table_actions.table_close_and_open()
+        # self.setup.wait_for_timeout(2000)
+        # self.table_actions.table_close_and_open()
         self.expire_and_adjust_variance.expire_and_adjust()
         self.setup.wait_for_timeout(3000)
 

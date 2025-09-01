@@ -1,3 +1,4 @@
+import time
 import requests
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Pages.TablePages.PlayerTab import PlayerTab
@@ -246,24 +247,30 @@ class TableActions:
         Author:
             Prasad Kamble
         """
+        self.logger_utils.log(f"Getting chips for: {denom_and_count}")
         try:
             denom_str, count_str = denom_and_count.split('-')
             denom = int(denom_str)
             count = int(count_str)
         except Exception:
-            print(f"Invalid format: {denom_and_count}. Use 'denom-count', e.g., '100-5'.")
+            msg = f"Invalid format: {denom_and_count}. Use 'denom-count', e.g., '100-5'."
+            self.logger_utils.log(f"[ERROR] {msg}")
+            print(msg)
             return []
 
         chips_df["Denom"] = chips_df["Denom"].astype(int)
         matching_chips = chips_df[chips_df["Denom"] == denom]
         if len(matching_chips) < count:
-            print(f"Not enough chips of denom {denom}. Requested: {count}, Available: {len(matching_chips)}")
+            msg = f"Not enough chips of denom {denom}. Requested: {count}, Available: {len(matching_chips)}"
+            self.logger_utils.log(f"[WARN] {msg}")
+            print(msg)
             chip_ids = matching_chips["chipsID"].tolist()
             chips_df.drop(matching_chips.index, inplace=True)
             return chip_ids  # Return as many as available
         else:
             chip_ids = matching_chips.iloc[:count]["chipsID"].tolist()
             chips_df.drop(matching_chips.iloc[:count].index, inplace=True)
+            self.logger_utils.log(f"Returning chip IDs for denom {denom}: {chip_ids}")
             return chip_ids
 
     def clock_in_player(self, tab_name, seat_num, player_id):
@@ -274,21 +281,37 @@ class TableActions:
         Author:
             Prasad Kamble
         """
+        self.logger_utils.log(f"Attempting to clock in player_id={player_id} at seat_num={seat_num} on tab={tab_name}.")
         if tab_name == "Players_TAB":
+            self.logger_utils.log("Navigating to Players_TAB for clock-in.")
             self.navigate_to_tab(self.player_tab.Players_TAB)
+            self.logger_utils.log(f"Clicking player card at seat {seat_num}.")
             self.ui_utils.click_to_element(self.player_tab.player_card_position(seat_num))
+            self.logger_utils.log(f"Filling player ID: {player_id}.")
             self.ui_utils.fill_element(self.player_tab.Enter_Player_ID, player_id)
+            self.logger_utils.log("Pressing enter after filling player ID.")
             self.ui_utils.press_enter(self.player_tab.Enter_Player_ID)
+            self.logger_utils.log("Clicking first row, first column selector.")
             self.ui_utils.click_to_element(self.player_tab.first_row_first_col_selector)
+            self.logger_utils.log("Clicking clock-in player button.")
             self.ui_utils.click_to_element(self.player_tab.clock_in_player_button)
+            self.logger_utils.log(f"Clocked in player_id={player_id} at seat_num={seat_num} on Players_TAB.")
         elif tab_name == "View_Table_TAB":
+            self.logger_utils.log("Navigating to View_Table_TAB for clock-in.")
             self.navigate_to_tab(self.view_table_tab.view_table_tab())
+            self.logger_utils.log(f"Clicking clock-in seat number {seat_num}.")
             self.ui_utils.click_to_element(self.view_table_tab.clockin_seat_num(seat_num))
+            self.logger_utils.log(f"Filling player ID: {player_id}.")
             self.ui_utils.fill_element(self.view_table_tab.player_id_input, player_id)
+            self.logger_utils.log("Pressing enter after filling player ID.")
             self.ui_utils.press_enter(self.view_table_tab.player_id_input)
+            self.logger_utils.log("Clicking clock-in button.")
             self.ui_utils.click_to_element(self.view_table_tab.clock_in_button)
+            self.logger_utils.log(f"Clocked in player_id={player_id} at seat_num={seat_num} on View_Table_TAB.")
         else:
-            print(f"Tab name '{tab_name}' is incorrect. Supported: 'Players_TAB', 'View_Table_TAB'.")
+            msg = f"Tab name '{tab_name}' is incorrect. Supported: 'Players_TAB', 'View_Table_TAB'."
+            self.logger_utils.log(f"[ERROR] {msg}")
+            print(msg)
             
     def clock_out_player(self, seat_num):
         """
@@ -297,12 +320,17 @@ class TableActions:
         Author:
             Prasad Kamble
         """
+        self.logger_utils.log(f"Attempting to clock out player at seat_num={seat_num}.")
         self.navigate_to_tab(self.player_tab.Players_TAB)
+        self.logger_utils.log(f"Clicking dot button for seat {seat_num}.")
         self.ui_utils.click_to_element(self.player_tab.player_card_dot(seat_num))
+        self.logger_utils.log("Clicking clock-out button.")
         self.ui_utils.click_to_element(self.player_tab.clock_out_button)
-        self.ui_utils.click_to_element(self.player_tab.clock_out_close_button)     
+        self.logger_utils.log("Clicking clock-out close button.")
+        self.ui_utils.click_to_element(self.player_tab.clock_out_close_button)
+        self.logger_utils.log(f"Clocked out player at seat_num={seat_num}.")
     
-    def submit_manual_rating(self, player_id, tab_name, seat_num, buyin, average_bet, casino_win_loss, mid):
+    def submit_manual_rating(self, player_id, tab_name, seat_num, buyin, average_bet, casino_win_loss, mid=None):
         """
         Submits a manual rating for a player on Players tab or Sessions tab.
         Args:
@@ -314,12 +342,17 @@ class TableActions:
             casino_win_loss: Casino Win/Loss value
             mid: Manual ID (if needed)
         """
+        self.logger_utils.log(
+            f"Submitting manual rating for player_id={player_id}, tab_name={tab_name}, seat_num={seat_num}, buyin={buyin}, average_bet={average_bet}, casino_win_loss={casino_win_loss}, mid={mid}"
+        )
         if tab_name == "Sessions_TAB":
             self.submit_manual_rating_sessions_tab(player_id, seat_num, buyin, average_bet, casino_win_loss, mid)
         elif tab_name == "Players_TAB":
             self.submit_manual_rating_players_tab(player_id, seat_num, buyin, average_bet, casino_win_loss, mid)
         else:
-            print(f"Tab name '{tab_name}' is not supported. Use 'Players_TAB' or 'Sessions_TAB'.")
+            msg = f"Tab name '{tab_name}' is not supported. Use 'Players_TAB' or 'Sessions_TAB'."
+            self.logger_utils.log(f"[ERROR] {msg}")
+            print(msg)
                      
     def save_manual_rating(self, player_id, tab_name, seat_num, buyin, average_bet, casino_win_loss, mid):
         """
@@ -333,14 +366,19 @@ class TableActions:
             casino_win_loss: Casino Win/Loss value
             mid: Manual ID (if needed)
         """
+        self.logger_utils.log(
+            f"Saving manual rating for player_id={player_id}, tab_name={tab_name}, seat_num={seat_num}, buyin={buyin}, average_bet={average_bet}, casino_win_loss={casino_win_loss}, mid={mid}"
+        )
         if tab_name == "Sessions_TAB":
             self.save_manual_rating_sessions_tab(player_id, seat_num, buyin, average_bet, casino_win_loss, mid)
         elif tab_name == "Players_TAB":
             self.save_manual_rating_players_tab(player_id, seat_num, buyin, average_bet, casino_win_loss, mid)
         else:
-            print(f"Tab name '{tab_name}' is not supported. Use 'Players_TAB' or 'Sessions_TAB'.")
+            msg = f"Tab name '{tab_name}' is not supported. Use 'Players_TAB' or 'Sessions_TAB'."
+            self.logger_utils.log(f"[ERROR] {msg}")
+            print(msg)
     
-    def submit_manual_rating_sessions_tab(self, player_id, seat_num, buyin, average_bet, casino_win_loss, mid):
+    def submit_manual_rating_sessions_tab(self, player_id, seat_num, buyin, average_bet, casino_win_loss, mid=None):
         """
         Submits a manual rating for a player on Sessions tab.
         Args:
@@ -353,6 +391,9 @@ class TableActions:
         Author:
             Prasad Kamble
         """
+        self.logger_utils.log(
+            f"Submitting manual rating (Sessions tab) for player_id={player_id}, seat_num={seat_num}, buyin={buyin}, average_bet={average_bet}, casino_win_loss={casino_win_loss}, mid={mid}"
+        )
         self.navigate_to_tab(self.sessions_tab.session_tab)
         self.ui_utils.click_to_element(self.sessions_tab.create_manual_rating_btn)
         self.ui_utils.click_to_element(self.sessions_tab.seat_number)
@@ -368,10 +409,15 @@ class TableActions:
         self.ui_utils.fill_element(self.sessions_tab.cash_buyin_textbox, str(buyin))
         self.ui_utils.fill_element(self.sessions_tab.average_bet_textbox, str(average_bet))
         self.ui_utils.fill_element(self.sessions_tab.casino_win_loss_textbox, str(casino_win_loss))
-        self.ui_utils.fill_element(self.sessions_tab.mid_textbox, str(mid))
-        self.ui_utils.click_to_element(self.sessions_tab.submit_btn)    
-        
-    def submit_manual_rating_players_tab(self, player_id, seat_num, buyin, average_bet, casino_win_loss, mid):
+        if mid:
+            self.ui_utils.fill_element(self.sessions_tab.mid_textbox, str(mid))
+        self.ui_utils.click_to_element(self.sessions_tab.submit_btn)
+        self.logger_utils.log(
+            f"Manual rating submitted (Sessions tab) for player_id={player_id}, seat_num={seat_num}"
+        )
+        time.sleep(5)
+
+    def submit_manual_rating_players_tab(self, player_id, seat_num, buyin, average_bet, casino_win_loss, mid=None):
         """
         Submits a manual rating for a player on Players tab.
         Args:
@@ -384,6 +430,9 @@ class TableActions:
         Author:
             Prasad Kamble
         """
+        self.logger_utils.log(
+            f"Submitting manual rating (Players tab) for player_id={player_id}, seat_num={seat_num}, buyin={buyin}, average_bet={average_bet}, casino_win_loss={casino_win_loss}, mid={mid}"
+        )
         self.navigate_to_tab(self.player_tab.Players_TAB)
         self.ui_utils.click_to_element(self.player_tab.radio_A)
         self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
@@ -399,9 +448,15 @@ class TableActions:
         self.ui_utils.fill_element(self.player_tab.average_bet_textbox, str(average_bet))
         self.ui_utils.fill_element(self.player_tab.casino_win_loss_textbox, str(casino_win_loss))
         self.ui_utils.fill_element(self.player_tab.mid_textbox, str(mid))
+        if mid:
+            self.ui_utils.fill_element(self.sessions_tab.mid_textbox, str(mid))
         self.ui_utils.click_to_element(self.player_tab.submit_btn)
+        self.logger_utils.log(
+            f"Manual rating submitted (Players tab) for player_id={player_id}, seat_num={seat_num}"
+        )
+        time.sleep(5)
         
-    def save_manual_rating_players_tab(self, player_id, seat_num, buyin, average_bet, casino_win_loss, mid):
+    def save_manual_rating_players_tab(self, player_id, seat_num, buyin, average_bet, casino_win_loss, mid=None):
         """
         Save a manual rating for a player on Players tab.
         Args:
@@ -414,27 +469,26 @@ class TableActions:
         Author:
             Prasad Kamble
         """
-        try:
-            self.logger_utils.log(f"Saving manual rating for player_id={player_id}, seat_num={seat_num} on Players tab.")
-            self.navigate_to_tab(self.player_tab.Players_TAB)
-            self.ui_utils.click_to_element(self.player_tab.radio_A)
-            self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
-            self.ui_utils.fill_element(self.player_tab.player_id_textbox, player_id)
-            self.ui_utils.press_enter(self.player_tab.player_id_textbox)
-            self.ui_utils.click_to_element(self.player_tab.first_player_item)
-            self.ui_utils.click_to_element(self.player_tab.start_time)
-            self.ui_utils.click_to_element(self.player_tab.minus_hour_btn)
-            self.ui_utils.click_to_element(self.player_tab.set_btn)
-            self.ui_utils.fill_element(self.player_tab.cash_buyin_textbox, str(buyin))
-            self.ui_utils.fill_element(self.player_tab.average_bet_textbox, str(average_bet))
-            self.ui_utils.fill_element(self.player_tab.casino_win_loss_textbox, str(casino_win_loss))
+        self.logger_utils.log(f"Saving manual rating for player_id={player_id}, seat_num={seat_num} on Players tab.")
+        self.navigate_to_tab(self.player_tab.Players_TAB)
+        self.ui_utils.click_to_element(self.player_tab.radio_A)
+        self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
+        self.ui_utils.fill_element(self.player_tab.player_id_textbox, player_id)
+        self.ui_utils.press_enter(self.player_tab.player_id_textbox)
+        self.ui_utils.click_to_element(self.player_tab.first_player_item)
+        self.ui_utils.click_to_element(self.player_tab.start_time)
+        self.ui_utils.click_to_element(self.player_tab.minus_hour_btn)
+        self.ui_utils.click_to_element(self.player_tab.set_btn)
+        self.ui_utils.fill_element(self.player_tab.cash_buyin_textbox, str(buyin))
+        self.ui_utils.fill_element(self.player_tab.average_bet_textbox, str(average_bet))
+        self.ui_utils.fill_element(self.player_tab.casino_win_loss_textbox, str(casino_win_loss))
+        if mid:
             self.ui_utils.fill_element(self.player_tab.mid_textbox, str(mid))
-            self.ui_utils.click_to_element(self.player_tab.save_btn)
-            self.logger_utils.log(f"Manual rating saved for player_id={player_id}, seat_num={seat_num} on Players tab.")
-        except Exception as e:
-            self.logger_utils.log(f"[ERROR] Failed to save manual rating for player_id={player_id}, seat_num={seat_num}: {e}")
+        self.ui_utils.click_to_element(self.player_tab.save_btn)
+        time.sleep(5)
+        self.logger_utils.log(f"Manual rating saved for player_id={player_id}, seat_num={seat_num} on Players tab.")
               
-    def save_manual_rating_sessions_tab(self, player_id, seat_num, buyin, average_bet, casino_win_loss, mid):
+    def save_manual_rating_sessions_tab(self, player_id, seat_num, buyin, average_bet, casino_win_loss, mid=None):
         """
         Submits a manual rating for a player on Sessions tab.
         Args:
@@ -447,6 +501,9 @@ class TableActions:
         Author:
             Prasad Kamble
         """
+        self.logger_utils.log(
+            f"Saving manual rating (Sessions tab) for player_id={player_id}, seat_num={seat_num}, buyin={buyin}, average_bet={average_bet}, casino_win_loss={casino_win_loss}, mid={mid}"
+        )
         self.navigate_to_tab(self.sessions_tab.session_tab)
         self.ui_utils.click_to_element(self.sessions_tab.create_manual_rating_btn)
         self.ui_utils.click_to_element(self.sessions_tab.seat_number)
@@ -460,5 +517,10 @@ class TableActions:
         self.ui_utils.fill_element(self.sessions_tab.cash_buyin_textbox, str(buyin))
         self.ui_utils.fill_element(self.sessions_tab.average_bet_textbox, str(average_bet))
         self.ui_utils.fill_element(self.sessions_tab.casino_win_loss_textbox, str(casino_win_loss))
-        self.ui_utils.fill_element(self.sessions_tab.mid_textbox, str(mid))
+        if mid:
+            self.ui_utils.fill_element(self.sessions_tab.mid_textbox, str(mid))
         self.ui_utils.click_to_element(self.sessions_tab.save_btn)
+        time.sleep(5)
+        self.logger_utils.log(
+            f"Manual rating saved (Sessions tab) for player_id={player_id}, seat_num={seat_num}"
+        )

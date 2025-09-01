@@ -13,11 +13,12 @@ def test_TEST_14007(setup):
     status = "Pass"
     remarks = ""
     try:
-        table_ip = tbd.config["tableIP"]
-        chips_df = tbd.chips_df
 
-        tbd.table_actions.save_manual_rating("6001","Players_TAB","2","10","10","10","1234")
-        # tbd.logger_utils.log("Manual rating submitted for player 6001")
+        tbd.table_actions.submit_manual_rating_sessions_tab("6001","1","1000","1000","1000","1234")
+        tbd.table_actions.save_manual_rating_sessions_tab("6001","2","1000","1000","1000","1234")
+        tbd.table_actions.submit_manual_rating_players_tab("6001","3","1000","1000","1000","1234")
+        tbd.table_actions.save_manual_rating_players_tab("6001","5","1000","1000","1000","1234")
+        tbd.logger_utils.log("Manual rating submitted for player 6001")
 
     except Exception as e:
         status = "Fail"

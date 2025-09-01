@@ -17,6 +17,7 @@ from GameSkeleton.Payouts import Payout
 from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
 from Utilites.Reporting.ScreenshotUtil import ScreenshotUtil
 from Utilites.ConfigurationUtils.ConfigurationActions import ConfigurationActions
+from Utilites.Logs.LoggerUtils import LoggerUtils
 
 
 class PPExecutionTemplate:
@@ -68,7 +69,8 @@ class PPExecutionTemplate:
         self.payout_processor = Payout(setup, self.feature_name)
         self.configuration_api = ConfigurationAPIs()
         self.configuration_login = ConfigurationLoginPage(setup)
-        self.configuration_actions = ConfigurationActions(setup, self.feature_name)  # <-- Pass feature name!
+        self.configuration_actions = ConfigurationActions(setup, self.feature_name)
+        self.logger_utils = LoggerUtils(self.feature_name)
 
     def _run_base_setup(self):
         self.configuration_login.navigate(self.config["pp_application_url"])

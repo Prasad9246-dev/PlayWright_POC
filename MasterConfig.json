@@ -5,6 +5,6 @@
   "configPath": "C:\\Users\\{userName}\\Walker Digital Table\u00A0Systems\\WDTS INDIA - automation\\Playwright\\ConfigFiles",
   "automationChipsPath": "C:\\Users\\{userName}\\Walker Digital Table\u00A0Systems\\WDTS INDIA - automation\\Playwright\\MasterFiles\\AutomationChips.xlsx",
   "testCaseReportPath": "C:\\Users\\{userName}\\Walker Digital Table\u00A0Systems\\WDTS INDIA - automation\\Playwright\\TestCaseReport",
-  "testCaseLogsPath" : "C:\\Users\\PrasadKamble\\Walker Digital Table\u00A0Systems\\WDTS INDIA - automation\\Playwright\\Logs"
+  "testCaseLogsPath" : "C:\\Users\\{userName}\\Walker Digital Table\u00A0Systems\\WDTS INDIA - automation\\Playwright\\Logs"
 }
 
