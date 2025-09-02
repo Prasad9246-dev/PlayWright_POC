@@ -2,9 +2,9 @@ from Utilites.TableUtils.TableActions import TableActions
 from Utilites.UIUtils import UIUtils
 from Pages.TablePages.ViewTableTab import ViewTableTab
 class BuyIn:
-    def __init__(self,page):
+    def __init__(self,page, feature_name):
         self.page = page
-        self.table_actions = TableActions(page)
+        self.table_actions = TableActions(page, feature_name)
         self.ui_utils = UIUtils(page)
         self.view_table_tab = ViewTableTab(page)
 

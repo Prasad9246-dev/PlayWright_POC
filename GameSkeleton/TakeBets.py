@@ -1,8 +1,8 @@
 from Utilites.TableUtils.TableActions import TableActions
 class TakeBets:
-    def __init__(self, page):
+    def __init__(self, page, feature_name):
         self.page = page
-        self.table_actions = TableActions(page)
+        self.table_actions = TableActions(page, feature_name)
 
     def take(self, table_ip, wager_result, takebets_list):
         """

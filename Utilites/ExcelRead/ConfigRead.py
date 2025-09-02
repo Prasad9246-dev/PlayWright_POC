@@ -1,13 +1,17 @@
 import os
-from Utilites.ExcelRead.ExcelReader import read_excel_config ,read_master_config
+from Utilites.ExcelRead.ExcelReader import read_excel_config ,get_file_path
 
 class ConfigUtils:
     
     def __init__(self):
-        self.feature_name = "PlayWright_POC"
         self.username = os.getlogin()
-        self.master_config = read_master_config("MasterConfig.json")
-        self.config_path = os.path.join(self.master_config.get("configPath").replace("{userName}", self.username),self.feature_name+".xlsx")
+        self.feature_name = None
+        self.config_path = None
+        self.config = None
+
+    def set_feature_name(self, feature_name):
+        self.feature_name = feature_name
+        self.config_path = os.path.join(get_file_path("configPath"),self.feature_name + ".xlsx")
         self.config = read_excel_config(self.config_path)
 
     def get_config(self):
@@ -136,7 +140,7 @@ class ConfigUtils:
         Author:
             Prasad Kamble
         """
-        url_template = self.master_config.get("ppapplicationurl")
+        url_template = get_file_path("ppapplicationurl")
         env = self.config.get("env")
         if url_template and env:
             return url_template.replace("env", env)
@@ -148,7 +152,7 @@ class ConfigUtils:
         Author:
             Prasad Kamble
         """
-        url_template = self.master_config.get("tableurl")
+        url_template = get_file_path("tableurl")
         table_ip = self.get_tableIP()
         if url_template and table_ip:
             return url_template.replace("tableIP", table_ip)
@@ -161,7 +165,7 @@ class ConfigUtils:
         Author:
             Prasad Kamble
         """
-        url_template = self.master_config.get("cageurl")
+        url_template = get_file_path("cageurl")
         cage_ip = self.get_cageIP()
         if url_template and cage_ip:
             return url_template.replace("CageIP", cage_ip)

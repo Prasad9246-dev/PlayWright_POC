@@ -2,8 +2,8 @@ from Utilites.TableUtils.TableActions import TableActions
 import time
 
 class Wager:
-    def __init__(self, page):
-        self.table_actions = TableActions(page)
+    def __init__(self, page, feature_name):
+        self.table_actions = TableActions(page, feature_name)
 
     def process_wagers(self, table_ip, buyin_result, wager_data):
         """

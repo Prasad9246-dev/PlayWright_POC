@@ -1,3 +1,4 @@
+import os
 from GameSkeleton.GameOutcomes import GameoutComes
 from GameSkeleton.Wager import Wager
 from Pages.TablePages.ViewTableTab import ViewTableTab
@@ -8,7 +9,7 @@ from Pages.TablePages.OverrideTab import OverrideTab
 from Pages.TablePages.SessionsTab import SessionsTab
 from Utilites.TableUtils.ExpireAdjustVariance import ExpireAndAdjustVariance
 from Utilites.TableUtils.TableActions import TableActions
-from Utilites.ExcelRead.ExcelReader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data
+from Utilites.ExcelRead.ExcelReader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data, get_file_path
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Utilites.ExcelRead.ExcelReader import read_chip_ids_df
 from Utilites.UIUtils import UIUtils
@@ -17,60 +18,68 @@ from GameSkeleton.TakeBets import TakeBets
 from GameSkeleton.Payouts import Payout
 from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
 from Utilites.Reporting.ScreenshotUtil import ScreenshotUtil
+from Utilites.Logs.LoggerUtils import LoggerUtils
 
 class TableExecutionTemplate:
-    def __init__(self, setup, test_case_id):
+    def __init__(self, setup, test_case_id, feature_name):
         self.setup = setup
+        self.feature_name = feature_name
         self.config = self._load_config()
         self.test_case_id = test_case_id
         self._init_data()
         self._init_pages_and_utils()
         self._run_base_setup()
-
+        
     def _load_config(self):
         config_utils = ConfigUtils()
+        config_utils.set_feature_name(self.feature_name)  # <-- This must be called!
         return {
-            "url": config_utils.get_table_url(),
+            "build_version": config_utils.get_config().get("build_version"),
+            "feature_name": self.feature_name,
+            "tableIP": config_utils.get_tableIP(),
+            "tbd_url": config_utils.get_table_url(),
             "username": config_utils.get_username(),
             "password": config_utils.get_password(),
-            "tableIP": config_utils.get_tableIP(),
-            "base_url": config_utils.get_ppApplication_Url(),
+            "pp_application_url": config_utils.get_ppApplication_Url(),
         }
 
     def _init_data(self):
-        # self.excel_path = r"C:\Users\PrasadKamble\Walker Digital Table\u00A0Systems\WDTS INDIA - automation\Playwright\MasterFiles\AutomationChips.xlsx"
-        # self.excel_path = self.excel_path.replace(r'\u00A0', '\u00A0')
+        test_data_dir = get_file_path("testDataPath")  # Reads from master config and resolves user/basePath
+        test_data_file = f"TestData_{self.feature_name}.xlsx"
+        test_data_path = os.path.join(test_data_dir, test_data_file)
+
         self.chips_df = read_chip_ids_df()
-        self.buyin_data = get_buyin_data("Configuration/TestData.xlsx", self.test_case_id)
-        self.wager_data = get_wager_data("Configuration/TestData.xlsx", self.test_case_id)
-        self.card_data = get_cards_data("Configuration/TestData.xlsx", self.test_case_id)
-        self.take_bets_data = get_takeBets_data("Configuration/TestData.xlsx", self.test_case_id)
-        self.payout_data = get_payout_data("Configuration/TestData.xlsx", self.test_case_id)
+        self.buyin_data = get_buyin_data(test_data_path, self.test_case_id)
+        self.wager_data = get_wager_data(test_data_path, self.test_case_id)
+        self.card_data = get_cards_data(test_data_path, self.test_case_id)
+        self.take_bets_data = get_takeBets_data(test_data_path, self.test_case_id)
+        self.payout_data = get_payout_data(test_data_path, self.test_case_id)
 
     def _init_pages_and_utils(self):
         setup = self.setup
         self.screenshot_util = ScreenshotUtil(setup)
         self.login_page = LoginPage(setup)
         self.player_tab = PlayerTab(setup)
-        self.table_actions = TableActions(setup)
-        self.games_tab = GamesTab(setup)
+        self.table_actions = TableActions(setup, self.feature_name)
+        self.games_tab = GamesTab(setup, self.feature_name)
         self.view_table_tab = ViewTableTab(setup)
-        self.Override_Tab = OverrideTab(setup)
-        self.sessions_tab = SessionsTab(setup)
+        self.Override_Tab = OverrideTab(setup,self.feature_name)
+        self.sessions_tab = SessionsTab(setup, self.feature_name)
         self.ui_utils = UIUtils(setup)
-        self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup)
-        self.buyin_processor = BuyIn(setup)
-        self.wager_processor = Wager(setup)
+        self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup, self.feature_name)
+        self.buyin_processor = BuyIn(setup, self.feature_name)
+        self.wager_processor = Wager(setup, self.feature_name)
         self.card_processor = GameoutComes()
-        self.take_bets_processor = TakeBets(setup)
-        self.payout_processor = Payout(setup)
-        self.configuration_api = ConfigurationAPIs()
+        self.take_bets_processor = TakeBets(setup, self.feature_name)
+        self.payout_processor = Payout(setup, self.feature_name)
+        self.configuration_api = ConfigurationAPIs(self.feature_name)
+        self.logger_utils = LoggerUtils(self.feature_name)
 
     def _run_base_setup(self):
-        self.login_page.navigate(self.config["url"])
+        self.login_page.navigate(self.config["tbd_url"])
         self.login_page.login(self.config["username"], self.config["password"])
-        self.setup.wait_for_timeout(2000)
-        self.table_actions.table_close_and_open()
+        # self.setup.wait_for_timeout(2000)
+        # self.table_actions.table_close_and_open()
         self.expire_and_adjust_variance.expire_and_adjust()
         self.setup.wait_for_timeout(3000)
 
