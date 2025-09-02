@@ -4,7 +4,8 @@ from Utilites.Logs.LoggerUtils import LoggerUtils
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class ConfigurationAPIs:
-    def __init__(self):
+    def __init__(self, feature_name):
+        self.feature_name = feature_name
         self.logger_utils = LoggerUtils(self.feature_name)
 
     def get_access_token(self, base_url):

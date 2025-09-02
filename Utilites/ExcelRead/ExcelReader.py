@@ -32,20 +32,25 @@ def read_chip_ids_df():
     Author:
             Prasad Kamble
     """
-    username = os.getlogin()
-    master_config = read_master_config("MasterConfig.json")
-    excel_path = master_config.get("automationChipsPath").replace("{userName}", username)
+    excel_path = get_file_path("automationChipsPath")  # Use the helper to resolve the path
     df = pd.read_excel(excel_path, sheet_name="ChipIds")
     return df[["All-chips", "Denom"]].rename(columns={"All-chips": "chipsID"})
-
-def read_master_config(json_path):
+    
+def get_file_path(key):
     """
-    Reads the master config JSON file and returns its contents as a dictionary.
+    Returns the resolved file path for the given key from MasterConfig.json,
+    replacing {userName} and {basePath} placeholders.
     Author:
         Prasad Kamble
     """
-    with open(json_path, 'r') as f:
-        return json.load(f)
+    username = os.getlogin()
+    with open("MasterConfig.json", "r", encoding="utf-8") as f:
+        config = json.load(f)
+    base_path = config["basePath"].replace("{userName}", username)
+    value = config.get(key)
+    if value:
+        return value.replace("{basePath}", base_path)
+    return None
 
 def get_buyin_data(excel_path, test_case_id):
     """

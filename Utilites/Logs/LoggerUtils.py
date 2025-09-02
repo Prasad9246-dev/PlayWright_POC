@@ -1,7 +1,7 @@
 import os
 import inspect
 from datetime import datetime
-from Utilites.ExcelRead.ExcelReader import read_master_config
+from Utilites.ExcelRead.ExcelReader import get_file_path
 
 class LoggerUtils:
     def __init__(self, feature_name):
@@ -16,9 +16,7 @@ class LoggerUtils:
             Prasad Kamble
         """
         # Get test case name from stack
-        username = os.getlogin()
-        master_config = read_master_config("MasterConfig.json")
-        excel_path = master_config.get("testCaseLogsPath").replace("{userName}", username)
+        excel_path = get_file_path("testCaseLogsPath")
         testcase_name = "unknown"
         for frame in inspect.stack():
             if frame.function.startswith("test_"):

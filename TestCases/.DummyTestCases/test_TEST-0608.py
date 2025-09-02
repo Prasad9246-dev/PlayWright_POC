@@ -35,7 +35,7 @@ def test_TEST_0608(setup):
         current_game_id = tbd.games_tab.get_first_row_first_column_text()
 
         print(f"Previous Game ID: {previous_game_id}, Current Game ID: {current_game_id}")
-        if previous_game_id != current_game_id:
+        if previous_game_id == current_game_id:
             msg = "Game record is not present on Games tab."
             print(msg)
             tbd.screenshot_util.attach_screenshot(name=msg)

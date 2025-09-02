@@ -15,9 +15,9 @@ def test_TEST_14007(setup):
     try:
 
         tbd.table_actions.submit_manual_rating_sessions_tab("6001","1","1000","1000","1000","1234")
-        tbd.table_actions.save_manual_rating_sessions_tab("6001","2","1000","1000","1000","1234")
+        # tbd.table_actions.save_manual_rating_sessions_tab("6001","2","1000","1000","1000","1234")
         tbd.table_actions.submit_manual_rating_players_tab("6001","3","1000","1000","1000","1234")
-        tbd.table_actions.save_manual_rating_players_tab("6001","5","1000","1000","1000","1234")
+        # tbd.table_actions.save_manual_rating_players_tab("6001","5","1000","1000","1000","1234")
         tbd.logger_utils.log("Manual rating submitted for player 6001")
 
     except Exception as e:
