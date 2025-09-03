@@ -2,7 +2,7 @@
   "ppapplicationurl": "https://wdts-gateway-env.wdts.local:792/login",
   "tableurl": "https://tableIP:790/login/table-ui",
   "cageurl": "https://CageIP:786/set-up/",
-  "basePath": "C:\\Users\\{userName}\\Walker Digital Table\u00A0Systems\\WDTS INDIA - automation\\Playwright",
+  "basePath": "Z:\\PlayWright",
   "configPath": "{basePath}\\ConfigFiles",
   "automationChipsPath": "{basePath}\\MasterFiles\\AutomationChips.xlsx",
   "testCaseReportPath": "{basePath}\\TestCaseReport",
