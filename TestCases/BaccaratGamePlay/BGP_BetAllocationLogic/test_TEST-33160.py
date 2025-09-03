@@ -8,7 +8,7 @@ import time
 @allure.title("TEST-33160 To verify the ownership of chips when player places more than one stack on a single seat")
 def test_33160(setup,request):
     # Initialize base test and get required data
-    tbd = TableExecutionTemplate(setup, "TEST-33160")
+    tbd = TableExecutionTemplate(setup, "TEST-33160","BGP_BetAllocationLogic")
     request.node.tbd = tbd
     table_ip = tbd.config["tableIP"]
     chips_df = tbd.chips_df
@@ -16,7 +16,8 @@ def test_33160(setup,request):
     # Navigate to Games tab and get previous Game ID
     tbd.table_actions.navigate_to_tab(tbd.games_tab.GAMES_TAB)
     previous_game_id = tbd.games_tab.get_first_row_first_column_text()
- 
+    tbd.logger_utils.log("Manual rating submitted for player 6001")
+
     # Process buy-ins
     buyin_result = tbd.buyin_processor.process_buyins(table_ip, tbd.buyin_data, chips_df)
     print("Buy-In Results:")

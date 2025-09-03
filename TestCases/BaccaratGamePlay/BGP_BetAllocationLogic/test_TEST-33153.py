@@ -6,10 +6,9 @@ import time
 @allure.feature("Bet Allocation Logic")
 @allure.story("TEST-33153: Bet Allocation Logic")
 @allure.title("TEST-33153 To verify the ownership of chips when player places more than one stack on a single seat")
-def test_33153(setup,request):
+def test_33153(setup):
     # Initialize base test and get required data
-    tbd = TableExecutionTemplate(setup, "TEST-33153")
-    request.node.tbd = tbd
+    tbd = TableExecutionTemplate(setup, "TEST-33153","BGP_BetAllocationLogic")
     table_ip = tbd.config["tableIP"]
     chips_df = tbd.chips_df
  
