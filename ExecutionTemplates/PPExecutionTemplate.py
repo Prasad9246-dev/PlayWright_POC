@@ -1,3 +1,4 @@
+import os
 from GameSkeleton.GameOutcomes import GameoutComes
 from GameSkeleton.Wager import Wager
 from Pages.TablePages.ViewTableTab import ViewTableTab
@@ -7,7 +8,7 @@ from Pages.TablePages.OverrideTab import OverrideTab
 from Pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPage
 from Utilites.TableUtils.ExpireAdjustVariance import ExpireAndAdjustVariance
 from Utilites.TableUtils.TableActions import TableActions
-from Utilites.ExcelRead.ExcelReader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data
+from Utilites.ExcelRead.ExcelReader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data, get_file_path
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Utilites.ExcelRead.ExcelReader import read_chip_ids_df
 from Utilites.UIUtils import UIUtils
@@ -45,12 +46,16 @@ class PPExecutionTemplate:
         }
 
     def _init_data(self):
+        test_data_dir = get_file_path("testDataPath")  # Reads from master config and resolves user/basePath
+        test_data_file = f"TestData_{self.feature_name}.xlsx"
+        test_data_path = os.path.join(test_data_dir, test_data_file)
+
         self.chips_df = read_chip_ids_df()
-        self.buyin_data = get_buyin_data("Configuration/TestData.xlsx", self.test_case_id)
-        self.wager_data = get_wager_data("Configuration/TestData.xlsx", self.test_case_id)
-        self.card_data = get_cards_data("Configuration/TestData.xlsx", self.test_case_id)
-        self.take_bets_data = get_takeBets_data("Configuration/TestData.xlsx", self.test_case_id)
-        self.payout_data = get_payout_data("Configuration/TestData.xlsx", self.test_case_id)
+        self.buyin_data = get_buyin_data(test_data_path, self.test_case_id)
+        self.wager_data = get_wager_data(test_data_path, self.test_case_id)
+        self.card_data = get_cards_data(test_data_path, self.test_case_id)
+        self.take_bets_data = get_takeBets_data(test_data_path, self.test_case_id)
+        self.payout_data = get_payout_data(test_data_path, self.test_case_id)
 
     def _init_pages_and_utils(self):
         setup = self.setup
