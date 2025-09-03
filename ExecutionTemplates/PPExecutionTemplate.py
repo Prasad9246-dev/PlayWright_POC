@@ -67,7 +67,7 @@ class PPExecutionTemplate:
         self.card_processor = GameoutComes()
         self.take_bets_processor = TakeBets(setup, self.feature_name)
         self.payout_processor = Payout(setup, self.feature_name)
-        self.configuration_api = ConfigurationAPIs()
+        self.configuration_api = ConfigurationAPIs(self.feature_name)
         self.configuration_login = ConfigurationLoginPage(setup)
         self.configuration_actions = ConfigurationActions(setup, self.feature_name)
         self.logger_utils = LoggerUtils(self.feature_name)
