@@ -8,8 +8,8 @@ from Utilites.ExcelRead.TestReportWriter import TestReportWriter
 @allure.title("test_DummyTestCase2 Rated Buy-In Test")
 def test_TEST_1999(setup):
     TEST_CASE_ID = "TEST-1999"
-    FEATURE_NAME = "PlayWright_POC"
-    ppb = PPExecutionTemplate(setup, "TEST-1999","PlayWright_POC")
+    FEATURE_NAME = "DummyFeature"
+    ppb = PPExecutionTemplate(setup, "TEST-1999","DummyFeature")
     status = "Pass"
     remarks = ""
     try:

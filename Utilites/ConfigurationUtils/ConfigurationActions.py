@@ -11,7 +11,7 @@ class ConfigurationActions:
         self.page = page
         self.feature_name = feature_name
         self.configuration_page = ConfigurationPage(page)
-        self.configuration_api = ConfigurationAPIs()
+        self.configuration_api = ConfigurationAPIs(feature_name)
         self.ui_utils = UIUtils(page)
         self.config_utils = ConfigUtils()
         self.config_utils.set_feature_name(feature_name)

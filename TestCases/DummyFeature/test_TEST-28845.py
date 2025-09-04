@@ -9,7 +9,7 @@ import allure
 @allure.title("'TAKE PLAYER' element should be visible after buy-in and wager")
 def test_TEST_28845(setup):
     TEST_CASE_ID = "TEST-28845"
-    FEATURE_NAME = "PlayWright_POC"
+    FEATURE_NAME = "DummyFeature"
     tbd = TableExecutionTemplate(setup, TEST_CASE_ID, FEATURE_NAME)
     status = "Pass"
     remarks = ""

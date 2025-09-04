@@ -8,7 +8,7 @@ import allure
 @allure.title("Player antenna should remain off when Banker antenna has insurance on commission table")
 def test_TEST_14007(setup):
     TEST_CASE_ID = "TEST-14007"
-    FEATURE_NAME = "PlayWright_POC"
+    FEATURE_NAME = "DummyFeature"
     tbd = TableExecutionTemplate(setup, TEST_CASE_ID, FEATURE_NAME)
     status = "Pass"
     remarks = ""
