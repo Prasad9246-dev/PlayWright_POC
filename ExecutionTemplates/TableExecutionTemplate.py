@@ -17,8 +17,10 @@ from GameSkeleton.BuyIn import BuyIn
 from GameSkeleton.TakeBets import TakeBets
 from GameSkeleton.Payouts import Payout
 from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
+from Utilites.Database.ConfigurationDBs import ConfigurationAPI_DB
 from Utilites.Reporting.ScreenshotUtil import ScreenshotUtil
 from Utilites.Logs.LoggerUtils import LoggerUtils
+from Utilites.ConfigurationUtils.ConfigurationActions import ConfigurationActions
 
 class TableExecutionTemplate:
     def __init__(self, setup, test_case_id, feature_name):
@@ -73,6 +75,8 @@ class TableExecutionTemplate:
         self.take_bets_processor = TakeBets(setup, self.feature_name)
         self.payout_processor = Payout(setup, self.feature_name)
         self.configuration_api = ConfigurationAPIs(self.feature_name)
+        self.configuration_db = ConfigurationAPI_DB(self.feature_name)
+        self.configuration_actions = ConfigurationActions(setup, self.feature_name)
         self.logger_utils = LoggerUtils(self.feature_name)
 
     def _run_base_setup(self):
@@ -80,7 +84,7 @@ class TableExecutionTemplate:
         self.login_page.login(self.config["username"], self.config["password"])
         # self.setup.wait_for_timeout(2000)
         # self.table_actions.table_close_and_open()
-        self.expire_and_adjust_variance.expire_and_adjust()
+        # self.expire_and_adjust_variance.expire_and_adjust()
         self.setup.wait_for_timeout(3000)
 
     def void_game(self):

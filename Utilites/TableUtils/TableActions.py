@@ -434,7 +434,7 @@ class TableActions:
             f"Submitting manual rating (Players tab) for player_id={player_id}, seat_num={seat_num}, buyin={buyin}, average_bet={average_bet}, casino_win_loss={casino_win_loss}, mid={mid}"
         )
         self.navigate_to_tab(self.player_tab.Players_TAB)
-        self.ui_utils.click_to_element(self.player_tab.radio_A)
+        self.ui_utils.click_to_element(self.player_tab.get_seat_A_locator())
         self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
         self.ui_utils.fill_element(self.player_tab.player_id_textbox, player_id)
         self.ui_utils.press_enter(self.player_tab.player_id_textbox)
@@ -471,7 +471,7 @@ class TableActions:
         """
         self.logger_utils.log(f"Saving manual rating for player_id={player_id}, seat_num={seat_num} on Players tab.")
         self.navigate_to_tab(self.player_tab.Players_TAB)
-        self.ui_utils.click_to_element(self.player_tab.radio_A)
+        self.ui_utils.click_to_element(self.player_tab.get_seat_A_locator())
         self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
         self.ui_utils.fill_element(self.player_tab.player_id_textbox, player_id)
         self.ui_utils.press_enter(self.player_tab.player_id_textbox)
