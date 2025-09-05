@@ -15,6 +15,7 @@ class TakeBets:
         Author:
             Prasad Kamble
         """
+        result_table = []
         for antenna in takebets_list:
             chips_to_remove = []
             for entry in wager_result:
@@ -28,5 +29,8 @@ class TakeBets:
                 chip_ids_str = ",".join(chips_to_remove)
                 print(f"Removing chips from antenna {antenna}: {chip_ids_str}")
                 self.table_actions.chip_move_antenna(table_ip, antenna, chip_ids_str, "false")
+                result_table.append({"antenna": antenna, "chips_IDs": chips_to_remove})
             else:
                 print(f"No chips found on antenna {antenna} to remove.")
+                result_table.append({"antenna": antenna, "chips_IDs": []})
+        return result_table

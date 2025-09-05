@@ -2,6 +2,7 @@ from ExecutionTemplates.TableExecutionTemplate import TableExecutionTemplate
 from Utilites.ExcelRead.TestReportWriter import TestReportWriter
 from datetime import datetime
 import allure
+import time
 
 @allure.feature("Player antenna logic on commission table")
 @allure.story("Insurance on Banker antenna disables Player antenna")
@@ -13,22 +14,15 @@ def test_TEST_14007(setup):
     status = "Pass"
     remarks = ""
     try:
-        # response = tbd.configuration_api.get_table_info(tbd.config.get("tableIP"))
-        # game_template = response['gameTemplate']
-        # print(game_template)
-        # template_id = tbd.configuration_db.get_game_template_id(tbd.config.get("tableIP"), game_template)
-        # print(template_id)
-        # current_template = tbd.configuration_api.get_current_template(tbd.config.get("tableIP"),tbd.config.get("pp_application_url"),"TABLE")
-        # print(current_template)
-        # tbd.configuration_api.update_template([("com.wdts.back.betting.enabled", "true")],tbd.config.get("pp_application_url"),tbd.config.get("tableIP"),"TABLE")
-        # print(tbd.configuration_api.get_current_template_id(tbd.config.get("pp_application_url"),tbd.config.get("tableIP"),"GAME"))
-        tbd.configuration_api.update_game_template(tbd.config.get("pp_application_url"),tbd.config.get("tableIP"),[("com.wdts.manualrating.approval.criteria.averagebet", "324243")])
-
-
-        # tbd.table_actions.submit_manual_rating_players_tab("6001","2","223","123","123","12223")
-        # print(tbd.configuration_db.get_connection("172.41.46.23"))
-        # print(tbd.configuration_db.get_connection_txndb("172.41.39.82"))
-        # tbd.configuration_actions.prepend_host_entry("Z:\\PlayWright\\hosts","172.41.38.181  wdts-gateway-qa112.wdts.local")
+        tbd.table_actions.navigate_to_tab(tbd.games_tab.games_tab_locator)
+        tbd.ui_utils.click_to_element(tbd.games_tab.first_row_first_column)
+        time.sleep(5)
+        nested_details_data = tbd.games_tab.extract_nested_details_table_data()
+        print(nested_details_data)
+        print("Nested Game Details Data:")
+        for entry in nested_details_data:
+            print(entry)
+        setup.pause()
 
     except Exception as e:
         status = "Fail"
