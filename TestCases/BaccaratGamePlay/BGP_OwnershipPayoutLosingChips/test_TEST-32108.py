@@ -4,25 +4,17 @@ from datetime import datetime
 import allure
 import time
 
-@allure.feature("Player antenna logic on commission table")
-@allure.story("Insurance on Banker antenna disables Player antenna")
-@allure.title("Player antenna should remain off when Banker antenna has insurance on commission table")
-def test_TEST_14007(setup):
-    TEST_CASE_ID = "TEST-14007"
-    FEATURE_NAME = "PlayWright_POC"
+@allure.feature("Baccarat Game Play")
+@allure.story("Game play-ownership after paying out from losing chips")
+@allure.title("To verify the ownership of chips when we do payout with mixed chips (loosing+casino owned)")
+def test_TEST_32108(setup):
+    TEST_CASE_ID = "TEST-32108"
+    FEATURE_NAME = "BGP_OwnershipPayoutLosingChips"
     tbd = TableExecutionTemplate(setup, TEST_CASE_ID, FEATURE_NAME)
     status = "Pass"
     remarks = ""
     try:
-        tbd.table_actions.navigate_to_tab(tbd.games_tab.games_tab_locator)
-        tbd.ui_utils.click_to_element(tbd.games_tab.first_row_first_column)
-        time.sleep(5)
-        nested_details_data = tbd.games_tab.extract_nested_details_table_data()
-        print(nested_details_data)
-        print("Nested Game Details Data:")
-        for entry in nested_details_data:
-            print(entry)
-        setup.pause()
+        time.sleep(2)
 
     except Exception as e:
         status = "Fail"

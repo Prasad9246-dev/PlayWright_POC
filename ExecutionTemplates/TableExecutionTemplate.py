@@ -1,6 +1,7 @@
 import os
 from GameSkeleton.GameOutcomes import GameoutComes
 from GameSkeleton.Wager import Wager
+from Pages.TablePages.ChipDetailsPage import ChipDetails
 from Pages.TablePages.ViewTableTab import ViewTableTab
 from Pages.TablePages.LoginPage import LoginPage
 from Pages.TablePages.PlayerTab import PlayerTab
@@ -67,6 +68,7 @@ class TableExecutionTemplate:
         self.view_table_tab = ViewTableTab(setup)
         self.Override_Tab = OverrideTab(setup,self.feature_name)
         self.sessions_tab = SessionsTab(setup, self.feature_name)
+        self.chip_details = ChipDetails(setup, self.feature_name)
         self.ui_utils = UIUtils(setup)
         self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup, self.feature_name)
         self.buyin_processor = BuyIn(setup, self.feature_name)
@@ -82,9 +84,9 @@ class TableExecutionTemplate:
     def _run_base_setup(self):
         self.login_page.navigate(self.config["tbd_url"])
         self.login_page.login(self.config["username"], self.config["password"])
-        # self.setup.wait_for_timeout(2000)
-        # self.table_actions.table_close_and_open()
-        # self.expire_and_adjust_variance.expire_and_adjust()
+        self.setup.wait_for_timeout(2000)
+        self.table_actions.table_close_and_open()
+        self.expire_and_adjust_variance.expire_and_adjust()
         self.setup.wait_for_timeout(3000)
 
     def void_game(self):

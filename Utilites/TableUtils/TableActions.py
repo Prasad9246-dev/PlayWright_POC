@@ -524,3 +524,26 @@ class TableActions:
         self.logger_utils.log(
             f"Manual rating saved (Sessions tab) for player_id={player_id}, seat_num={seat_num}"
         )
+        
+        
+    def chipOwnership_check(self, chip_details_data, player_ids):
+        """
+        Checks if all Owner values in the chip details data contain only the given player IDs.
+
+        Args:
+            chip_details_data (list): List of dicts as extracted from the chip details table.
+            player_ids (list): List of player IDs to check for (e.g., ["6001", "6002"]).
+
+        Returns:
+            bool: True if all Owner values contain only the player IDs, False otherwise.
+        """
+        if not chip_details_data or not player_ids:
+            return False
+        owners = chip_details_data[0].get("Owner", [])
+        # Extract just the player ID part from each Owner string (e.g., "Jain, Parul (6001)" -> "6001")
+        def extract_id(owner_str):
+            if "(" in owner_str and ")" in owner_str:
+                return owner_str.split("(")[-1].split(")")[0].strip()
+            return owner_str.strip()
+        owner_ids = [extract_id(owner) for owner in owners]
+        return all(owner_id in player_ids for owner_id in owner_ids)
