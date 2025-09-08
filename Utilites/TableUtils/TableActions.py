@@ -1,3 +1,4 @@
+import re
 import time
 import requests
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
@@ -524,8 +525,7 @@ class TableActions:
         self.logger_utils.log(
             f"Manual rating saved (Sessions tab) for player_id={player_id}, seat_num={seat_num}"
         )
-        
-        
+           
     def chipOwnership_check(self, chip_details_data, player_ids):
         """
         Checks if all Owner values in the chip details data contain only the given player IDs.
@@ -547,3 +547,20 @@ class TableActions:
             return owner_str.strip()
         owner_ids = [extract_id(owner) for owner in owners]
         return all(owner_id in player_ids for owner_id in owner_ids)
+
+    def is_owner_only_anonymous(self, chip_details_data):
+        """
+        Returns True if all Owner values contain only the word 'Anonymous'
+        (with any numbers/special characters allowed after it), and no other words.
+
+        Args:
+            chip_details_data (list): List of dicts as extracted from the chip details table.
+
+        Returns:
+            bool: True if all Owner values contain only 'Anonymous' (with any numbers/special chars), False otherwise.
+        """
+        if not chip_details_data:
+            return False
+        owners = chip_details_data[0].get("Owner", [])
+        pattern = r"^Anonymous[\s\S]*$"  # Starts with 'Anonymous', anything after is allowed
+        return all(re.match(pattern, owner) for owner in owners)

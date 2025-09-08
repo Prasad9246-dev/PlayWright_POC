@@ -32,25 +32,20 @@ class Payout:
                 
 
 
-    def payout_chips_to_antenna(self, chips_data, table_ip, target_antenna):
+    def payout_chips_to_antenna(self, chips_str, table_ip, target_antenna):
         """
         Moves chips from chips_data to the dealer antenna first, then to the target antenna.
 
         Args:
-            chips_data (list): List of dicts with 'antenna' and 'chips_IDs' keys.
+            chips_data (str): Comma-separated chip IDs as a string.
             table_ip (str): Table IP address.
             target_antenna (str): Antenna name where chips should be finally placed.
-            table_actions (TableActions): Instance to perform chip movements.
 
         Example chips_data:
-            [{'antenna': 'B2', 'chips_IDs': ['e00540011226b3cb', 'e00540011226b40c', ...]}]
+            'e00540011226b3cb,e00540011226b40c,e00540011226b40f'
         """
-        dealer_antenna = "DEALER" 
-
-        for entry in chips_data:
-            chips = entry.get("chips_IDs", [])
-            for chip_id in chips:
-                # Move chip to dealer antenna
-                self.table_actions.chip_move_antenna(table_ip, dealer_antenna, chip_id, "true")
-                # Move chip to target antenna
-                self.table_actions.move_chips_between_antennas(table_ip, dealer_antenna, target_antenna, chip_id)
+        dealer_antenna = "DEALER"
+        print(f"Moving chips {chips_str} to dealer...")
+        self.table_actions.move_chips_between_antennas(table_ip, "TT", dealer_antenna, chips_str)
+        print(f"Moving chips {chips_str} to {target_antenna}...")
+        self.table_actions.move_chips_between_antennas(table_ip, dealer_antenna, target_antenna, chips_str)

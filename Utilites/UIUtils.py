@@ -60,7 +60,7 @@ class UIUtils:
             print(f"Error in get_text: {e}")
             return None
         
-    def is_visible(self, element_selector, timeout=5000):
+    def is_element_visible(self, element_selector, timeout=5000):
         """
         Checks if the locator is visible on the page.
         Author:

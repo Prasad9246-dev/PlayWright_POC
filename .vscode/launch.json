@@ -3,14 +3,14 @@
   "configurations": [
  
     {
-      "name": "Python: Debug test_TEST-14007.py",
+      "name": "Python: Debug test_TEST-32111.py",
       "type": "debugpy",
       "request": "launch",
       "module": "pytest",
       "args": [
         "-s",
         "-v",
-        "TestCases\\.DummyTestCases\\test_TEST-14007.py"
+        "TestCases/BaccaratGamePlay/BGP_OwnershipPayoutLosingChips/test_TEST-32111.py"
       ],
       "console": "integratedTerminal",
       "justMyCode": true

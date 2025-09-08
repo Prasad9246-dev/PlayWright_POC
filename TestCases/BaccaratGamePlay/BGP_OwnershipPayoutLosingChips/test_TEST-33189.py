@@ -5,14 +5,14 @@ import allure
 
 @allure.feature("Baccarat Game Play")
 @allure.story("Game play-ownership after paying out from losing chips")
-@allure.title("To verify the ownership of chips when we pay with the losing chips")
-def test_TEST_32107(setup):
-    TEST_CASE_ID = "TEST-32107"
+@allure.title("To verify the ownership of chips when we pay with the loosing chips")
+def test_TEST_33189(setup):
+    TEST_CASE_ID = "TEST-33189"
     FEATURE_NAME = "BGP_OwnershipPayoutLosingChips"
     tbd = TableExecutionTemplate(setup, TEST_CASE_ID, FEATURE_NAME)
     status = "Fail" 
     remarks = ""
-    tbd.logger_utils.log("Starting test: To verify the ownership of chips when we pay with the losing chips")
+    tbd.logger_utils.log("Starting test: To verify the ownership of chips when we pay with the loosing chips")
     try:
         table_ip = tbd.config.get("tableIP")
         tbd.logger_utils.log(f"Table IP: {table_ip}")
@@ -38,7 +38,7 @@ def test_TEST_32107(setup):
             tbd.logger_utils.log(msg)
             tbd.screenshot_util.attach_screenshot(name=msg)
             tbd.screenshot_util.attach_text(msg, name="Verification Message")
-            status = "Pass"  # Set to Pass only if check passes
+            status = "Pass"
             assert True, msg
         else:
             msg = "Ownership verification failed: Not all chips are owned by player 6001."

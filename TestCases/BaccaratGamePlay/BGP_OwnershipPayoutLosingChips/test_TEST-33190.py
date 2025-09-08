@@ -5,18 +5,18 @@ import allure
 
 @allure.feature("Baccarat Game Play")
 @allure.story("Game play-ownership after paying out from losing chips")
-@allure.title("To verify the ownership of chips when we pay with the losing chips")
-def test_TEST_32107(setup):
-    TEST_CASE_ID = "TEST-32107"
+@allure.title("To verify the ownership of chips when we do payout with mixed chips (loosing+casino owned)")
+def test_TEST_33190(setup):
+    TEST_CASE_ID = "TEST-33190"
     FEATURE_NAME = "BGP_OwnershipPayoutLosingChips"
     tbd = TableExecutionTemplate(setup, TEST_CASE_ID, FEATURE_NAME)
-    status = "Fail" 
+    status = "Fail"
     remarks = ""
-    tbd.logger_utils.log("Starting test: To verify the ownership of chips when we pay with the losing chips")
     try:
+        chips_df = tbd.chips_df
         table_ip = tbd.config.get("tableIP")
         tbd.logger_utils.log(f"Table IP: {table_ip}")
-        buyin_result = tbd.buyin_processor.process_buyins(table_ip, tbd.buyin_data, tbd.chips_df)
+        buyin_result = tbd.buyin_processor.process_buyins(table_ip, tbd.buyin_data, chips_df)
         tbd.logger_utils.log(f"Buy-in result: {buyin_result}")
         wager_result = tbd.wager_processor.process_wagers(table_ip, buyin_result, tbd.wager_data)
         tbd.logger_utils.log(f"Wager result: {wager_result}")
@@ -24,24 +24,24 @@ def test_TEST_32107(setup):
         tbd.logger_utils.log(f"Wager result after card draw: {wager_result}")
         take_result = tbd.take_bets_processor.take(table_ip, wager_result, tbd.take_bets_data)
         tbd.logger_utils.log(f"Take bets result: {take_result}")
-        print(take_result)
         chips_str = ",".join(take_result[0].get("chips_IDs", []))
         tbd.payout_processor.payout_chips_to_antenna(chips_str, table_ip, "P1")
         tbd.logger_utils.log("Payout chips to antenna P1 completed.")
         chips_data = tbd.chip_details.extract_chip_details_table()
         tbd.logger_utils.log(f"Extracted chip details: {chips_data}")
-        chip_ownership_check = tbd.table_actions.chipOwnership_check(chips_data, ["6001"])
+        chip_ownership_check = tbd.table_actions.is_owner_only_anonymous(chips_data)
         tbd.logger_utils.log(f"Chip ownership check result: {chip_ownership_check}")
+    
         if chip_ownership_check:
-            msg = "Ownership verification passed: All chips are owned by player 6001."
+            msg = "Ownership verification passed: All chips ownership is Anonymous."
             print(msg)
             tbd.logger_utils.log(msg)
             tbd.screenshot_util.attach_screenshot(name=msg)
             tbd.screenshot_util.attach_text(msg, name="Verification Message")
-            status = "Pass"  # Set to Pass only if check passes
+            status = "Pass"  
             assert True, msg
         else:
-            msg = "Ownership verification failed: Not all chips are owned by player 6001."
+            msg = "Ownership verification failed: Not all chips ownership is Anonymous."
             print(msg)
             tbd.logger_utils.log(msg)
             tbd.screenshot_util.attach_screenshot(name=msg)
