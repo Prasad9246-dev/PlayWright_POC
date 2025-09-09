@@ -13,6 +13,7 @@ from Utilites.TableUtils.TableActions import TableActions
 from Utilites.ExcelRead.ExcelReader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data, get_file_path
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Utilites.ExcelRead.ExcelReader import read_chip_ids_df
+from Utilites.ExcelRead.TestReportWriter import TestReportWriter
 from Utilites.UIUtils import UIUtils
 from GameSkeleton.BuyIn import BuyIn
 from GameSkeleton.TakeBets import TakeBets
@@ -37,7 +38,7 @@ class TableExecutionTemplate:
         config_utils = ConfigUtils()
         config_utils.set_feature_name(self.feature_name)  # <-- This must be called!
         return {
-            "build_version": config_utils.get_config().get("build_version"),
+            "build_version": config_utils.get_build_version(),
             "feature_name": self.feature_name,
             "tableIP": config_utils.get_tableIP(),
             "tbd_url": config_utils.get_table_url(),
@@ -79,6 +80,7 @@ class TableExecutionTemplate:
         self.configuration_api = ConfigurationAPIs(self.feature_name)
         self.configuration_db = ConfigurationAPI_DB(self.feature_name)
         self.configuration_actions = ConfigurationActions(setup, self.feature_name)
+        self.test_case_report = TestReportWriter(self.feature_name)
         self.logger_utils = LoggerUtils(self.feature_name)
 
     def _run_base_setup(self):

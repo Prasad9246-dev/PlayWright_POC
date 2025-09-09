@@ -10,6 +10,7 @@ def test_TEST_32113(setup):
     TEST_CASE_ID = "TEST-32113"
     FEATURE_NAME = "BGP_OwnershipPayoutLosingChips"
     tbd = TableExecutionTemplate(setup, TEST_CASE_ID, FEATURE_NAME)
+    BUILD_VERSION = tbd.config.get("build_version")
     status = "Fail"
     remarks = ""
     try:
@@ -66,18 +67,10 @@ def test_TEST_32113(setup):
         raise
     finally:
         tbd.configuration_api.update_template([("com.wdts.bt.require.player.verification","false")], tbd.config.get("pp_application_url"), table_ip, "BUSINESS_RULES")
-        config = tbd.config
-        BUILD_VERSION = config.get("build_version")
-        report_writer = TestReportWriter(BUILD_VERSION, FEATURE_NAME)
-        report_writer.add_result(
-            test_set_name=FEATURE_NAME,
-            test_case_id=TEST_CASE_ID,
-            status=status,
-            remarks=remarks,
-            time_str=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        tbd.test_case_report.write_test_result(
+            FEATURE_NAME,
+            TEST_CASE_ID,
+            BUILD_VERSION,
+            status,
+            remarks
         )
-        report_writer.write_report()
-        tbd.logger_utils.log("========================================================")
-        tbd.logger_utils.log(f"Test result written: {status}")
-        tbd.logger_utils.log("========================================================")
-        print(f"Test case status: {status}")

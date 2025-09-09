@@ -1,3 +1,4 @@
+from logging import config
 import os
 from Utilites.ExcelRead.ExcelReader import read_excel_config ,get_file_path
 
@@ -120,6 +121,18 @@ class ConfigUtils:
             Prasad Kamble
         """
         return self.config.get("username")
+    
+    def get_build_version(self):
+        """
+        Returns the build version from the given config dictionary.
+
+        Args:
+            config (dict): Configuration dictionary containing 'build_version' key.
+
+        Returns:
+            str: The build version, or an empty string if not found.
+        """
+        return self.config.get("build_version")
 
     def get_password(self):
         """Returns the password.
@@ -171,9 +184,3 @@ class ConfigUtils:
             return url_template.replace("CageIP", cage_ip)
         print(url_template)
         return url_template
-    
-if __name__ == "__main__":
-    config_utils = ConfigUtils()
-    print(config_utils.get_table_url())
-    print(config_utils.get_cageURL())
-    print(config_utils.get_ppApplication_Url())
