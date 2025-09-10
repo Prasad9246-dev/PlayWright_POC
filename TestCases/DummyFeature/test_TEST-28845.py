@@ -1,7 +1,5 @@
 import time
 from ExecutionTemplates.TableExecutionTemplate import TableExecutionTemplate
-from Utilites.ExcelRead.TestReportWriter import TestReportWriter
-from datetime import datetime
 import allure
 
 @allure.feature("Take messaging visibility on the screen")
@@ -9,9 +7,10 @@ import allure
 @allure.title("'TAKE PLAYER' element should be visible after buy-in and wager")
 def test_TEST_28845(setup):
     TEST_CASE_ID = "TEST-28845"
-    FEATURE_NAME = "PlayWright_POC"
+    FEATURE_NAME = "DummyFeature"
     tbd = TableExecutionTemplate(setup, TEST_CASE_ID, FEATURE_NAME)
-    status = "Pass"
+    BUILD_VERSION = tbd.config.get("build_version")
+    status = "Fail"
     remarks = ""
     try:
         tbd.logger_utils.log("Starting test_TEST_28845: TAKE PLAYER visibility test")
@@ -32,7 +31,7 @@ def test_TEST_28845(setup):
         tbd.card_processor.draw_cards_and_shoe_press(tbd.card_data, table_ip)
 
         tbd.logger_utils.log("Waiting for cards to be drawn.")
-        time.sleep(5)  # Wait for the cards to be drawn
+        time.sleep(5)
 
         tbd.logger_utils.log("Checking if TAKE PLAYER element is visible.")
         is_visible = tbd.view_table_tab.is_take_player_visible()
@@ -51,7 +50,6 @@ def test_TEST_28845(setup):
             tbd.logger_utils.log(msg)
             tbd.screenshot_util.attach_screenshot(name="TAKE PLAYER Not Visible - Fail")
             tbd.screenshot_util.attach_text(msg, name="Verification Message")
-            status = "Fail"
             remarks = "'TAKE PLAYER' element is not visible on the screen"
             assert is_visible, "'TAKE PLAYER' element is not visible on the screen"
 
@@ -59,7 +57,6 @@ def test_TEST_28845(setup):
         takebets_list = tbd.take_bets_data
         tbd.take_bets_processor.take(table_ip, wager_data_result, takebets_list)
     except Exception as e:
-        status = "Fail"
         remarks = str(e)
         tbd.logger_utils.log(f"Exception occurred: {remarks}")
         try:
@@ -69,20 +66,11 @@ def test_TEST_28845(setup):
             tbd.logger_utils.log(f"Failed to void hand in test: {ve}")
         raise
     finally:
-        config = tbd.config
-        BUILD_VERSION = config.get("build_version")
-        report_writer = TestReportWriter(BUILD_VERSION, FEATURE_NAME)
-        report_writer.add_result(
-            test_set_name=FEATURE_NAME,
-            test_case_id=TEST_CASE_ID,
-            status=status,
-            remarks=remarks,
-            time_str=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        tbd.test_case_report.write_test_result(
+            FEATURE_NAME,
+            TEST_CASE_ID,
+            BUILD_VERSION,
+            status,
+            remarks
         )
-        report_writer.write_report()
-        tbd.logger_utils.log("============================")
-        tbd.logger_utils.log(f"Test case status: {status}")
-        tbd.logger_utils.log("============================")
-        print("============================")
-        print(f"Test case status: {status}")
-        print("============================")
+        

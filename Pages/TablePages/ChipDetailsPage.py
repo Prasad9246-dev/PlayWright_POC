@@ -1,4 +1,5 @@
 from Utilites.UIUtils import UIUtils
+from Utilites.Reporting.ScreenshotUtil import ScreenshotUtil
 import time
 
 class ChipDetails:
@@ -6,6 +7,7 @@ class ChipDetails:
         self.page = page
         self.feature_name = feature_name
         self.ui_utils = UIUtils(page)
+        self.screenshot_util = ScreenshotUtil(page)
         self.table_locator = "table.table-chip-details"
         self.chip_details = self.page.get_by_role("menuitem", name="Chip Details")
         self.table_dashboard = self.page.get_by_role('button', name='Table Dashboard')
@@ -32,6 +34,7 @@ class ChipDetails:
                 row_data[headers[j]] = cell_texts if len(cell_texts) > 1 else (cell_texts[0] if cell_texts else "")
             data.append(row_data)
         time.sleep(2)
+        self.screenshot_util.attach_screenshot("chip_details")
         if self.crossbutton.is_visible():
             self.crossbutton.click()
         # if self.ui_utils.is_element_visible(self.crossbutton):

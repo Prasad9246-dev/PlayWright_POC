@@ -1,6 +1,4 @@
 from ExecutionTemplates.TableExecutionTemplate import TableExecutionTemplate
-from Utilites.ExcelRead.TestReportWriter import TestReportWriter
-from datetime import datetime
 import allure
 import time
 
@@ -9,8 +7,9 @@ import time
 @allure.title("Player antenna should remain off when Banker antenna has insurance on commission table")
 def test_TEST_14007(setup):
     TEST_CASE_ID = "TEST-14007"
-    FEATURE_NAME = "PlayWright_POC"
+    FEATURE_NAME = "DummyFeature"
     tbd = TableExecutionTemplate(setup, TEST_CASE_ID, FEATURE_NAME)
+    BUILD_VERSION = tbd.config.get("build_version")
     status = "Pass"
     remarks = ""
     try:
@@ -25,14 +24,10 @@ def test_TEST_14007(setup):
             print(f"Failed to void hand in test: {ve}")
         raise
     finally:
-        config = tbd.config
-        BUILD_VERSION = config.get("build_version")
-        report_writer = TestReportWriter(BUILD_VERSION, FEATURE_NAME)
-        report_writer.add_result(
-            test_set_name=FEATURE_NAME,
-            test_case_id=TEST_CASE_ID,
-            status=status,
-            remarks=remarks,
-            time_str=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        tbd.test_case_report.write_test_result(
+            FEATURE_NAME,
+            TEST_CASE_ID,
+            BUILD_VERSION,
+            status,
+            remarks
         )
-        report_writer.write_report()

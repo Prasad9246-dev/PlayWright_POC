@@ -81,7 +81,7 @@ class TableActions:
             Prasad Kamble
         """
         self.logger_utils.log("Starting table close and open sequence.")
-        self.navigate_to_tab(self.player_tab.Players_TAB)
+        self.navigate_to_tab(self.player_tab.players_tab)
         self.table_close()
         self.table_open()
         self.logger_utils.log("Completed table close and open sequence.")
@@ -285,7 +285,7 @@ class TableActions:
         self.logger_utils.log(f"Attempting to clock in player_id={player_id} at seat_num={seat_num} on tab={tab_name}.")
         if tab_name == "Players_TAB":
             self.logger_utils.log("Navigating to Players_TAB for clock-in.")
-            self.navigate_to_tab(self.player_tab.Players_TAB)
+            self.navigate_to_tab(self.player_tab.players_tab)
             self.logger_utils.log(f"Clicking player card at seat {seat_num}.")
             self.ui_utils.click_to_element(self.player_tab.player_card_position(seat_num))
             self.logger_utils.log(f"Filling player ID: {player_id}.")
@@ -322,7 +322,7 @@ class TableActions:
             Prasad Kamble
         """
         self.logger_utils.log(f"Attempting to clock out player at seat_num={seat_num}.")
-        self.navigate_to_tab(self.player_tab.Players_TAB)
+        self.navigate_to_tab(self.player_tab.players_tab)
         self.logger_utils.log(f"Clicking dot button for seat {seat_num}.")
         self.ui_utils.click_to_element(self.player_tab.player_card_dot(seat_num))
         self.logger_utils.log("Clicking clock-out button.")
@@ -434,7 +434,7 @@ class TableActions:
         self.logger_utils.log(
             f"Submitting manual rating (Players tab) for player_id={player_id}, seat_num={seat_num}, buyin={buyin}, average_bet={average_bet}, casino_win_loss={casino_win_loss}, mid={mid}"
         )
-        self.navigate_to_tab(self.player_tab.Players_TAB)
+        self.navigate_to_tab(self.player_tab.players_tab)
         self.ui_utils.click_to_element(self.player_tab.get_seat_A_locator())
         self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
         self.ui_utils.fill_element(self.player_tab.player_id_textbox, player_id)
@@ -471,7 +471,7 @@ class TableActions:
             Prasad Kamble
         """
         self.logger_utils.log(f"Saving manual rating for player_id={player_id}, seat_num={seat_num} on Players tab.")
-        self.navigate_to_tab(self.player_tab.Players_TAB)
+        self.navigate_to_tab(self.player_tab.players_tab)
         self.ui_utils.click_to_element(self.player_tab.get_seat_A_locator())
         self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
         self.ui_utils.fill_element(self.player_tab.player_id_textbox, player_id)

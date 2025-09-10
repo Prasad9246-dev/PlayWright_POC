@@ -1,14 +1,15 @@
 from ExecutionTemplates.TableExecutionTemplate import TableExecutionTemplate
-from Utilites.ExcelRead.TestReportWriter import TestReportWriter
-from datetime import datetime
 import allure
 
 @allure.feature("Buy-In Feature")
 @allure.story("test_DummyTestCase1: Rated Buy-In")
 @allure.title("test_DummyTestCase1 Rated Buy-In Test")
 def test_TEST_0608(setup):
-    tbd = TableExecutionTemplate(setup, "TEST-0608","PlayWright_POC")
-    status = "Pass"
+    TEST_CASE_ID = "TEST-0608"
+    FEATURE_NAME = "DummyFeature"
+    tbd = TableExecutionTemplate(setup, TEST_CASE_ID, FEATURE_NAME)
+    BUILD_VERSION = tbd.config.get("build_version")
+    status = "Fail"
     remarks = ""
     try:
         # Your test logic here
@@ -45,13 +46,12 @@ def test_TEST_0608(setup):
         tbd.logger_utils.log(f"Current Game ID: {current_game_id}")
 
         print(f"Previous Game ID: {previous_game_id}, Current Game ID: {current_game_id}")
-        if previous_game_id == current_game_id:
+        if previous_game_id != current_game_id:
             msg = "Game record is not present on Games tab."
             print(msg)
             tbd.logger_utils.log(msg)
             tbd.screenshot_util.attach_screenshot(name=msg)
             tbd.screenshot_util.attach_text(msg, name="Verification Message")
-            status = "Fail"
             remarks = "Rated Buyin completed, but game record is NOT displayed on Games tab."
             assert False, remarks
         else:
@@ -65,7 +65,6 @@ def test_TEST_0608(setup):
             assert True, remarks
 
     except Exception as e:
-        status = "Fail"
         remarks = str(e)
         tbd.logger_utils.log(f"Exception occurred: {remarks}")
         try:
@@ -75,21 +74,10 @@ def test_TEST_0608(setup):
             tbd.logger_utils.log(f"Failed to void hand in test: {ve}")
         raise
     finally:
-        config = tbd.config
-        BUILD_VERSION = config.get("build_version")
-        FEATURE_NAME = config.get("feature_name")
-        report_writer = TestReportWriter(BUILD_VERSION, FEATURE_NAME)
-        report_writer.add_result(
-            test_set_name=FEATURE_NAME,
-            test_case_id="TEST-0608",
-            status=status,
-            remarks=remarks,
-            time_str=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        tbd.test_case_report.write_test_result(
+            FEATURE_NAME,
+            TEST_CASE_ID,
+            BUILD_VERSION,
+            status,
+            remarks
         )
-        report_writer.write_report()
-        tbd.logger_utils.log("============================")
-        tbd.logger_utils.log(f"Test case status: {status}")
-        tbd.logger_utils.log("============================")
-        print("============================")
-        print(f"Test case status: {status}")
-        print("============================")

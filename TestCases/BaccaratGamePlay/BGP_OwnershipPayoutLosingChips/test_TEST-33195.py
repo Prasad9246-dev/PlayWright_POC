@@ -1,6 +1,4 @@
 from ExecutionTemplates.TableExecutionTemplate import TableExecutionTemplate
-from Utilites.ExcelRead.TestReportWriter import TestReportWriter
-from datetime import datetime
 import allure
 
 @allure.feature("Baccarat Game Play")
