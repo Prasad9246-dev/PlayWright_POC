@@ -2,6 +2,7 @@ from Pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPa
 from Pages.ConfigurationPages.ConfigurationPage import ConfigurationPage
 from Pages.ConfigurationPages.GameTemplatePage import GameTemplatePage
 from Pages.ConfigurationPages.LimitTemplatePage import LimitTemplatePage
+from Pages.ConfigurationPages.TableTemplatePage import TableTemplatePage
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Utilites.UIUtils import UIUtils
 from Pages.ConfigurationPages.CasinoManager import CasinoManager
@@ -16,6 +17,7 @@ class ConfigurationActions:
         self.configuration_page = ConfigurationPage(page)
         self.game_template_page = GameTemplatePage(page)
         self.limit_template_page = LimitTemplatePage(page)
+        self.table_template_page = TableTemplatePage(page)
         self.configuration_api = ConfigurationAPIs(feature_name)
         self.ui_utils = UIUtils(page)
         self.config_utils = ConfigUtils()
@@ -174,8 +176,7 @@ class ConfigurationActions:
             print("Game template is created")
         else:
             print("Game template creation failed or success message not visible")
-            
-            
+                     
     def create_limit_template(self, limit_name, site_name, table_ip, game_template_name):
         """
         Creates a limit template using the provided details.
@@ -206,3 +207,35 @@ class ConfigurationActions:
             print("Limit template is created")
         else:
             print("Limit template creation failed or success message not visible")
+
+    def create_table_template(self, table_template_name, site_name, table_ip, game_template_name):
+        """
+        Creates a table template using the provided details.
+        Args:
+            table_template_name (str): Name for the table template.
+            site_name (str): Site name to select.
+            table_ip (str): Table IP to fetch table type.
+            game_template_name (str): Game template name to select.
+        """
+        time.sleep(2)
+        self.ui_utils.click_to_element(self.table_template_page.table_templates_tab)
+        self.ui_utils.click_to_element(self.table_template_page.create_button)
+        self.ui_utils.fill_element(self.table_template_page.table_template_name_textbox, table_template_name)
+        self.ui_utils.click_to_element(self.table_template_page.site_select_combobox)
+        self.ui_utils.click_to_element(self.table_template_page.get_site_option(site_name))
+        self.ui_utils.press_escape(self.table_template_page.site_select_combobox)
+        self.ui_utils.click_to_element(self.table_template_page.table_type_combobox)
+        table_info = self.configuration_api.get_table_info(table_ip)
+        table_type = table_info.get("tableType")
+        self.ui_utils.click_to_element(self.table_template_page.get_table_type_option(table_type))
+        self.ui_utils.click_to_element(self.table_template_page.game_type_combobox)
+        self.ui_utils.click_to_element(self.table_template_page.baccarat_option)
+        self.ui_utils.click_to_element(self.table_template_page.game_template_combobox)
+        self.ui_utils.click_to_element(self.table_template_page.get_game_template_option(game_template_name))
+        self.ui_utils.click_to_element(self.table_template_page.limits_tab)
+        # self.ui_utils.click_to_element(self.table_template_page.save_button)
+        # self.ui_utils.click_to_element(self.table_template_page.confirm_button)
+        # if self.ui_utils.is_element_visible(self.table_template_page.created_success_message):
+        #     print("Table template is created")
+        # else:
+        #     print("Table template creation failed or success message not visible")

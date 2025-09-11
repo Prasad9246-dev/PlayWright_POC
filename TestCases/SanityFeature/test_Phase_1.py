@@ -19,6 +19,8 @@ def test_Phase_1(setup):
         limit_name = f"LT-{random.randint(100, 999)}"
         ppb.configuration_actions.create_game_template(game_template, "Site-26", table_ip)
         ppb.configuration_actions.create_limit_template(limit_name, "Site-26", table_ip, game_template)
+        ppb.configuration_actions.create_table_template(f"TT-{random.randint(100, 999)}", "Site-26", table_ip, game_template)
+        setup.pause()
         status = "Pass"
 
     except Exception as e:
