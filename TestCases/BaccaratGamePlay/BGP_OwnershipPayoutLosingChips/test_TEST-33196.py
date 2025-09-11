@@ -62,5 +62,4 @@ def test_TEST_33196(setup):
             BUILD_VERSION,
             status,
             remarks
-        )
-        
+        ) 

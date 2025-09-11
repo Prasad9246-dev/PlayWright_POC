@@ -5,6 +5,7 @@ from Pages.TablePages.ViewTableTab import ViewTableTab
 from Pages.TablePages.LoginPage import LoginPage
 from Pages.TablePages.GamesTab import GamesTab
 from Pages.TablePages.OverrideTab import OverrideTab
+from Pages.ConfigurationPages.GameTemplatePage import GameTemplatePage
 from Pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPage
 from Utilites.TableUtils.ExpireAdjustVariance import ExpireAndAdjustVariance
 from Utilites.TableUtils.TableActions import TableActions
@@ -66,6 +67,7 @@ class PPExecutionTemplate:
         self.games_tab = GamesTab(setup, self.feature_name)
         self.view_table_tab = ViewTableTab(setup)
         self.Override_Tab = OverrideTab(setup,self.feature_name)
+        self.game_template_page = GameTemplatePage(setup)
         self.ui_utils = UIUtils(setup)
         self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup, self.feature_name)
         self.buyin_processor = BuyIn(setup, self.feature_name)

@@ -8,6 +8,7 @@ from Pages.TablePages.PlayerTab import PlayerTab
 from Pages.TablePages.GamesTab import GamesTab
 from Pages.TablePages.OverrideTab import OverrideTab
 from Pages.TablePages.SessionsTab import SessionsTab
+from Pages.ConfigurationPages.GameTemplatePage import GameTemplatePage
 from Utilites.TableUtils.ExpireAdjustVariance import ExpireAndAdjustVariance
 from Utilites.TableUtils.TableActions import TableActions
 from Utilites.ExcelRead.ExcelReader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data, get_file_path
@@ -70,6 +71,7 @@ class TableExecutionTemplate:
         self.Override_Tab = OverrideTab(setup,self.feature_name)
         self.sessions_tab = SessionsTab(setup, self.feature_name)
         self.chip_details = ChipDetails(setup, self.feature_name)
+        self.game_template_page = GameTemplatePage(setup)
         self.ui_utils = UIUtils(setup)
         self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup, self.feature_name)
         self.buyin_processor = BuyIn(setup, self.feature_name)
