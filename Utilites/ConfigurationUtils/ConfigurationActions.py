@@ -1,5 +1,6 @@
 from Pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPage
 from Pages.ConfigurationPages.ConfigurationPage import ConfigurationPage
+from Pages.ConfigurationPages.GameTemplatePage import GameTemplatePage
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Utilites.UIUtils import UIUtils
 from Pages.ConfigurationPages.CasinoManager import CasinoManager
@@ -11,6 +12,7 @@ class ConfigurationActions:
         self.page = page
         self.feature_name = feature_name
         self.configuration_page = ConfigurationPage(page)
+        self.game_template_page = GameTemplatePage(page)
         self.configuration_api = ConfigurationAPIs(feature_name)
         self.ui_utils = UIUtils(page)
         self.config_utils = ConfigUtils()
@@ -114,3 +116,10 @@ class ConfigurationActions:
                 f.write("\n".join(lines) + "\n")
         except PermissionError:
             print(f"Permission denied: You must run as administrator to modify {hosts_path}")
+                   
+    def create_game_template(self, template_name, site_name):
+        self.ui_utils.click_to_element(self.game_template_page.game_templates_tab)
+        self.ui_utils.click_to_element(self.game_template_page.create_button)
+        self.ui_utils.fill_element(self.game_template_page.game_template_name_textbox, template_name)
+        self.ui_utils.click_to_element(self.game_template_page.site_select_combobox)
+        self.ui_utils.click_to_element(self.game_template_page.get_site_option(site_name))
