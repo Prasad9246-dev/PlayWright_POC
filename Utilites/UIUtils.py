@@ -1,3 +1,4 @@
+from socket import timeout
 from Pages.TablePages.ViewTableTab import ViewTableTab
 import time
 
@@ -67,9 +68,13 @@ class UIUtils:
             Prasad Kamble
         """
         time.sleep(1)
-        element_selector.wait_for(state="visible", timeout=timeout)
+        if isinstance(element_selector, str):
+            locator = self.page.locator(element_selector)
+        else:
+            locator = element_selector
         try:
-            return self.page.locator(element_selector).is_visible()
+            locator.wait_for(state="visible", timeout=timeout)
+            return locator.is_visible()
         except Exception:
             return False
 
@@ -161,3 +166,15 @@ class UIUtils:
                 return False
         except Exception:
                     print("Buy-In Confirm Button is NOT present on screen")    
+                    
+                    
+                    
+    def press_escape(self, element_selector, timeout=5000):
+        """
+        Presses Escape on the given locator or selector.
+        Author:
+            Prasad Kamble
+        """
+        time.sleep(1)
+        element_selector.wait_for(state="visible", timeout=timeout)
+        element_selector.press("Escape")

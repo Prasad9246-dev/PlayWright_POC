@@ -6,6 +6,7 @@ from Pages.TablePages.LoginPage import LoginPage
 from Pages.TablePages.GamesTab import GamesTab
 from Pages.TablePages.OverrideTab import OverrideTab
 from Pages.ConfigurationPages.GameTemplatePage import GameTemplatePage
+from Pages.ConfigurationPages.LimitTemplatePage import LimitTemplatePage
 from Pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPage
 from Utilites.TableUtils.ExpireAdjustVariance import ExpireAndAdjustVariance
 from Utilites.TableUtils.TableActions import TableActions
@@ -53,6 +54,16 @@ class PPExecutionTemplate:
         test_data_path = os.path.join(test_data_dir, test_data_file)
 
         self.chips_df = read_chip_ids_df()
+        
+        if not os.path.exists(test_data_path):
+            print(f"Test data file not found: {test_data_path}")
+            self.buyin_data = None
+            self.wager_data = None
+            self.card_data = None
+            self.take_bets_data = None
+            self.payout_data = None
+            return
+        
         self.buyin_data = get_buyin_data(test_data_path, self.test_case_id)
         self.wager_data = get_wager_data(test_data_path, self.test_case_id)
         self.card_data = get_cards_data(test_data_path, self.test_case_id)
@@ -68,6 +79,7 @@ class PPExecutionTemplate:
         self.view_table_tab = ViewTableTab(setup)
         self.Override_Tab = OverrideTab(setup,self.feature_name)
         self.game_template_page = GameTemplatePage(setup)
+        self.limit_template_page = LimitTemplatePage(setup)
         self.ui_utils = UIUtils(setup)
         self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup, self.feature_name)
         self.buyin_processor = BuyIn(setup, self.feature_name)

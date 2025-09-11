@@ -1,11 +1,13 @@
 from Pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPage
 from Pages.ConfigurationPages.ConfigurationPage import ConfigurationPage
 from Pages.ConfigurationPages.GameTemplatePage import GameTemplatePage
+from Pages.ConfigurationPages.LimitTemplatePage import LimitTemplatePage
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Utilites.UIUtils import UIUtils
 from Pages.ConfigurationPages.CasinoManager import CasinoManager
 from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
 from Utilites.Logs.LoggerUtils import LoggerUtils
+import time
 
 class ConfigurationActions:
     def __init__(self, page, feature_name):
@@ -13,6 +15,7 @@ class ConfigurationActions:
         self.feature_name = feature_name
         self.configuration_page = ConfigurationPage(page)
         self.game_template_page = GameTemplatePage(page)
+        self.limit_template_page = LimitTemplatePage(page)
         self.configuration_api = ConfigurationAPIs(feature_name)
         self.ui_utils = UIUtils(page)
         self.config_utils = ConfigUtils()
@@ -117,9 +120,89 @@ class ConfigurationActions:
         except PermissionError:
             print(f"Permission denied: You must run as administrator to modify {hosts_path}")
                    
-    def create_game_template(self, template_name, site_name):
+    def create_game_template(self, template_name, site_name, table_ip):
+        """
+        Creates a game template using the provided template name, site name, and table IP.
+
+        Args:
+            template_name (str): The name for the new game template (e.g., "GT-234").
+            site_name (str): The site to select (e.g., "Site-26").
+            table_ip (str): The table IP address to fetch table type from API.
+
+        Steps:
+            - Navigates to the Game Templates tab.
+            - Clicks the Create button.
+            - Fills in the template name.
+            - Selects the site.
+            - Selects the table type (fetched using table_ip).
+            - Selects the game type and options.
+            - Completes antenna mapping.
+            - Saves and confirms the template.
+            - Prints the result of the creation.
+
+        Author:
+            Prasad Kamble
+        """
+        time.sleep(2)
         self.ui_utils.click_to_element(self.game_template_page.game_templates_tab)
         self.ui_utils.click_to_element(self.game_template_page.create_button)
         self.ui_utils.fill_element(self.game_template_page.game_template_name_textbox, template_name)
         self.ui_utils.click_to_element(self.game_template_page.site_select_combobox)
         self.ui_utils.click_to_element(self.game_template_page.get_site_option(site_name))
+        self.ui_utils.press_escape(self.game_template_page.site_select_combobox)
+        self.ui_utils.click_to_element(self.game_template_page.table_type_combobox)
+        table_info = self.configuration_api.get_table_info(table_ip)
+        table_type = table_info.get("tableType")
+        self.ui_utils.click_to_element(self.game_template_page.get_table_type_option(table_type))
+        self.ui_utils.click_to_element(self.game_template_page.game_type_combobox)
+        self.ui_utils.click_to_element(self.game_template_page.baccarat_option)
+        self.ui_utils.click_to_element(self.game_template_page.player_pair_option)
+        self.ui_utils.click_to_element(self.game_template_page.banker_pair_option)
+        self.ui_utils.click_to_element(self.game_template_page.tie_option)
+        self.ui_utils.click_to_element(self.game_template_page.antenna_mapping_button)
+        self.ui_utils.click_to_element(self.game_template_page.continue_button)
+        self.ui_utils.click_to_element(self.game_template_page.antenna_mapping_zero)
+        self.ui_utils.click_to_element(self.game_template_page.pp_option)
+        self.ui_utils.click_to_element(self.game_template_page.sb1_span_option)
+        self.ui_utils.click_to_element(self.game_template_page.bp_option)
+        self.ui_utils.click_to_element(self.game_template_page.sb2_span_option)
+        self.ui_utils.click_to_element(self.game_template_page.tie_option_short)
+        self.ui_utils.click_to_element(self.game_template_page.sb3_span_option)
+        self.ui_utils.click_to_element(self.game_template_page.save_button)
+        self.ui_utils.click_to_element(self.game_template_page.confirm_button)
+        if self.ui_utils.is_element_visible(self.game_template_page.created_success_message):
+            print("Game template is created")
+        else:
+            print("Game template creation failed or success message not visible")
+            
+            
+    def create_limit_template(self, limit_name, site_name, table_ip, game_template_name):
+        """
+        Creates a limit template using the provided details.
+        Args:
+            limit_name (str): Name for the limit template.
+            site_name (str): Site name to select.
+            table_ip (str): Table IP to fetch table type.
+            game_template_name (str): Game template name to select.
+        """
+        time.sleep(2)
+        self.ui_utils.click_to_element(self.limit_template_page.limit_templates_tab)
+        self.ui_utils.click_to_element(self.limit_template_page.create_button)
+        self.ui_utils.fill_element(self.limit_template_page.limit_template_name_textbox, limit_name)
+        self.ui_utils.click_to_element(self.limit_template_page.site_select_combobox)
+        self.ui_utils.click_to_element(self.limit_template_page.get_site_option(site_name))
+        self.ui_utils.press_escape(self.limit_template_page.site_select_combobox)
+        self.ui_utils.click_to_element(self.limit_template_page.table_type_combobox)
+        table_info = self.configuration_api.get_table_info(table_ip)
+        table_type = table_info.get("tableType")
+        self.ui_utils.click_to_element(self.limit_template_page.get_table_type_option(table_type))
+        self.ui_utils.click_to_element(self.limit_template_page.game_type_combobox)
+        self.ui_utils.click_to_element(self.limit_template_page.baccarat_option)
+        self.ui_utils.click_to_element(self.limit_template_page.game_template_combobox)
+        self.ui_utils.click_to_element(self.limit_template_page.get_game_template_option(game_template_name))
+        self.ui_utils.click_to_element(self.limit_template_page.save_button)
+        self.ui_utils.click_to_element(self.limit_template_page.confirm_button)
+        if self.ui_utils.is_element_visible(self.limit_template_page.created_success_message):
+            print("Limit template is created")
+        else:
+            print("Limit template creation failed or success message not visible")

@@ -9,11 +9,6 @@ class PlayerTab:
         self.clock_out_close_button = self.page.get_by_label("Clock-Outclose").get_by_role("button", name="Clock-Out")
         
         # Manual Rating selectors
-<<<<<<< HEAD
-        self.seat_A = self.page.locator(
-    'mat-button-toggle button[name="seat"]:has(span.mat-button-toggle-label-content:has-text("A"))'
-).first
-=======
         # Dynamic selector: try radio first, fallback to button if not found
         try:
             self.radio_A = self.page.get_by_role("radio", name="A", exact=True)
@@ -22,7 +17,6 @@ class PlayerTab:
                 raise Exception("No radio found")
         except Exception:
             self.radio_A = self.page.get_by_role("button", name="A", exact=True)
->>>>>>> 062f8565c43e0f24b6d2ee001acc86f4fed9ff79
         self.player_id_textbox = self.page.get_by_role("textbox", name="Enter Player ID/Name")
         self.first_player_item = self.page.locator(".searched-players__list__item").first
         self.start_time = self.page.get_by_label("Manual Rating Formclose").get_by_text("Start Time")

@@ -1,4 +1,5 @@
 import allure
+import random
 from ExecutionTemplates.PPExecutionTemplate import PPExecutionTemplate
 
 @allure.feature("Buy-In Feature")
@@ -12,17 +13,20 @@ def test_Phase_1(setup):
     status = "Fail"
     remarks = ""
     try:
+        table_ip = ppb.config.get("tableIP")
         ppb.configuration_login.navigate_to_configuration("Configuration")
-        ppb.configuration_actions.create_game_template("Auto_Template_01", "Site-26")
-        setup.pause()
-        status = "Pass"  
+        game_template = f"GT-{random.randint(100, 999)}"
+        limit_name = f"LT-{random.randint(100, 999)}"
+        ppb.configuration_actions.create_game_template(game_template, "Site-26", table_ip)
+        ppb.configuration_actions.create_limit_template(limit_name, "Site-26", table_ip, game_template)
+        status = "Pass"
 
     except Exception as e:
         remarks = str(e)
-        try:
-            ppb.void_game()
-        except Exception as ve:
-            print(f"Failed to void hand in test: {ve}")
+        # try:
+        #     ppb.void_game()
+        # except Exception as ve:
+        #     print(f"Failed to void hand in test: {ve}")
         raise
     finally:
         ppb.test_case_report.write_test_result(
