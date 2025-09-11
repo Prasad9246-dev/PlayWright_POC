@@ -10,13 +10,7 @@ class PlayerTab:
         
         # Manual Rating selectors
         # Dynamic selector: try radio first, fallback to button if not found
-        try:
-            self.radio_A = self.page.get_by_role("radio", name="A", exact=True)
-            # Optionally check if locator resolves to any element
-            if not self.radio_A.count():
-                raise Exception("No radio found")
-        except Exception:
-            self.radio_A = self.page.get_by_role("button", name="A", exact=True)
+        self.radio_A = self.get_seat_A_locator()
         self.player_id_textbox = self.page.get_by_role("textbox", name="Enter Player ID/Name")
         self.first_player_item = self.page.locator(".searched-players__list__item").first
         self.start_time = self.page.get_by_label("Manual Rating Formclose").get_by_text("Start Time")
@@ -109,3 +103,16 @@ class PlayerTab:
             Prasad Kamble
         """
         return self.page.get_by_text(f"{seat_num}A")
+    
+    def get_seat_A_locator(self):
+        """
+        Returns the locator for seat 'A', handling both radio (2.4) and button (2.3) versions.
+        Author:
+            Prasad Kamble
+        """
+        locator_radio = self.page.get_by_role("radio", name="A", exact=True)
+        if locator_radio.count() > 0:
+            return locator_radio
+        locator_button = self.page.get_by_role("button", name="A", exact=True)
+        if locator_button.count() > 0:
+            return locator_button
