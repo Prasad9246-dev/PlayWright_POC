@@ -9,7 +9,7 @@ from Pages.ConfigurationPages.GameTemplatePage import GameTemplatePage
 from Pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPage
 from Utilites.TableUtils.ExpireAdjustVariance import ExpireAndAdjustVariance
 from Utilites.TableUtils.TableActions import TableActions
-from Utilites.ExcelRead.ExcelReader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data, get_file_path
+from Utilites.ExcelRead.ExcelReader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data, get_file_path 
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Utilites.ExcelRead.ExcelReader import read_chip_ids_df
 from Utilites.UIUtils import UIUtils
