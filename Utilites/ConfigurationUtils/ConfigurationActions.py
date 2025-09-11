@@ -98,3 +98,19 @@ class ConfigurationActions:
         ui_utils.click_to_element(casino_manager.pit_text(pit_name))
         self.logger_utils.log("Drill down navigation completed.")
         return page1
+
+    def prepend_host_entry(self, hosts_path, new_entry):
+        try:
+            with open(hosts_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            lines = content.splitlines()
+            insert_index = 0
+            for i, line in enumerate(lines):
+                if line.strip() and not line.strip().startswith("#"):
+                    insert_index = i
+                    break
+            lines.insert(insert_index, new_entry.strip())
+            with open(hosts_path, "w", encoding="utf-8") as f:
+                f.write("\n".join(lines) + "\n")
+        except PermissionError:
+            print(f"Permission denied: You must run as administrator to modify {hosts_path}")

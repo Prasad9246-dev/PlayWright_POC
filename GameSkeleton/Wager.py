@@ -15,6 +15,8 @@ class Wager:
             Prasad Kamble
         """
         results = []
+        used_chips = {}  # Track used chips for each player
+
         for wager in wager_data.values():
             player = wager["player"]
             wager_amount = int(wager["denom"])  # e.g., 300
@@ -36,15 +38,20 @@ class Wager:
             else:
                 chip_value = int(buyin_denom)
 
-            # Select chips to match wager_amount
             chips_needed = wager_amount // chip_value
-            selected_chips = chips_ID[:chips_needed]
+
+            # Track and select chips for this player
+            already_used = used_chips.get(player, 0)
+            selected_chips = chips_ID[already_used:already_used + chips_needed]
+            used_chips[player] = already_used + chips_needed
 
             if len(selected_chips) < chips_needed or chips_needed == 0:
                 print(f"[SKIP] Not enough chips to match wager {wager_amount} for player {player}")
                 continue
 
             chip_ids_str = ",".join(selected_chips)
+            print(f"[INFO] Player: {player}, Wager: {wager_amount}, Antenna: {antenna}, Chips: {chip_ids_str}, Tagged: {tagged_antenna}")
+
             if tagged_antenna:
                 # Step 1: Move chips to main antenna with "true"
                 print(f"[TAGGED] Placing chips for {player} on antenna {antenna}: {chip_ids_str} (true)")
@@ -70,4 +77,5 @@ class Wager:
                 "chips_ID": selected_chips,
                 "tagged_antenna": tagged_antenna if tagged_antenna else None
             })
+        print(f"[RESULT] Wager processing complete. Results: {results}")
         return results

@@ -1,7 +1,7 @@
 class PlayerTab:
     def __init__(self, page):
         self.page = page
-        self.Players_TAB = self.page.get_by_role('tab', name="Players")
+        self.players_tab = self.page.get_by_role('tab', name="Players")
         self.Enter_Player_ID = self.page.get_by_placeholder("Enter Player ID")
         self.first_row_first_col_selector = 'tbody.mdc-data-table__content tr[role="row"]:nth-of-type(1) td:nth-of-type(1)'
         self.clock_in_player_button = self.page.get_by_role("button", name="Clock-In Player")
@@ -9,8 +9,9 @@ class PlayerTab:
         self.clock_out_close_button = self.page.get_by_label("Clock-Outclose").get_by_role("button", name="Clock-Out")
         
         # Manual Rating selectors
-        # Dynamic selector: try radio first, fallback to button if not found
-        self.radio_A = self.get_seat_A_locator()
+        self.seat_A = self.page.locator(
+    'mat-button-toggle button[name="seat"]:has(span.mat-button-toggle-label-content:has-text("A"))'
+).first
         self.player_id_textbox = self.page.get_by_role("textbox", name="Enter Player ID/Name")
         self.first_player_item = self.page.locator(".searched-players__list__item").first
         self.start_time = self.page.get_by_label("Manual Rating Formclose").get_by_text("Start Time")

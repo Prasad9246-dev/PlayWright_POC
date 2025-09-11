@@ -29,3 +29,23 @@ class Payout:
                 self.page.wait_for_timeout(1000)
             else:
                 print(f"No chips available for payout: Antenna={antenna}, Denom={denom}")
+                
+
+
+    def payout_chips_to_antenna(self, chips_str, table_ip, target_antenna):
+        """
+        Moves chips from chips_data to the dealer antenna first, then to the target antenna.
+
+        Args:
+            chips_data (str): Comma-separated chip IDs as a string.
+            table_ip (str): Table IP address.
+            target_antenna (str): Antenna name where chips should be finally placed.
+
+        Example chips_data:
+            'e00540011226b3cb,e00540011226b40c,e00540011226b40f'
+        """
+        dealer_antenna = "DEALER"
+        print(f"Moving chips {chips_str} to dealer...")
+        self.table_actions.move_chips_between_antennas(table_ip, "TT", dealer_antenna, chips_str)
+        print(f"Moving chips {chips_str} to {target_antenna}...")
+        self.table_actions.move_chips_between_antennas(table_ip, dealer_antenna, target_antenna, chips_str)

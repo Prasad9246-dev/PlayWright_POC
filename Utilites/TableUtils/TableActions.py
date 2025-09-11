@@ -1,3 +1,4 @@
+import re
 import time
 import requests
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
@@ -80,7 +81,7 @@ class TableActions:
             Prasad Kamble
         """
         self.logger_utils.log("Starting table close and open sequence.")
-        self.navigate_to_tab(self.player_tab.Players_TAB)
+        self.navigate_to_tab(self.player_tab.players_tab)
         self.table_close()
         self.table_open()
         self.logger_utils.log("Completed table close and open sequence.")
@@ -284,7 +285,7 @@ class TableActions:
         self.logger_utils.log(f"Attempting to clock in player_id={player_id} at seat_num={seat_num} on tab={tab_name}.")
         if tab_name == "Players_TAB":
             self.logger_utils.log("Navigating to Players_TAB for clock-in.")
-            self.navigate_to_tab(self.player_tab.Players_TAB)
+            self.navigate_to_tab(self.player_tab.players_tab)
             self.logger_utils.log(f"Clicking player card at seat {seat_num}.")
             self.ui_utils.click_to_element(self.player_tab.player_card_position(seat_num))
             self.logger_utils.log(f"Filling player ID: {player_id}.")
@@ -321,7 +322,7 @@ class TableActions:
             Prasad Kamble
         """
         self.logger_utils.log(f"Attempting to clock out player at seat_num={seat_num}.")
-        self.navigate_to_tab(self.player_tab.Players_TAB)
+        self.navigate_to_tab(self.player_tab.players_tab)
         self.logger_utils.log(f"Clicking dot button for seat {seat_num}.")
         self.ui_utils.click_to_element(self.player_tab.player_card_dot(seat_num))
         self.logger_utils.log("Clicking clock-out button.")
@@ -433,10 +434,15 @@ class TableActions:
         self.logger_utils.log(
             f"Submitting manual rating (Players tab) for player_id={player_id}, seat_num={seat_num}, buyin={buyin}, average_bet={average_bet}, casino_win_loss={casino_win_loss}, mid={mid}"
         )
+<<<<<<< HEAD
+        self.navigate_to_tab(self.player_tab.players_tab)
+        self.ui_utils.click_to_element(self.player_tab.get_seat_A_locator())
+=======
         self.navigate_to_tab(self.player_tab.Players_TAB)
     # Increase timeout for radio_A element
         self.player_tab.radio_A.wait_for(state="visible", timeout=5000)
         self.ui_utils.click_to_element(self.player_tab.radio_A)
+>>>>>>> 062f8565c43e0f24b6d2ee001acc86f4fed9ff79
         self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
         self.ui_utils.fill_element(self.player_tab.player_id_textbox, player_id)
         self.ui_utils.press_enter(self.player_tab.player_id_textbox)
@@ -472,8 +478,8 @@ class TableActions:
             Prasad Kamble
         """
         self.logger_utils.log(f"Saving manual rating for player_id={player_id}, seat_num={seat_num} on Players tab.")
-        self.navigate_to_tab(self.player_tab.Players_TAB)
-        self.ui_utils.click_to_element(self.player_tab.radio_A)
+        self.navigate_to_tab(self.player_tab.players_tab)
+        self.ui_utils.click_to_element(self.player_tab.get_seat_A_locator())
         self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
         self.ui_utils.fill_element(self.player_tab.player_id_textbox, player_id)
         self.ui_utils.press_enter(self.player_tab.player_id_textbox)
@@ -526,3 +532,42 @@ class TableActions:
         self.logger_utils.log(
             f"Manual rating saved (Sessions tab) for player_id={player_id}, seat_num={seat_num}"
         )
+           
+    def chipOwnership_check(self, chip_details_data, player_ids):
+        """
+        Checks if all Owner values in the chip details data contain only the given player IDs.
+
+        Args:
+            chip_details_data (list): List of dicts as extracted from the chip details table.
+            player_ids (list): List of player IDs to check for (e.g., ["6001", "6002"]).
+
+        Returns:
+            bool: True if all Owner values contain only the player IDs, False otherwise.
+        """
+        if not chip_details_data or not player_ids:
+            return False
+        owners = chip_details_data[0].get("Owner", [])
+        # Extract just the player ID part from each Owner string (e.g., "Jain, Parul (6001)" -> "6001")
+        def extract_id(owner_str):
+            if "(" in owner_str and ")" in owner_str:
+                return owner_str.split("(")[-1].split(")")[0].strip()
+            return owner_str.strip()
+        owner_ids = [extract_id(owner) for owner in owners]
+        return all(owner_id in player_ids for owner_id in owner_ids)
+
+    def is_owner_only_anonymous(self, chip_details_data):
+        """
+        Returns True if all Owner values contain only the word 'Anonymous'
+        (with any numbers/special characters allowed after it), and no other words.
+
+        Args:
+            chip_details_data (list): List of dicts as extracted from the chip details table.
+
+        Returns:
+            bool: True if all Owner values contain only 'Anonymous' (with any numbers/special chars), False otherwise.
+        """
+        if not chip_details_data:
+            return False
+        owners = chip_details_data[0].get("Owner", [])
+        pattern = r"^Anonymous[\s\S]*$"  # Starts with 'Anonymous', anything after is allowed
+        return all(re.match(pattern, owner) for owner in owners)

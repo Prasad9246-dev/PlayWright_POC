@@ -4,7 +4,7 @@
   "configurations": [
  
     {
-      "name": "Python: Debug test_TEST-14007.py",
+      "name": "Python: Debug test_TEST-32111.py",
       "type": "debugpy",
       "request": "launch",
       "module": "pytest",

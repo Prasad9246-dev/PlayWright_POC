@@ -1,24 +1,29 @@
 import os
 from GameSkeleton.GameOutcomes import GameoutComes
 from GameSkeleton.Wager import Wager
+from Pages.TablePages.ChipDetailsPage import ChipDetails
 from Pages.TablePages.ViewTableTab import ViewTableTab
 from Pages.TablePages.LoginPage import LoginPage
 from Pages.TablePages.PlayerTab import PlayerTab
 from Pages.TablePages.GamesTab import GamesTab
 from Pages.TablePages.OverrideTab import OverrideTab
 from Pages.TablePages.SessionsTab import SessionsTab
+from Pages.ConfigurationPages.GameTemplatePage import GameTemplatePage
 from Utilites.TableUtils.ExpireAdjustVariance import ExpireAndAdjustVariance
 from Utilites.TableUtils.TableActions import TableActions
 from Utilites.ExcelRead.ExcelReader import get_buyin_data, get_cards_data, get_wager_data, get_takeBets_data, get_payout_data, get_file_path
 from Utilites.ExcelRead.ConfigRead import ConfigUtils
 from Utilites.ExcelRead.ExcelReader import read_chip_ids_df
+from Utilites.ExcelRead.TestReportWriter import TestReportWriter
 from Utilites.UIUtils import UIUtils
 from GameSkeleton.BuyIn import BuyIn
 from GameSkeleton.TakeBets import TakeBets
 from GameSkeleton.Payouts import Payout
 from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
+from Utilites.Database.ConfigurationDBs import ConfigurationAPI_DB
 from Utilites.Reporting.ScreenshotUtil import ScreenshotUtil
 from Utilites.Logs.LoggerUtils import LoggerUtils
+from Utilites.ConfigurationUtils.ConfigurationActions import ConfigurationActions
 
 class TableExecutionTemplate:
     def __init__(self, setup, test_case_id, feature_name):
@@ -34,7 +39,7 @@ class TableExecutionTemplate:
         config_utils = ConfigUtils()
         config_utils.set_feature_name(self.feature_name)  # <-- This must be called!
         return {
-            "build_version": config_utils.get_config().get("build_version"),
+            "build_version": config_utils.get_build_version(),
             "feature_name": self.feature_name,
             "tableIP": config_utils.get_tableIP(),
             "tbd_url": config_utils.get_table_url(),
@@ -65,6 +70,8 @@ class TableExecutionTemplate:
         self.view_table_tab = ViewTableTab(setup)
         self.Override_Tab = OverrideTab(setup,self.feature_name)
         self.sessions_tab = SessionsTab(setup, self.feature_name)
+        self.chip_details = ChipDetails(setup, self.feature_name)
+        self.game_template_page = GameTemplatePage(setup)
         self.ui_utils = UIUtils(setup)
         self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup, self.feature_name)
         self.buyin_processor = BuyIn(setup, self.feature_name)
@@ -73,6 +80,9 @@ class TableExecutionTemplate:
         self.take_bets_processor = TakeBets(setup, self.feature_name)
         self.payout_processor = Payout(setup, self.feature_name)
         self.configuration_api = ConfigurationAPIs(self.feature_name)
+        self.configuration_db = ConfigurationAPI_DB(self.feature_name)
+        self.configuration_actions = ConfigurationActions(setup, self.feature_name)
+        self.test_case_report = TestReportWriter(self.feature_name)
         self.logger_utils = LoggerUtils(self.feature_name)
 
     def _run_base_setup(self):

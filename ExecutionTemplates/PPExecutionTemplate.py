@@ -5,6 +5,7 @@ from Pages.TablePages.ViewTableTab import ViewTableTab
 from Pages.TablePages.LoginPage import LoginPage
 from Pages.TablePages.GamesTab import GamesTab
 from Pages.TablePages.OverrideTab import OverrideTab
+from Pages.ConfigurationPages.GameTemplatePage import GameTemplatePage
 from Pages.ConfigurationPages.ConfigurationLoginPage import ConfigurationLoginPage
 from Utilites.TableUtils.ExpireAdjustVariance import ExpireAndAdjustVariance
 from Utilites.TableUtils.TableActions import TableActions
@@ -19,6 +20,7 @@ from Utilites.APIs.ConfigurationAPIs import ConfigurationAPIs
 from Utilites.Reporting.ScreenshotUtil import ScreenshotUtil
 from Utilites.ConfigurationUtils.ConfigurationActions import ConfigurationActions
 from Utilites.Logs.LoggerUtils import LoggerUtils
+from Utilites.ExcelRead.TestReportWriter import TestReportWriter
 
 
 class PPExecutionTemplate:
@@ -65,6 +67,7 @@ class PPExecutionTemplate:
         self.games_tab = GamesTab(setup, self.feature_name)
         self.view_table_tab = ViewTableTab(setup)
         self.Override_Tab = OverrideTab(setup,self.feature_name)
+        self.game_template_page = GameTemplatePage(setup)
         self.ui_utils = UIUtils(setup)
         self.expire_and_adjust_variance = ExpireAndAdjustVariance(setup, self.feature_name)
         self.buyin_processor = BuyIn(setup, self.feature_name)
@@ -76,6 +79,7 @@ class PPExecutionTemplate:
         self.configuration_login = ConfigurationLoginPage(setup)
         self.configuration_actions = ConfigurationActions(setup, self.feature_name)
         self.logger_utils = LoggerUtils(self.feature_name)
+        self.test_case_report = TestReportWriter(self.feature_name)
 
     def _run_base_setup(self):
         self.configuration_login.navigate(self.config["pp_application_url"])

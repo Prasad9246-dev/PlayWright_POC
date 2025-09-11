@@ -1,0 +1,1 @@
+Ownership verification failed: Not all chips are owned by player 6001.
