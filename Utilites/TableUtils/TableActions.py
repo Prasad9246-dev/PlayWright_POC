@@ -434,15 +434,10 @@ class TableActions:
         self.logger_utils.log(
             f"Submitting manual rating (Players tab) for player_id={player_id}, seat_num={seat_num}, buyin={buyin}, average_bet={average_bet}, casino_win_loss={casino_win_loss}, mid={mid}"
         )
-<<<<<<< HEAD
-        self.navigate_to_tab(self.player_tab.players_tab)
-        self.ui_utils.click_to_element(self.player_tab.get_seat_A_locator())
-=======
         self.navigate_to_tab(self.player_tab.Players_TAB)
     # Increase timeout for radio_A element
         self.player_tab.radio_A.wait_for(state="visible", timeout=5000)
         self.ui_utils.click_to_element(self.player_tab.radio_A)
->>>>>>> 062f8565c43e0f24b6d2ee001acc86f4fed9ff79
         self.ui_utils.click_to_element(self.player_tab.select_seat(seat_num))
         self.ui_utils.fill_element(self.player_tab.player_id_textbox, player_id)
         self.ui_utils.press_enter(self.player_tab.player_id_textbox)
