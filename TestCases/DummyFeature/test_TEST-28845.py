@@ -3,8 +3,8 @@ from ExecutionTemplates.TableExecutionTemplate import TableExecutionTemplate
 import allure
 
 @allure.feature("Take messaging visibility on the screen")
-@allure.story("Verify 'TAKE PLAYER' element appears after buy-in and wager")
-@allure.title("'TAKE PLAYER' element should be visible after buy-in and wager")
+@allure.story("test_DummyTestCase4: TAKE PLAYER visibility test")
+@allure.title("test_DummyTestCase4: TAKE PLAYER visibility test")
 def test_TEST_28845(setup):
     TEST_CASE_ID = "TEST-28845"
     FEATURE_NAME = "DummyFeature"
@@ -14,7 +14,7 @@ def test_TEST_28845(setup):
     remarks = ""
     try:
         tbd.logger_utils.log("Starting test_TEST_28845: TAKE PLAYER visibility test")
-        table_ip = tbd.config["tableIP"]
+        table_ip = tbd.config.get("tableIP")
         chips_df = tbd.chips_df
 
         tbd.logger_utils.log("Processing buy-ins.")
