@@ -12,9 +12,8 @@ def test_TEST_0608(setup):
     status = "Fail"
     remarks = ""
     try:
-        # Your test logic here
         tbd.logger_utils.log("Starting test_TEST-0608: Rated Buy-In Test")
-        table_ip = tbd.config["tableIP"]
+        table_ip = tbd.config.get("tableIP")
         chips_df = tbd.chips_df
 
         tbd.logger_utils.log("Navigating to Games tab.")
@@ -46,7 +45,7 @@ def test_TEST_0608(setup):
         tbd.logger_utils.log(f"Current Game ID: {current_game_id}")
 
         print(f"Previous Game ID: {previous_game_id}, Current Game ID: {current_game_id}")
-        if previous_game_id != current_game_id:
+        if previous_game_id == current_game_id:
             msg = "Game record is not present on Games tab."
             print(msg)
             tbd.logger_utils.log(msg)

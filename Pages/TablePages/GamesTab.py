@@ -15,22 +15,22 @@ class GamesTab:
         self.games_table_locator = self.page.locator("table[role='table']")
         self.table_header_locator = self.page.locator("thead tr th")
         self.table_body_locator = self.page.locator("tbody tr:first-child td")
-
+        
     def get_first_row_first_column_text(self):
         """
-        Returns the text content of the first row, first column cell in the table.
-        
+        Returns the value of the first column, first row in the games table.
         Author:
             Prasad Kamble
         """
-        # locator = "table[role='table'] tbody tr:first-child td:nth-child(2)"  # 2nd <td> is the first data column
         try:
-            self.first_row_first_column.wait_for(state="visible", timeout=5000)
-            text = self.first_row_first_column.inner_text()
-            print(f"First row, first column text: '{text}'")
-            return text
+            # Locate the first row and then the first cell (td)
+            self.first_cell = self.page.locator("table[role='table'] tbody tr[role='row']:nth-child(1) td:nth-child(2)")
+            self.first_cell.wait_for(state="visible", timeout=5000)
+            value = self.first_cell.inner_text().strip()
+            print(f"First row, first column value: '{value}'")
+            return value
         except Exception as e:
-            print(f"Error in get_first_row_first_column_text: {e}")
+            print(f"Error in get_first_cell_value: {e}")
             return None
                
     def get_first_row_as_dict(self):
