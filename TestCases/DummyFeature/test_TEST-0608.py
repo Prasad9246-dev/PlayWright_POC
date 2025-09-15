@@ -1,6 +1,4 @@
 from ExecutionTemplates.TableExecutionTemplate import TableExecutionTemplate
-from Utilites.ExcelRead.TestReportWriter import TestReportWriter
-from datetime import datetime
 import allure
 
 @allure.feature("Buy-In Feature")
@@ -18,6 +16,8 @@ def test_TEST_0608(setup):
         tbd.logger_utils.log("Starting test_TEST-0608: Rated Buy-In Test")
         table_ip = tbd.config.get("tableIP")
         chips_df = tbd.chips_df
+
+        tbd.table_actions.navigate_to_tab(tbd.view_table_tab.view_table_tab_selector)
 
         tbd.logger_utils.log("Navigating to Games tab.")
         tbd.table_actions.navigate_to_tab(tbd.games_tab.games_tab_locator)

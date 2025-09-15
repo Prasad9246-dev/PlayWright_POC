@@ -1,4 +1,5 @@
 import openpyxl
+import platform
 import pandas as pd
 import json
 import os
@@ -49,7 +50,12 @@ def get_file_path(key):
     base_path = config["basePath"].replace("{userName}", username)
     value = config.get(key)
     if value:
-        return value.replace("{basePath}", base_path)
+        resolved_path = value.replace("{basePath}", base_path)
+        if platform.system().lower() == "darwin":
+            # Only replace 'Z:' at the start of the path with '/Volumes/automationbot'
+            if resolved_path.startswith("Z:"):
+                resolved_path = resolved_path.replace("Z:", "/Volumes/automationbot", 1)
+        return resolved_path
     return None
 
 def get_buyin_data(excel_path, test_case_id):

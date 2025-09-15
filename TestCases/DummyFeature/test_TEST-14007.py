@@ -14,11 +14,9 @@ def test_TEST_14007(setup):
     status = "Pass"
     remarks = ""
     try:
-
-        tbd.table_actions.submit_manual_rating_sessions_tab("6001","1","1000","1000","1000","1234")
-        tbd.table_actions.submit_manual_rating_players_tab("6001","3","1000","1000","1000","1234")
-        tbd.logger_utils.log("Manual rating submitted for player 6001")
-
+        table_ip = tbd.config.get("tableIP")
+        tbd.configuration_api.update_template([("com.wdts.bt.require.player.verification", "false")], tbd.config.get("pp_application_url"), table_ip, "BUSINESS_RULES")
+  
     except Exception as e:
         status = "Fail"
         remarks = str(e)

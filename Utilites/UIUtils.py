@@ -166,9 +166,7 @@ class UIUtils:
                 return False
         except Exception:
                     print("Buy-In Confirm Button is NOT present on screen")    
-                    
-                    
-                    
+                                 
     def press_escape(self, element_selector, timeout=5000):
         """
         Presses Escape on the given locator or selector.
