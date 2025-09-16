@@ -1,0 +1,2 @@
+Exception during Players tab/seat validation: Verification failed: Seat 3 does not contain player 6001.
+assert False

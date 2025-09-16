@@ -1,0 +1,1 @@
+Verification passed: Found row with '6002' in Player and Bets 200.

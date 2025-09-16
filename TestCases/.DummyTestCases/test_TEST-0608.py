@@ -7,7 +7,7 @@ import allure
 @allure.story("test_DummyTestCase1: Rated Buy-In")
 @allure.title("test_DummyTestCase1 Rated Buy-In Test")
 def test_TEST_0608(setup):
-    tbd = TableExecutionTemplate(setup, "TEST-0608","PlayWright_POC")
+    tbd = TableExecutionTemplate(setup, "TEST-0608","DummyFeature")
     status = "Pass"
     remarks = ""
     try:
@@ -17,7 +17,7 @@ def test_TEST_0608(setup):
         chips_df = tbd.chips_df
 
         tbd.logger_utils.log("Navigating to Games tab.")
-        tbd.table_actions.navigate_to_tab(tbd.games_tab.GAMES_TAB)
+        tbd.table_actions.navigate_to_tab(tbd.games_tab.games_table_locator)
         previous_game_id = tbd.games_tab.get_first_row_first_column_text()
         tbd.logger_utils.log(f"Previous Game ID: {previous_game_id}")
 
@@ -40,7 +40,7 @@ def test_TEST_0608(setup):
         tbd.payout_processor.process_payouts(table_ip, tbd.payout_data, chips_df)
 
         tbd.logger_utils.log("Navigating to Games tab for verification.")
-        tbd.table_actions.navigate_to_tab(tbd.games_tab.GAMES_TAB)
+        tbd.table_actions.navigate_to_tab(tbd.games_tab.games_table_locator)
         current_game_id = tbd.games_tab.get_first_row_first_column_text()
         tbd.logger_utils.log(f"Current Game ID: {current_game_id}")
 

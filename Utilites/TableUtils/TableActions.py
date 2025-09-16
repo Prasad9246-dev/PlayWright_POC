@@ -292,7 +292,7 @@ class TableActions:
             self.logger_utils.log("Pressing enter after filling player ID.")
             self.ui_utils.press_enter(self.player_tab.Enter_Player_ID)
             self.logger_utils.log("Clicking first row, first column selector.")
-            self.ui_utils.click_to_element(self.player_tab.first_row_first_col_selector)
+            # self.ui_utils.click_to_element(self.player_tab.first_row_first_col_selector)
             self.logger_utils.log("Clicking clock-in player button.")
             self.ui_utils.click_to_element(self.player_tab.clock_in_player_button)
             self.logger_utils.log(f"Clocked in player_id={player_id} at seat_num={seat_num} on Players_TAB.")

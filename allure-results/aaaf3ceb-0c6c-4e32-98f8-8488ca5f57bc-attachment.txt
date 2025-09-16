@@ -1,0 +1,1 @@
+Verification passed: Found row with '6001' in Player and Position 3.

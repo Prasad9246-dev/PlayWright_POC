@@ -1,0 +1,1 @@
+Verification failed: Seat 3 does not contain player 6001.

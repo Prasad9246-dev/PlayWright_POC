@@ -102,3 +102,8 @@ class PlayerTab:
             Prasad Kamble
         """
         return self.page.get_by_text(f"{seat_num}A")
+
+    def get_player_session_card(self, seat_num, player_id):
+        card_id = f"#player-card--0\\.{seat_num}"
+        player_id_selector = f"{card_id} .player-id:has-text('({player_id})')"
+        return player_id_selector

@@ -1,0 +1,1 @@
+Verification failed: Table does not have both rows with '6001' in Player and correct Bets for Position 1 and 2.

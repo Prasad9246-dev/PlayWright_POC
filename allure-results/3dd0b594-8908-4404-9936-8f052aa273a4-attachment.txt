@@ -1,0 +1,1 @@
+Verification failed: Player column does not contain '6002' or Bets column does not contain 1500 and 200.
